@@ -1,3 +1,8 @@
+import Search from "./search";
+
+import { courses } from "@/data/courses";
+
 export default function SearchPage() {
-  return "search";
+  const coursesData = courses;
+  return <Search courseData={coursesData} />;
 }

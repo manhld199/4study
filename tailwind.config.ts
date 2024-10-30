@@ -50,6 +50,12 @@ const config: Config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+
+        pri1: "#11009E",
+        pri2: "#5271FF",
+        pri3: "#C4CEFF",
+        pri4: "#FFE3FA",
+        bg1: "#F5F5F5",
       },
       borderRadius: {
         lg: "var(--radius)",
