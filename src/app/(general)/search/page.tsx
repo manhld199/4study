@@ -1,8 +1,19 @@
 import Search from "./search";
 
 import { courses } from "@/data/courses";
+import { schools } from "@/data/schools";
+import { teachers } from "@/data/teachers";
 
 export default function SearchPage() {
-  const coursesData = courses;
-  return <Search courseData={coursesData} />;
+  const courseData = courses;
+  const schoolData = schools;
+  const teacherData = teachers;
+
+  return (
+    <Search
+      courseData={courseData}
+      schoolData={schoolData}
+      teacherData={teacherData}
+    />
+  );
 }
