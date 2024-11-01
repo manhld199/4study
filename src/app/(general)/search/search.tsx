@@ -69,7 +69,7 @@ export default function Search({
       sortedData.sort((a, b) => b.rank_personalized - a.rank_personalized);
 
     setFilteredData(sortedData);
-  }, [sortState, courseData]);
+  }, [sortState]);
 
   return (
     <div className="w-full min-h-[500px] grid grid-cols-[1fr_3fr] gap-2">
@@ -100,7 +100,7 @@ export default function Search({
           <div className="pb-2 border-b-2">
             <p className="text-base">
               <span className="font-bold">{resultsCount}</span> results for
-              &quot {searchKey} &quot
+              &quot; {searchKey} &quot;
             </p>
           </div>
 
