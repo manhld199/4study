@@ -1,6 +1,11 @@
+// import libs
 import React from "react";
-import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+
+// import components
+import { Input } from "@/components/ui/input";
+
+// import data
 import { SELECT_DATA } from "@/data/components";
 
 const RenderSearch: React.FC<{

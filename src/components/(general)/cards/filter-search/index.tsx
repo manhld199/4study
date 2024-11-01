@@ -1,5 +1,8 @@
+// import libs
 import React from "react";
 import Image from "next/image";
+
+// import components
 import { Checkbox } from "@/components/ui/checkbox";
 
 export default function CardSchool1({

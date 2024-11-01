@@ -1,8 +1,10 @@
+// import libs
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Star } from "lucide-react";
 
+// import components
 import { Badge } from "@/components/ui/badge";
 
 export default function CardCourse({

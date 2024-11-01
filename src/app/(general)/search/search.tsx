@@ -9,17 +9,10 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { CardCourse } from "@/components";
@@ -106,8 +99,8 @@ export default function Search({
         <div className="w-full flex flex-row justify-between items-center">
           <div className="pb-2 border-b-2">
             <p className="text-base">
-              <span className="font-bold">{resultsCount}</span> results for "
-              {searchKey}"
+              <span className="font-bold">{resultsCount}</span> results for
+              &quot {searchKey} &quot
             </p>
           </div>
 

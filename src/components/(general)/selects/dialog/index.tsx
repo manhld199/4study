@@ -1,8 +1,9 @@
 "use client";
 
+// import libs
 import React, { useCallback, useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 
+// import components
 import {
   Dialog,
   DialogContent,
@@ -12,13 +13,17 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-
-import { SELECT_DATA } from "@/data/components";
-import { PLACEHOLDER_DATA } from "@/data/placeholder";
-import { normalizeVietnameseStr } from "@/utils/functions/format";
+import { Button } from "@/components/ui/button";
 import RenderTrigger from "./render-trigger";
 import RenderSearch from "./render-search";
 import RenderLayout from "./render-layout";
+
+// import data
+import { SELECT_DATA } from "@/data/components";
+import { PLACEHOLDER_DATA } from "@/data/placeholder";
+
+// import utils
+import { normalizeVietnameseStr } from "@/utils/functions/format";
 
 // Component nhận đầu vào: name, isMultiChoice, options
 const SelectDialog: React.FC<{

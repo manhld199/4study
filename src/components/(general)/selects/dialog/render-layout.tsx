@@ -1,4 +1,7 @@
+// import libs
 import React from "react";
+
+// import components
 import RenderOption from "./render-option";
 
 const RenderLayout: React.FC<{

@@ -1,5 +1,8 @@
+// import libs
 import React from "react";
 import { ChevronRight } from "lucide-react";
+
+// import components
 import { Badge } from "@/components/ui/badge";
 
 const RenderTrigger: React.FC<{

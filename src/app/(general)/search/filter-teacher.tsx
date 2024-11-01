@@ -1,6 +1,9 @@
 "use client";
 
+// import libs
 import React, { useEffect, useState } from "react";
+
+// import components
 import { CardFilterSearch, SelectDialog } from "@/components";
 
 export default function FilterTeacher({

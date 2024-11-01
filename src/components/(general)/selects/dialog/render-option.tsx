@@ -1,7 +1,8 @@
+// import libs
 import React from "react";
 import { Check } from "lucide-react";
-import { cn } from "@/libs/utils";
 import Image from "next/image";
+import { cn } from "@/libs/utils";
 
 const RenderOption: React.FC<{
   option: { value?: string; _id?: string; name?: string; img?: string };
