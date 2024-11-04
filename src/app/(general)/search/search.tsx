@@ -42,7 +42,7 @@ export default function Search({
     const filtered = courseData.filter((course) => {
       const matchesSchool =
         filterSchoolState.length === 0 ||
-        filterSchoolState.indexOf(course.school._id) != -1;
+        filterSchoolState.indexOf(course?.school?._id as string) != -1;
       // console.log("matchesSchool", matchesSchool);
 
       const matchesTeacher =
@@ -64,9 +64,14 @@ export default function Search({
 
     if (sortState === "Top") sortedData = sortedData;
     else if (sortState === "Popular")
-      sortedData.sort((a, b) => b.rank_popular - a.rank_popular);
+      sortedData.sort(
+        (a, b) => (b?.rank_popular as number) - (a?.rank_popular as number)
+      );
     else if (sortState === "Personalized")
-      sortedData.sort((a, b) => b.rank_personalized - a.rank_personalized);
+      sortedData.sort(
+        (a, b) =>
+          (b?.rank_personalized as number) - (a?.rank_personalized as number)
+      );
 
     setFilteredData(sortedData);
   }, [sortState]);
