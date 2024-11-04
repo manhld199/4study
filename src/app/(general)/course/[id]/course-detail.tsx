@@ -1,5 +1,9 @@
 "use client";
 
+// import libs
+import { useState } from "react";
+
+// import components
 import { Chapter } from "@/components";
 import { Button } from "@/components/ui/button";
 
@@ -18,11 +22,14 @@ type Course = {
 };
 
 export default function CourseDetail({ courseData }: { courseData: Course }) {
+  const [isRegistered, setIsRegistered] = useState(false);
   const handleRegister = () => {
     const currentTime = new Date().toLocaleString();
     console.log(
       `Registering for course with ID: ${courseData._id} at ${currentTime}`
     );
+
+    setIsRegistered(true);
   };
 
   return (
@@ -37,7 +44,7 @@ export default function CourseDetail({ courseData }: { courseData: Course }) {
           <p className="font-semibold text-xl">Course Content</p>
           <p className="text-lg">
             3 Chapters | {courseData.course_videos.length * 3} lessons |
-            Teacher(s): {courseData.teachers.length}
+            Teacher(s): {courseData.teachers.length} | The total time: 18h36min
           </p>
         </div>
 
@@ -49,7 +56,7 @@ export default function CourseDetail({ courseData }: { courseData: Course }) {
         </div>
       </div>
 
-      <div className="flex-[3] mt-8 lg:mt-0 lg:ml-8 bg-[#FFE3FA] p-8 rounded-md shadow-lg border border-[#11009E]">
+      <div className="flex-[3] lg:self-start mt-8 lg:mt-0 lg:ml-8 bg-[#FFE3FA] p-8 rounded-md shadow-lg border border-[#11009E]">
         <div className="bg-[#C4CeFF] rounded-md flex items-center border border-[#11009E] p-3">
           <div>
             <p className="text-2xl font-semibold text-center text-[#11009E] mb-4">
@@ -76,8 +83,13 @@ export default function CourseDetail({ courseData }: { courseData: Course }) {
         </div>
         <Button
           onClick={handleRegister}
-          className="mt-6 w-full bg-[#5271FF] text-white py-3 text-xl rounded-md hover:bg-[#11009E] h-12">
-          Register Now
+          disabled={isRegistered} 
+          className={`mt-6 w-full text-white py-3 text-xl rounded-md h-12 ${
+            isRegistered
+              ? "bg-[#11009E] cursor-default"
+              : "bg-[#5271FF] hover:bg-[#11009E]"
+          }`}>
+          {isRegistered ? "Registered" : "Register Now"}
         </Button>
       </div>
     </div>
