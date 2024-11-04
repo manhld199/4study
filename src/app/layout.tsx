@@ -8,6 +8,7 @@ const nunito = Nunito({
   subsets: ["latin"],
   weight: "400",
 });
+import { Header, MainNav } from "../partials";
 
 export default function RootLayout({
   children,
@@ -18,7 +19,8 @@ export default function RootLayout({
     <html lang="en" className={nunito.className}>
       <body className="flex flex-col gap-2 bg-bg1">
         {/* HEADER */}
-        <header className="w-full h-[150px] bg-teal-300">Header</header>
+        <Header />
+        <MainNav />
 
         {/* CONTAINER */}
         <main className="w-4/5 m-auto">{children}</main>
