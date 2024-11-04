@@ -1,6 +1,9 @@
 // import libs
 import { Nunito } from "next/font/google";
 
+// import partials
+import { Header, MainNav } from "../partials";
+
 // import css
 import "./globals.css";
 
@@ -8,7 +11,6 @@ const nunito = Nunito({
   subsets: ["latin"],
   weight: "400",
 });
-import { Header, MainNav } from "../partials";
 
 export default function RootLayout({
   children,

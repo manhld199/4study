@@ -35,8 +35,8 @@ interface Course {
   course_img: string;
   course_about?: string;
   course_videos: string[];
-  school: School;
+  school?: School;
   teachers: Teacher[];
-  rank_popular: number;
-  rank_personalized: number;
+  rank_popular?: number;
+  rank_personalized?: number;
 }

@@ -1,9 +1,11 @@
-// import components
 "use client";
+
+// import libs
 import { useState, useEffect } from "react";
-import { Button } from "../components/ui/button";
 import Link from "next/link";
-// import CardCourse from
+
+// import components
+import { Button } from "../components/ui/button";
 
 const images = ["/imgs/test.jpg", "/imgs/test.jpg", "/imgs/test.jpg"];
 

@@ -1,20 +1,4 @@
-interface Teacher {
-  _id: string;
-  teacher_name: string;
-  teacher_img: string;
-  teacher_about: string;
-}
-
-interface Course {
-  _id: string;
-  course_name: string;
-  course_img: string;
-  course_about: string;
-  course_videos: string[];
-  teachers: Teacher[];
-}
-
-export const courses: Course = {
+export const course: Course = {
   _id: "abc",
   course_name: "JavaScript Basics",
   course_img:
@@ -45,6 +29,7 @@ export const courses: Course = {
     },
   ],
 };
+
 export const courses: Course[] = [
   {
     _id: "abc",
