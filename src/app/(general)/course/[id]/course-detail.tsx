@@ -7,19 +7,19 @@ import { useState } from "react";
 import { Chapter } from "@/components";
 import { Button } from "@/components/ui/button";
 
-type Teacher = {
-  teacher_name: string;
-  teacher_about: string;
-  teacher_img: string;
-};
+// type Teacher = {
+//   teacher_name: string;
+//   teacher_about: string;
+//   teacher_img: string;
+// };
 
-type Course = {
-  _id: string;
-  course_name: string;
-  course_about: string;
-  course_videos: string[];
-  teachers: Teacher[];
-};
+// type Course = {
+//   _id: string;
+//   course_name: string;
+//   course_about: string;
+//   course_videos: string[];
+//   teachers: Teacher[];
+// };
 
 export default function CourseDetail({ courseData }: { courseData: Course }) {
   const [isRegistered, setIsRegistered] = useState(false);
@@ -83,7 +83,7 @@ export default function CourseDetail({ courseData }: { courseData: Course }) {
         </div>
         <Button
           onClick={handleRegister}
-          disabled={isRegistered} 
+          disabled={isRegistered}
           className={`mt-6 w-full text-white py-3 text-xl rounded-md h-12 ${
             isRegistered
               ? "bg-[#11009E] cursor-default"
