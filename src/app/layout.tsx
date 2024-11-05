@@ -2,8 +2,7 @@
 import { Nunito } from "next/font/google";
 
 // import partials
-import { Header, MainNav } from "../partials";
-import { Footer } from "@/partials";
+import { Header, MainNav, Footer } from "../partials";
 
 // import css
 import "./globals.css";
