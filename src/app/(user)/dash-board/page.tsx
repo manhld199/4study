@@ -5,9 +5,6 @@ import CardCourse from "@/components/(general)/cards/courses";
 import { courses } from "@/data/courses";
 
 export default function ProfilePage() {
-  const handleExplore = () => {
-    console.log("Search button clicked");
-  };
 
   // Filtering courses for different sections
   const popularCourses = courses
