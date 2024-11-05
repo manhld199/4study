@@ -1,4 +1,4 @@
-export const course = {
+export const course= {
   _id: "abc",
   course_name: "JavaScript Basics",
   course_img:
