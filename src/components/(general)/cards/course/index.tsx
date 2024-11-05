@@ -63,7 +63,7 @@ export default function CardCourse({
           </div>
         )}
 
-        {/* <div className="absolute left-2 bottom-2 w-1/3">
+        <div className="absolute left-2 bottom-2 w-1/3">
           <div className="relative w-full aspect-[10/5]">
             <Image
               src={course.school.school_img}
@@ -72,8 +72,8 @@ export default function CardCourse({
               fill
             />
           </div>
-        </div> */}
-        {/* <div className="absolute w-1/3 right-2 bottom-2">
+        </div>
+        <div className="absolute w-1/3 right-2 bottom-2">
           {course.teachers.slice(0, 2).map((teacher, index) => (
             <div
               key={`course teacher ${course._id} ${index}`}
@@ -88,7 +88,7 @@ export default function CardCourse({
               </div>
             </div>
           ))}
-        </div> */}
+        </div>
       </div>
 
       <div className="w-full pb-2 flex flex-col gap-1">
