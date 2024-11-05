@@ -71,6 +71,15 @@ export default function Header() {
             onClick={toggleMenu}
           />
 
+         {/* Login Button */}
+         {/* <div className="flex items-center">
+         <Link href="/login"> 
+          <Button className="h-10 bg-[#5271FF] hover:bg-[#11009E]">
+            LOG IN
+          </Button>
+          </Link>
+        </div> */}
+
           {/* Menu thả xuống */}
           {isMenuOpen && (
             <div
