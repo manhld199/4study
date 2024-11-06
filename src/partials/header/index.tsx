@@ -37,8 +37,8 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="px-20">
-      <div className="w-full h-20 bg-teal-300 flex items-center justify-between bg-white px-5">
+    <header className="bg-white">
+      <div className="w-4/5 m-auto h-20 flex items-center justify-between px-5">
         {/* Logo */}
         <Link href="/">
           <img src="/imgs/Logone.png" alt="Logo" className="h-10" />
@@ -56,11 +56,11 @@ export default function Header() {
 
         {/* My Courses Button và Avatar */}
         <div className="flex items-center relative">
-          <Link href="/course/1">
+          <Link href="/dash-board">
             <Button
               variant="ghost"
               className="cursor-pointer text-[#5271FF] text-base hover:bg-transparent hover:text-[#11009E]">
-              Personal courses
+              Dashboard
             </Button>
           </Link>
           <img
