@@ -6,11 +6,13 @@ import Link from "next/link";
 
 // import components
 import { Button } from "../components/ui/button";
+import { CardCourse } from "@/components";
+import { courses } from "@/data/courses"; // Import dữ liệu từ file data.ts
 
-const images = ["/imgs/test.jpg", "/imgs/test.jpg", "/imgs/test.jpg"];
+const images: string[] = ["/imgs/test.jpg", "/imgs/test.jpg", "/imgs/test.jpg"];
 
 export default function Home() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) =>
@@ -34,7 +36,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="relative mx-[100px] h-[450px] overflow-hidden">
+      <div className="relative h-[450px] overflow-hidden">
         <div
           className="flex transition-transform duration-500"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
@@ -80,31 +82,35 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mx-[100px]">
-        <div className="font-bold text-xl pt-4 text-[#11009E]">NEW COURSES</div>
+      <div>
+        <div className="font-bold text-xl pt-5 text-[#11009E]">NEW COURSES</div>
 
-        <div className="grid grid-cols-4 gap-4 py-4">
-          {Array.from({ length: 8 }, (_, i) => (
-            <div
-              key={i}
-              className="bg-gray-300 flex items-center justify-center h-[290px] rounded-md">
-              Khóa học
-            </div>
-            // <CardCourse key={i} />
+        <div className="grid grid-cols-4 gap-4 pt-4">
+          {courses.slice(0, 8).map((course: Course) => (
+            <CardCourse
+              key={course._id}
+              course={course}
+              isPersonalized={true}
+            />
           ))}
         </div>
       </div>
-      <div className="mx-[100px]">
-        <div className="font-bold text-xl text-[#11009E]">POPULAR COURSES</div>
-        <div className="grid grid-cols-4 gap-4 py-4">
-          {Array.from({ length: 8 }, (_, i) => (
-            <div
-              key={i}
-              className="bg-gray-300 flex items-center justify-center h-[290px] rounded-md">
-              Khóa học
-            </div>
-            // <CardCourse key={i} />
-          ))}
+
+      <div>
+        <div className="font-bold text-xl text-[#11009E] pt-5">
+          POPULAR COURSES
+        </div>
+        <div className="grid grid-cols-4 gap-4 pt-4">
+          {courses
+            .sort((a, b) => b.rank_popular - a.rank_popular) // Sắp xếp theo độ phổ biến
+            .slice(0, 8)
+            .map((course: Course) => (
+              <CardCourse
+                key={course._id}
+                course={course}
+                isPersonalized={false}
+              />
+            ))}
         </div>
       </div>
     </>
