@@ -2,7 +2,7 @@
 import { Nunito } from "next/font/google";
 
 // import partials
-import { Header, MainNav } from "../partials";
+import { Header, MainNav, ScrollUp } from "../partials";
 
 // import css
 import "./globals.css";
@@ -29,6 +29,7 @@ export default function RootLayout({
 
         {/* FOOTER */}
         <footer className="w-full h-[300px] bg-teal-300">Footer</footer>
+        <ScrollUp/>
       </body>
     </html>
   );
