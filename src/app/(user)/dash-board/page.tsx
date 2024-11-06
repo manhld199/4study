@@ -1,10 +1,15 @@
 "use client";
 
 import React from "react";
-import CardCourse from "@/components/(general)/cards/courses";
+// import { Button } from "@/components/ui/button";
+import CardCourse from "@/components/(general)/cards/course";
 import { courses } from "@/data/courses";
+// import { Search } from "lucide-react";
 
-export default function ProfilePage() {
+export default function ExplorePage() {
+  // const handleExplore = () => {
+  //   console.log("Search button clicked");
+  // };
 
   // Filtering courses for different sections
   const popularCourses = courses
@@ -12,10 +17,16 @@ export default function ProfilePage() {
     .slice(0, 4);
   const personalizedCourses = courses
     .sort((a, b) => a.rank_personalized - b.rank_personalized)
-    .slice(0, 8);
+    .slice(0, 4);
+  // const schoolCourses = courses
+  //   .filter((course) => course.school._id === "1")
+  //   .slice(0, 4); // Adjust school ID as needed
+  // const teacherCourses = courses
+  //   .filter((course) => course.teachers.some((teacher) => teacher._id === "1"))
+  //   .slice(0, 4); // Adjust teacher ID as needed
 
   return (
-    <div className="min-h-screen bg-[#FFE3FA] text-white p-6 pb-12">
+    <div className="min-h-screen bg-[#FFE3FA] p-6 pb-12">
       {/* Search Bar */}
       {/* <div className="flex items-center justify-center mb-8">
         <div className="bg-[#11009E] p-2 rounded-l">
@@ -66,6 +77,40 @@ export default function ProfilePage() {
             ))}
           </div>
         </div>
+
+        {/* School-Based Courses */}
+        {/* <div>
+          <h2 className="text-lg text-black font-semibold mb-4">
+            Courses by School
+          </h2>
+          <div className="grid grid-cols-4 gap-4">
+            {schoolCourses.map((course) => (
+              <CardCourse
+                key={course._id}
+                course={course}
+                className="custom-class"
+                isPersonalized={false}
+              />
+            ))}
+          </div>
+        </div> */}
+
+        {/* Teacher-Based Courses */}
+        {/* <div>
+          <h2 className="text-lg text-black font-semibold mb-4">
+            Courses by Teacher
+          </h2>
+          <div className="grid grid-cols-4 gap-4">
+            {teacherCourses.map((course) => (
+              <CardCourse
+                key={course._id}
+                course={course}
+                className="custom-class"
+                isPersonalized={false}
+              />
+            ))}
+          </div>
+        </div> */}
       </section>
     </div>
   );
