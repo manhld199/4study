@@ -9,7 +9,6 @@ export default function MainNav() {
   // Mảng chứa tất cả các liên kết điều hướng
   const navLinks = [
     { href: "/", label: "Home" },
-    { href: "/course/1", label: "Courses" },
     { href: "/explore", label: "Explore" },
     { href: "/term-of-use", label: "Term of use" },
     { href: "/term-of-service", label: "Term of service" },
@@ -17,8 +16,8 @@ export default function MainNav() {
   ];
 
   return (
-    <nav className="bg-white shadow-md px-20 py-2">
-      <ul className="flex px-5 text-[14px] font-medium leading-[24px] tracking-[0.15px] whitespace-nowrap uppercase h-[45px]">
+    <nav className="bg-white shadow-md pb-[6px] px-5">
+      <ul className="w-4/5 m-auto flex text-[14px] font-medium leading-[24px] tracking-[0.15px] whitespace-nowrap uppercase h-[45px]">
         {navLinks.map(({ href, label }) => (
           <Link href={href} key={href}>
             <li

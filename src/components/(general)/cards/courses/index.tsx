@@ -7,6 +7,28 @@ import { Star } from "lucide-react";
 // import components
 import { Badge } from "@/components/ui/badge";
 
+interface Course {
+  _id: string;
+  course_name: string;
+  course_img: string;
+  course_about: string;
+  course_videos: string[];
+  school: {
+    _id: string;
+    school_name: string;
+    school_img: string;
+    school_about: string;
+  };
+  teachers: {
+    _id: string;
+    teacher_name: string;
+    teacher_img: string;
+    teacher_about: string;
+  }[];
+  rank_popular: number;
+  rank_personalized: number;
+}
+
 export default function CardCourse({
   course,
   className = "",
@@ -20,9 +42,10 @@ export default function CardCourse({
     <Link
       href={`/course/${course._id}`}
       target="_blank"
-      className={`cursor-pointer w-full border-2 rounded-lg flex flex-col gap-2 items-center overflow-hidden bg-white hover:bg-pri3/30 ${className}`}>
+      className={`cursor-pointer w-full border-2 rounded-lg flex flex-col gap-2 items-center overflow-hidden bg-white hover:bg-pri3/30 ${className}`}
+    >
       <div className="relative w-full">
-        <div className="relative w-full aspect-[10/7]">
+        <div className="relative w-full aspect-[10/3]">
           <Image
             src={course.course_img}
             alt={course.course_name}
@@ -34,7 +57,8 @@ export default function CardCourse({
         {isPersonalized && (
           <div
             className="absolute top-0 left-0 w-12 h-12 bg-pri2"
-            style={{ clipPath: "polygon(0 0, 100% 0, 0 100%)" }}>
+            style={{ clipPath: "polygon(0 0, 100% 0, 0 100%)" }}
+          >
             <Star fill="yellow" strokeWidth={0} className="mt-1 ml-[2px]" />
           </div>
         )}
@@ -73,7 +97,8 @@ export default function CardCourse({
             {course.teachers.slice(0, 2).map((teacher, index) => (
               <Badge
                 key={`badge ${course._id} teacher ${index}`}
-                className="w-fit bg-pri2">
+                className="w-fit bg-pri2"
+              >
                 {teacher.teacher_name}
               </Badge>
             ))}
@@ -84,11 +109,15 @@ export default function CardCourse({
         </div>
 
         <div className="h-24 px-3 flex flex-col gap-1 border-b-2">
-          <h4 className="w-full line-clamp-1">{course.course_name}</h4>
+          <h4 className="text-zinc-500 w-full line-clamp-1">
+            {course.course_name}
+          </h4>
           <p className="text-zinc-500 line-clamp-2">{course.course_about}</p>
         </div>
 
-        <p className="px-3 font-bold text-pri2">{course.school.school_name}</p>
+        <p className="text-zinc-500 px-3 font-bold text-pri2">
+          {course.school.school_name}
+        </p>
       </div>
     </Link>
   );

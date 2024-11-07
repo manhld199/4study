@@ -2,7 +2,8 @@
 import { Nunito } from "next/font/google";
 
 // import partials
-import { Header, MainNav } from "../partials";
+import { Header, MainNav, ScrollUp } from "../partials";
+import { Footer } from "../partials";
 
 // import css
 import "./globals.css";
@@ -20,15 +21,19 @@ export default function RootLayout({
   return (
     <html lang="en" className={nunito.className}>
       <body className="flex flex-col gap-2 bg-bg1">
-        {/* HEADER */}
-        <Header />
-        <MainNav />
+        {/* HEADER và MainNav trong một div để kiểm soát khoảng cách */}
+    <div className="">
+      <Header />
+      <MainNav />
+    </div>
 
         {/* CONTAINER */}
         <main className="w-4/5 m-auto">{children}</main>
 
         {/* FOOTER */}
-        <footer className="w-full h-[300px] bg-teal-300">Footer</footer>
+        {/* <footer className="w-full h-[300px] bg-teal-300">Footer</footer> */}
+        <Footer/>
+        <ScrollUp/>
       </body>
     </html>
   );
