@@ -33,22 +33,26 @@ const courseSchema = new Schema(
 const Course =
   mongoose.models?.Course || mongoose.model("Course", courseSchema);
 
-const importCourses = courses.map(
-  (course, index) =>
-    new Course({
-      _id: new mongoose.Types.ObjectId(course.id),
-      course_name: course.course_name,
-      course_img: courseImgs[Math.floor(Math.random() * courseImgs.length)],
-      course_about: course.course_about,
-      course_videos: [
-        courseVideos[Math.floor(Math.random() * courseVideos.length)],
-      ],
-      school_id: new mongoose.Types.ObjectId(course.school_id),
-      teachers: course.teachers.map(
-        (teacher) => new mongoose.Types.ObjectId(teacher)
-      ),
-    })
-);
+const importCourses = courses.map((course, index) => {
+  let videos = [];
+  for (let i = 0; i < 5; i++) {
+    const randomVideo =
+      courseVideos[Math.floor(Math.random() * courseVideos.length)];
+    if (videos.indexOf(randomVideo) == -1) videos.push(randomVideo);
+  }
+
+  return new Course({
+    _id: new mongoose.Types.ObjectId(course.id),
+    course_name: course.course_name,
+    course_img: courseImgs[Math.floor(Math.random() * courseImgs.length)],
+    course_about: course.course_about,
+    course_videos: videos,
+    school_id: new mongoose.Types.ObjectId(course.school_id),
+    teachers: course.teachers.map(
+      (teacher) => new mongoose.Types.ObjectId(teacher)
+    ),
+  });
+});
 // console.log("aaaaaaaaaaaaaaaa", importCourses);
 
 // connect mongodb
