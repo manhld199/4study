@@ -13,7 +13,7 @@ const RenderLayout: React.FC<{
   switch (type) {
     case "search-page":
       return (
-        <div className="grid grid-cols-3 gap-2">
+        <div className="py-2 grid grid-cols-3 gap-2">
           {filteredOptions.map((option) => (
             <RenderOption
               type={type}

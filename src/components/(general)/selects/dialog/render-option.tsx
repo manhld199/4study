@@ -48,8 +48,8 @@ const RenderOption: React.FC<{
         return (
           <div
             className={`w-full flex flex-col gap-2 ${
-              isSelected ? "bg-pri2/80" : "bg-zinc-300"
-            }  rounded-md`}>
+              isSelected ? "bg-hover" : "bg-zinc-300"
+            }`}>
             <div className="h-11 px-2 pt-2 grid grid-cols-[1.25rem_1fr] gap-2 text-black">
               {renderSelectionIndicator()}
               <p className="text-sm font-semibold line-clamp-2">
@@ -83,13 +83,8 @@ const RenderOption: React.FC<{
   return (
     <div
       className={cn(
-        "cursor-pointer transition-all",
-        type === "admin-categories"
-          ? "p-2 rounded-md bg-pri-2/40 hover:bg-pri-2/60 dark:bg-pri-2/10 dark:hover:bg-pri-2/60 flex flex-col gap-2"
-          : "group flex gap-1 items-start py-1 px-2 rounded-full",
-        isSelected
-          ? "bg-pri-7 text-white"
-          : "text-zinc-700 dark:text-white bg-pri-2/20 dark:bg-zinc-700 dark:hover:text-zinc-800 hover:bg-pri-2/60 dark:hover:bg-pri-2"
+        "m-1 cursor-pointer transition-all",
+        "overflow-hidden rounded-lg hover:shadow-lg"
       )}
       onClick={() => handleToggle(option)}>
       {renderOptionContent()}

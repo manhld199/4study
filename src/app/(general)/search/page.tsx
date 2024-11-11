@@ -1,21 +1,26 @@
 // import components
 import Search from "./search";
 
-// import data
-import { courses } from "@/data/courses";
-import { schools } from "@/data/schools";
-import { teachers } from "@/data/teachers";
+// import utils
+import { fetchData } from "@/utils/functions/server";
+import { API_SCHOOL_URL, API_TEACHER_URL } from "@/utils/constants/urls";
 
-export default function SearchPage() {
-  const courseData = courses;
-  const schoolData = schools;
-  const teacherData = teachers;
+export default async function SearchPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) {
+  const { keyword, page } = searchParams;
+
+  const schoolData = await fetchData(API_SCHOOL_URL);
+  const teacherData = await fetchData(API_TEACHER_URL);
 
   return (
     <Search
-      courseData={courseData}
       schoolData={schoolData}
       teacherData={teacherData}
+      keyword={keyword ?? ""}
+      pageNumber={Number(page)}
     />
   );
 }

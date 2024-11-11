@@ -22,18 +22,18 @@ export default function RootLayout({
     <html lang="en" className={nunito.className}>
       <body className="flex flex-col gap-2 bg-bg1">
         {/* HEADER và MainNav trong một div để kiểm soát khoảng cách */}
-    <div className="">
-      <Header />
-      <MainNav />
-    </div>
+        <div className="">
+          <Header />
+          <MainNav />
+        </div>
 
         {/* CONTAINER */}
         <main className="w-4/5 m-auto">{children}</main>
 
         {/* FOOTER */}
         {/* <footer className="w-full h-[300px] bg-teal-300">Footer</footer> */}
-        <Footer/>
-        <ScrollUp/>
+        <Footer />
+        <ScrollUp />
       </body>
     </html>
   );

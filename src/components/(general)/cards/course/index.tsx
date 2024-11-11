@@ -20,7 +20,7 @@ export default function CardCourse({
     <Link
       href={`/course/${course._id}`}
       target="_blank"
-      className={`cursor-pointer w-full border-2 rounded-lg flex flex-col gap-2 items-center overflow-hidden bg-white hover:bg-pri3/30 ${className}`}>
+      className={`cursor-pointer w-full border-2 rounded-3xl flex flex-col gap-2 items-center overflow-hidden bg-white hover:shadow-lg pb-2 ${className}`}>
       <div className="relative w-full">
         <div className="relative w-full aspect-[10/7]">
           <Image
@@ -38,57 +38,32 @@ export default function CardCourse({
             <Star fill="yellow" strokeWidth={0} className="mt-1 ml-[2px]" />
           </div>
         )}
-
-        <div className="absolute left-2 bottom-2 w-1/3">
-          <div className="relative w-full aspect-[10/5]">
-            <Image
-              src={course.school.school_img}
-              alt={course.school.school_name}
-              className="object-cover rounded-lg shadow-sm shadow-zinc-800"
-              fill
-            />
-          </div>
-        </div>
-        <div className="absolute w-1/3 right-2 bottom-2">
-          {course.teachers.slice(0, 2).map((teacher, index) => (
-            <div
-              key={`course teacher ${course._id} ${index}`}
-              className="w-full mt-2">
-              <div className="relative w-full aspect-[10/5]">
-                <Image
-                  src={teacher.teacher_img}
-                  alt={teacher.teacher_name}
-                  className="object-cover rounded-lg shadow-sm shadow-zinc-800"
-                  fill
-                />
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
 
-      <div className="w-full pb-2 flex flex-col gap-1">
-        <div className="px-3 flex flex-row justify-between">
+      <div className="w-full py-2 flex flex-col gap-3">
+        <div className="px-4 flex flex-row justify-between">
           <div className="flex flex-row gap-1 flex-wrap">
             {course.teachers.slice(0, 2).map((teacher, index) => (
               <Badge
                 key={`badge ${course._id} teacher ${index}`}
-                className="w-fit bg-pri2">
+                className="w-fit bg-pri2 hover:bg-pri2">
                 {teacher.teacher_name}
               </Badge>
             ))}
           </div>
           {course.teachers.length > 2 && (
-            <Badge className="bg-zinc-400">+{course.teachers.length - 2}</Badge>
+            <Badge className="bg-zinc-400 hover:bg-zinc-400">
+              +{course.teachers.length - 2}
+            </Badge>
           )}
         </div>
 
-        <div className="h-24 px-3 flex flex-col gap-1 border-b-2">
+        <div className="h-28 px-4 flex flex-col gap-1 border-b-2">
           <h4 className="w-full line-clamp-1">{course.course_name}</h4>
           <p className="text-zinc-500 line-clamp-2">{course.course_about}</p>
         </div>
 
-        <p className="px-3 font-bold text-pri2">{course.school.school_name}</p>
+        <p className="px-4 font-bold text-pri2">{course.school.school_name}</p>
       </div>
     </Link>
   );
