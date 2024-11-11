@@ -28,7 +28,7 @@ export default function RootLayout({
         </div>
 
         {/* CONTAINER */}
-        <main className="w-4/5 m-auto">{children}</main>
+        <main className="m-auto">{children}</main>
 
         {/* FOOTER */}
         {/* <footer className="w-full h-[300px] bg-teal-300">Footer</footer> */}
