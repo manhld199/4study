@@ -26,7 +26,7 @@ export default function ExplorePage() {
     .slice(0, 4); // Adjust teacher ID as needed
 
   return (
-    <div className="min-h-screen bg-[#FFE3FA] text-white p-6 pb-12">
+    <div className="min-h-screen bg-[#FFE3FA] p-6 pb-12">
       {/* Search Bar */}
       <div className="flex items-center justify-center mb-8">
         <div className="bg-[#11009E] p-2 rounded-l">

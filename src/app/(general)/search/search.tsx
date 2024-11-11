@@ -150,7 +150,8 @@ export default function Search({
 
               <DropdownMenuRadioGroup
                 value={sortState}
-                onValueChange={setSortState}>
+                onValueChange={setSortState}
+              >
                 <DropdownMenuRadioItem className="capitalize" value="Top">
                   Top
                 </DropdownMenuRadioItem>
@@ -161,7 +162,8 @@ export default function Search({
 
                 <DropdownMenuRadioItem
                   className="capitalize"
-                  value="Personalized">
+                  value="Personalized"
+                >
                   Personalized
                 </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
