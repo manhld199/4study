@@ -37,7 +37,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="bg-white">
+    <header className="bg-white pt-[24px]">
       <div className="w-4/5 m-auto h-20 flex items-center justify-between px-5">
         {/* Logo */}
         <Link href="/">
@@ -45,24 +45,22 @@ export default function Header() {
         </Link>
 
         {/* Search bar */}
-        <div className="flex items-center justify-between w-full max-w-[480px] min-w-[360px] border-[#5271FF] border-[1.4px] rounded-lg px-4 min-h-10 bg-[#C4CEFF] bg-opacity-50">
+        <div className="flex items-center justify-between w-full max-w-[480px] min-w-[700px] border-[#D9D9D9] border-[1.4px] rounded-[18px] px-1 min-h-12  bg-opacity-50">
+          <FiSearch className="min-w-[30px] min-h-[30px] p-[7px] rounded-full stroke-[#5271FF]" />
           <input
             type="text"
-            placeholder="Search..."
+            placeholder="Find Your Courses..."
             className="w-full border-0 outline-none bg-transparent"
           />
-          <FiSearch className="min-w-[30px] min-h-[30px] p-[7px] rounded-full bg-[#5271FF] cursor-pointer stroke-white" />
+          <Button
+            type="submit"
+            className="bg-[#5271FF] text-white rounded-[18px] py-2 px-8 hover:bg-[#11009E]">
+              Search
+            </Button>
         </div>
 
         {/* My Courses Button và Avatar */}
         <div className="flex items-center relative">
-          <Link href="/dash-board">
-            <Button
-              variant="ghost"
-              className="cursor-pointer text-[#5271FF] text-base hover:bg-transparent hover:text-[#11009E]">
-              Dashboard
-            </Button>
-          </Link>
           <img
             ref={avatarRef}
             src="/imgs/test.jpg"
@@ -70,6 +68,13 @@ export default function Header() {
             className="h-[40px] w-[40px] rounded-full cursor-pointer"
             onClick={toggleMenu}
           />
+          <Link href="/dash-board">
+            <Button
+              variant="ghost"
+              className="cursor-pointer text-[#5271FF] text-base hover:bg-transparent hover:text-[#11009E]">
+              Dashboard
+            </Button>
+          </Link>
 
           {/* Menu thả xuống */}
           {isMenuOpen && (
