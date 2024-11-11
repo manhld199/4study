@@ -5,14 +5,14 @@ interface IOkResponseProps {
 
 interface INotOkResponseProps {
   message?: string;
-  error?: Error | string | undefined;
+  error?: Error | string | undefined | unknown;
 }
 
 interface IBaseResponseProps {
   message: string;
   status: EResponseStatus;
   data?: IResponseData;
-  error?: Error | string;
+  error?: Error | string | undefined | unknown;
 }
 
 interface Teacher {
