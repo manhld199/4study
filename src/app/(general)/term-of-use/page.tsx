@@ -154,7 +154,7 @@ export default function TermsOfUsePage() {
             third-party unless expressly permitted by these Terms.
           </li>
           <li>
-            Create derivative works based on the website's content without
+            Create derivative works based on the website&apos;s content without
             authorization.
           </li>
           <p>
@@ -169,12 +169,11 @@ export default function TermsOfUsePage() {
           <p>
             We take the protection of your personal information seriously and
             are committed to handling your data responsibly and securely. Our
-            Privacy Policy, accessible at [Link to Privacy Policy], explains our
-            practices regarding the collection, use, and protection of your
-            personal information. By using our website, you consent to our data
-            practices as outlined in the Privacy Policy. We encourage you to
-            review this policy regularly to stay informed about our data
-            practices and your rights.
+            Privacy Policy, explains our practices regarding the collection,
+            use, and protection of your personal information. By using our
+            website, you consent to our data practices as outlined in the
+            Privacy Policy. We encourage you to review this policy regularly to
+            stay informed about our data practices and your rights.
           </p>
         </div>
         <div className="flex-1 text-justify">
@@ -205,8 +204,8 @@ export default function TermsOfUsePage() {
           </li>
           <p>
             By using our platform, you acknowledge that the website provides
-            information "as-is" and "as-available," without warranties of any
-            kind, express or implied.
+            information &apos;as-is&apos; and &apos;as-available&apos; without
+            warranties of any kind, express or implied.
           </p>
         </div>
         <div className="flex-1 text-justify">
