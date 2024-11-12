@@ -61,9 +61,12 @@ export default function TermsOfUsePage() {
           <p>
             Welcome to{" "}
             <span className="text-[#5271FF] font-semibold">4STUDY</span>. These
-            Terms of Use govern your access to and use of the services and
-            content provided by our platform. By accessing our website, you
-            agree to comply with these Terms. Please read them carefully.
+            <span className="text-[#5271FF] font-semibold">
+              Terms of use
+            </span>{" "}
+            govern your access to and use of the services and content provided
+            by our platform. By accessing our website, you agree to comply with
+            these Terms. Please read them carefully.
           </p>
         </div>
         <div className="flex-1 text-justify">
@@ -82,7 +85,7 @@ export default function TermsOfUsePage() {
         </div>
         <div className="flex-1 text-justify">
           <h2 id="2" className="text-2xl mb-2 text-[#5271FF]">
-            2. Use of Services
+            2. Definitions
           </h2>
           <ul> </ul>
           <li>
