@@ -1,9 +1,9 @@
-// import libs
+// Import libs
 import { Course } from "@/libs/models";
 import { type NextRequest } from "next/server";
 import mongoose from "mongoose";
 
-// import utils
+// Import utils
 import {
   successResponse,
   notFoundResponse,
@@ -22,15 +22,15 @@ export const GET = async (req: NextRequest) => {
     const limit = parseInt(searchParams.get("limit") || "9", 10); // Default to 9 items per page
     const skip = (page - 1) * limit; // Skip based on the current page
 
-    // Build the aggregation pipeline
-    const pipeline: any[] = [
+    // Build the common part of the pipeline
+    const basePipeline: any[] = [
       {
         $search: {
           index: "search",
           text: {
             query: keyword,
             path: {
-              wildcard: "*", // Search across all fields in Course model
+              wildcard: "*",
             },
           },
         },
@@ -79,51 +79,53 @@ export const GET = async (req: NextRequest) => {
     }
 
     if (Object.keys(matchFilters).length > 0) {
-      pipeline.push({ $match: matchFilters });
+      basePipeline.push({ $match: matchFilters });
     }
 
     // Sorting based on sortType
     let sortStage = {};
     if (sortType === "Popular") {
-      sortStage = { rank_popular: -1 };
+      sortStage = { enrolled_users: -1 };
     } else if (sortType === "Personalized") {
       sortStage = { rank_personalized: -1 };
     }
 
     if (Object.keys(sortStage).length > 0) {
-      pipeline.push({ $sort: sortStage });
+      basePipeline.push({ $sort: sortStage }); // Ensure sorting before pagination
     }
 
-    // Pagination stages: skip and limit
-    pipeline.push({ $skip: skip });
-    pipeline.push({ $limit: limit });
-
-    // Project the required fields
-    pipeline.push({
-      $project: {
-        course_name: 1,
-        course_img: 1,
-        course_about: 1,
-        course_videos: 1,
-        "school.school_name": 1,
-        "school.school_img": 1,
-        "school.school_about": 1,
-        "teachers.teacher_name": 1,
-        "teachers.teacher_img": 1,
-        "teachers.teacher_about": 1,
+    // Define the pipeline with pagination stages for fetching results
+    const paginatedPipeline = [
+      ...basePipeline,
+      { $skip: skip },
+      { $limit: limit },
+      {
+        $project: {
+          course_name: 1,
+          course_img: 1,
+          course_about: 1,
+          course_videos: 1,
+          enrolled_users: 1,
+          "school.school_name": 1,
+          "school.school_img": 1,
+          "school.school_about": 1,
+          "teachers.teacher_name": 1,
+          "teachers.teacher_img": 1,
+          "teachers.teacher_about": 1,
+        },
       },
-    });
+    ];
 
-    // Count the total number of matching documents (for pagination info)
-    const totalCourses = await Course.aggregate([
-      ...pipeline.slice(0, pipeline.length - 2), // Exclude pagination stages
-      { $count: "total" },
-    ]);
+    // Separate pipeline for counting total courses without pagination
+    const countPipeline = [...basePipeline, { $count: "total" }];
 
+    // Count the total number of matching documents
+    const totalCourses = await Course.aggregate(countPipeline);
     const total = totalCourses[0]?.total || 0;
     const totalPages = Math.ceil(total / limit);
 
-    const courses = await Course.aggregate(pipeline);
+    // Fetch the paginated results
+    const courses = await Course.aggregate(paginatedPipeline);
 
     if (!courses.length) return notFoundResponse();
 
