@@ -22,6 +22,7 @@ import FilterTeacher from "./filter-teacher";
 
 // import utils
 import { PUBLIC_API_SEARCH_URL } from "@/utils/constants/urls";
+import Pagination from "./pagination";
 
 export default function Search({
   schoolData,
@@ -150,8 +151,7 @@ export default function Search({
 
               <DropdownMenuRadioGroup
                 value={sortState}
-                onValueChange={setSortState}
-              >
+                onValueChange={setSortState}>
                 <DropdownMenuRadioItem className="capitalize" value="Top">
                   Top
                 </DropdownMenuRadioItem>
@@ -162,8 +162,7 @@ export default function Search({
 
                 <DropdownMenuRadioItem
                   className="capitalize"
-                  value="Personalized"
-                >
+                  value="Personalized">
                   Personalized
                 </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
@@ -189,7 +188,9 @@ export default function Search({
               )}
             </div>
 
-            <div className="pagination-controls">
+            <Pagination page={page} setPage={setPage} totalPages={totalPages} />
+
+            {/* <div className="pagination-controls">
               <button
                 disabled={page === 1}
                 onClick={() => setPage((prev) => Math.max(prev - 1, 1))}>
@@ -205,7 +206,7 @@ export default function Search({
                 }>
                 Next
               </button>
-            </div>
+            </div> */}
           </div>
         )}
       </div>
