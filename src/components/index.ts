@@ -12,3 +12,5 @@ export { default as NotificationSuccess } from "./(general)/dialog/notification-
 
 // Chapter
 export { default as Chapter } from "./(general)/chapter/index";
+
+export { default as InfoTeacher } from "./(general)/info-teacher/index";
