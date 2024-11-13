@@ -19,10 +19,10 @@ const handler = NextAuth({
       async authorize(credentials) {
         try {
           if (!credentials?.email || !credentials?.password) {
-            throw new Error("Vui lòng nhập đầy đủ email và mật khẩu.");
+            throw new Error("Please enter both email and password.");
           }
 
-          // Tìm người dùng dựa trên email
+          // Find user by email
           const user = await User.aggregate([
             { $match: { user_email: credentials.email } },
             { $limit: 1 },
@@ -41,23 +41,42 @@ const handler = NextAuth({
           if (!isPasswordCorrect) {
             throw new Error("Incorrect email or password.");
           }
-
+          console.log("User found:", foundUser);
+          // Return user details including id, name, and email
           return {
-            id: foundUser._id,
+            id: foundUser._id.toString(),
             email: foundUser.user_email,
-            name: foundUser.name,
+            name: foundUser.user_name,
           };
         } catch (error) {
           if (error instanceof Error) {
-            throw new Error(error.message || "Có lỗi xảy ra khi xác thực.");
+            throw new Error(error.message || "An error occurred during authentication.");
           }
-          throw new Error("Có lỗi xảy ra khi xác thực.");
+          throw new Error("An error occurred during authentication.");
         }
       },
     }),
   ],
+  callbacks: {
+    async session({ session, token }) {
+      session.user = {
+        ...session.user,
+        id: token.id as string,  
+        name: token.name as string,
+        email: token.email as string,
+      };
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+      }
+      return token;
+    },
+  },
   secret: process.env.NEXTAUTH_SECRET,
 });
 
 export { handler as GET, handler as POST };
-
