@@ -10,6 +10,7 @@ const courseSchema = new Schema(
     course_videos: [{ type: String }],
     school_id: { type: Schema.Types.ObjectId, ref: "School" },
     teachers: [{ type: Schema.Types.ObjectId, ref: "Teacher" }],
+    enrolled_users: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
