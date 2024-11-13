@@ -9,7 +9,7 @@ export default function MainNav() {
   // Mảng chứa tất cả các liên kết điều hướng
   const navLinks = [
     { href: "/", label: "Home" },
-    { href: "/course", label: "Courses" },
+    { href: "/courses", label: "Courses" },
     { href: "/explore", label: "Explore" },
     { href: "/term-of-use", label: "Term of use" },
     { href: "/term-of-service", label: "Term of service" },

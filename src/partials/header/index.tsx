@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { FiSearch } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
+import coursesData from "../../../database/preprocessed-data/course.json";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,6 +37,47 @@ export default function Header() {
     };
   }, []);
 
+  const [searchQuery, setSearchQuery] = useState<string>(""); // Lưu trữ giá trị tìm kiếm
+  const [suggestions, setSuggestions] = useState<string[]>([]); // Lưu trữ danh sách gợi ý
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  // Hàm tìm kiếm gợi ý
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query.length > 0) {
+      // Tìm kiếm các khóa học phù hợp với truy vấn
+      const filteredSuggestions = coursesData
+        .map((course) => course.course_name) // Chỉ lấy tên khóa học
+        .filter((courseName) =>
+          courseName.toLowerCase().includes(query.toLowerCase())
+        );
+
+      setSuggestions(filteredSuggestions);
+    } else {
+      setSuggestions([]); // Nếu không có gì nhập, xóa gợi ý
+    }
+  };
+
+  // Xử lý khi người dùng chọn một gợi ý
+  const handleSuggestionClick = (suggestion: string) => {
+    setSearchQuery(suggestion); // Cập nhật input thành gợi ý đã chọn
+    setSuggestions([]); // Ẩn danh sách gợi ý
+  };
+
+  // Xử lý sự kiện khi người dùng nhấn "Search"
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      setIsSubmitting(true);
+      // Bạn có thể thực hiện tìm kiếm qua API hoặc chuyển hướng sang trang tìm kiếm
+      console.log("Searching for:", searchQuery); // Tìm kiếm với query
+      setIsSubmitting(false);
+      setSuggestions([]); // Xóa gợi ý sau khi tìm kiếm
+    }
+  };
+
   return (
     <header className="bg-white pt-[24px]">
       <div className="w-4/5 m-auto h-20 flex items-center justify-between px-5">
@@ -45,21 +87,38 @@ export default function Header() {
         </Link>
 
         {/* Search bar */}
-        <div className="flex items-center justify-between w-full max-w-[480px] min-w-[700px] border-[#D9D9D9] border-[1.4px] rounded-[18px] px-1 min-h-12  bg-opacity-50">
+        <form
+          onSubmit={handleSearch}
+          className="relative flex items-center justify-between w-full max-w-[480px] min-w-[700px] border-[#D9D9D9] border-[1.4px] rounded-[18px] px-1 min-h-12  bg-opacity-50">
           <FiSearch className="min-w-[30px] min-h-[30px] p-[7px] rounded-full stroke-[#5271FF]" />
           <input
             type="text"
             placeholder="Find Your Courses..."
             className="w-full border-0 outline-none bg-transparent"
+            value={searchQuery}
+            onChange={handleSearchChange}
           />
           <Link href="/courses">
             <Button
               type="submit"
               className="bg-[#5271FF] text-white rounded-[18px] py-2 px-8 hover:bg-[#11009E]">
-              Search
+              {isSubmitting ? "Submitting..." : "Search"}
             </Button>
           </Link>
-        </div>
+          {/* Hiển thị gợi ý tìm kiếm */}
+          {suggestions.length > 0 && (
+            <ul className="absolute top-[100%] left-0 w-full bg-white border border-[#D9D9D9] rounded-[12px] max-h-[200px] overflow-y-auto z-50">
+              {suggestions.map((suggestion, index) => (
+                <li
+                  key={index}
+                  className="p-2 cursor-pointer hover:bg-[#f0f0f0]"
+                  onClick={() => handleSuggestionClick(suggestion)}>
+                  {suggestion}
+                </li>
+              ))}
+            </ul>
+          )}
+        </form>
         {/* Khi chưa có account */}
         <div>
           <Link href="/login">
