@@ -1,9 +1,10 @@
 "use client";
-
+import { useSession } from "next-auth/react";
+import { useState } from "react";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import CourseDetail from "./course-detail";
+import { useEffect } from "react";
 
+import CourseDetail from "./course-detail";
 interface Teacher {
   _id: string;
   teacher_name: string;
@@ -28,9 +29,12 @@ interface Course {
   school: School;
 }
 
+
 export default function CoursePage() {
   const { id } = useParams();
+  const { data: session } = useSession();
   const [courseData, setCourseData] = useState<Course | null>(null);
+  const [isRegistered, setIsRegistered] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -58,11 +62,50 @@ export default function CoursePage() {
     fetchCourseData();
   }, [id]);
 
-  if (loading)
-    return <p className="flex items-center min-h-screen">Loading...</p>;
-  if (error) return <p className="text-center text-red-500">{error}</p>;
+  useEffect(() => {
+    if (session && courseData) {
+      checkIfEnrolled(session.user.id);
+    }
+  }, [session, courseData]);
 
+  const checkIfEnrolled = async (userId: string) => {
+    try {
+      const response = await fetch("/api/users/courses", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const courseIds = data.data || [];
+
+        const enrolled = courseIds.includes(courseData?._id);
+        setIsRegistered(enrolled);
+      } else {
+        console.error("Failed to fetch enrolled courses.");
+      }
+    } catch (error) {
+      console.error("Error fetching enrolled courses:", error);
+    }
+  };
+
+  if (loading)
+    return (
+      <p className="flex items-center justify-center min-h-screen">
+        Loading...
+      </p>
+    );
+  if (error) return <p className="text-center text-red-500">{error}</p>;
   if (!courseData) return null;
 
-  return <CourseDetail courseData={courseData} />;
+  return (
+    <CourseDetail
+      courseData={courseData}
+      isRegistered={isRegistered}
+      setIsRegistered={setIsRegistered} // Pass setIsRegistered
+    />
+  );
 }
