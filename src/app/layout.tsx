@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={nunito.className}>
-      <body className="flex flex-col gap-2 bg-bg1">
+      <body className="flex flex-col bg-bg1">
         {/* HEADER và MainNav trong một div để kiểm soát khoảng cách */}
         <div className="">
           <Header />

@@ -49,7 +49,7 @@ export default function Home() {
               <br />
               And Improve Your <span className="text-[#5271FF]">Skills</span>
             </h1>
-            <p className="font-regular">It's Time To Get Started With Us</p>
+            <p className="font-regular">It&apos;s Time To Get Started With Us</p>
           </div>
           <Link href="/explore">
             <Button className="px-6 py-2 bg-[#5271FF] text-white rounded-[18px] hover:bg-[#405DC3]">
@@ -68,7 +68,7 @@ export default function Home() {
         />
         <div className="absolute top-0 right-0 w-1/2 h-full flex flex-col gap-[50px] justify-center items-start p-10 bg-white bg-opacity-80 text-left">
           <div className="flex flex-col gap-[10px]">
-            <p className="text-[22px]">WHAT'S OUR MAIN GOAL</p>
+          <p className="text-[22px]">WHAT&apos;S OUR MAIN GOAL</p>
             <h2 className="text-[32px] font-semibold text-[#5271FF] leading-10">
               Professional Courses For Students
             </h2>
