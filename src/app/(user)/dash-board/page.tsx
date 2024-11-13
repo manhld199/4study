@@ -15,11 +15,11 @@ export default function ProfilePage() {
   const personalizedCourses = courses
     .sort((a, b) => a.rank_personalized - b.rank_personalized)
     .slice(0, 4);
-  const totalCourses = courses.length;  
+  const totalCourses = courses.length;
   return (
     <div className="">
       <div className="flex justify-center py-4">
-        <div className="bg-white w-[1300px] h-[302px] rounded-[18px] shadow-lg p-6">
+        <div className="bg-white w-full h-[302px] rounded-[18px] shadow-lg p-6">
           <div className="space-y-1">
             <h4 className="text-[32px] text-[#5271FF] font-medium leading-none">
               Dash Board
@@ -100,7 +100,7 @@ export default function ProfilePage() {
 
             {/* Fourth column */}
             <div className="flex flex-col items-left space-y-4">
-              <div className="text-[24px]">All Courses</div>
+              <div className="text-[24px] pr-[200px]">All Courses</div>
               <div className="text-[32px] pt-[32px] pb-[24px]">
                 {totalCourses}+
               </div>
@@ -119,7 +119,7 @@ export default function ProfilePage() {
           <h4 className="text-[32px] text-[#5271FF] font-medium leading-none pt-[30px] pb-[30px]">
             Completed Courses
           </h4>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-4 gap-4 p-6">
             {popularCourses.map((course) => (
               <CardCourse
                 key={course._id}
@@ -130,7 +130,7 @@ export default function ProfilePage() {
             ))}
           </div>
 
-          <div className="grid grid-cols-4 gap-4 pt-[30px]">
+          <div className="grid grid-cols-4 gap-4 pt-[30px] p-6">
             {popularCourses.map((course) => (
               <CardCourse
                 key={course._id}
@@ -142,7 +142,9 @@ export default function ProfilePage() {
           </div>
 
           {/* Navigation bar */}
-          <div className="pt-[30px] pb-[30px]">Navigation bar</div>
+          <div className="pt-[30px] pb-[30px] w-full text-center">
+            Navigation bar
+          </div>
         </div>
 
         {/* Personalized Courses */}
@@ -150,7 +152,7 @@ export default function ProfilePage() {
           <h4 className="text-[32px] text-[#5271FF] font-medium leading-none pt-[30px] pb-[30px]">
             Personalized Courses
           </h4>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-4 gap-4 p-6">
             {personalizedCourses.map((course) => (
               <CardCourse
                 key={course._id}
