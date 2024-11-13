@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "next-auth/react"; 
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -32,6 +33,7 @@ export default function Home() {
     fetchCourses();
   }, []);
 
+  const { data: session, status } = useSession(); // Get session data and status
   return (
     <>
       {/* Phần ảnh nền và nội dung chữ */}
@@ -141,3 +143,5 @@ export default function Home() {
     </>
   );
 }
+
+
