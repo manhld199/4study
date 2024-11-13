@@ -31,9 +31,10 @@ export default function FilterTeacher({
   };
 
   return (
-    <>
-      <div className="grid grid-cols-2 gap-1">
-        {teacherData.slice(0, 4).map((teacher, index) => (
+    <div className="w-full flex flex-col gap-2">
+      <h4 className="text-pri2">Teacher</h4>
+      <div className="grid grid-cols-2 gap-2">
+        {teacherData.slice(0, 6).map((teacher, index) => (
           <CardFilterSearch
             key={`filter_teacher_${index}`}
             data={teacher}
@@ -56,6 +57,6 @@ export default function FilterTeacher({
         type="search-page"
         placeholder="See more..."
       />
-    </>
+    </div>
   );
 }

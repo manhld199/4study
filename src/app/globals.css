@@ -78,29 +78,39 @@ html {
 h1 {
   font-size: 2rem;
   font-weight: bold;
+  color:#2C2C2C;
 }
 
 h2 {
   font-size: 1.75rem;
   font-weight: bold;
+  color:#2C2C2C;
 }
 
 h3 {
   font-size: 1.5rem;
   font-weight: bold;
+  color:#2C2C2C;
 }
 
 h4 {
   font-size: 1.25rem;
   font-weight: bold;
+  color:#2C2C2C;
 }
 
 h5 {
   font-size: 1.125rem;
   font-weight: bold;
+  color:#2C2C2C;
 }
 
 p {
   font-size: 1rem;
   font-weight: normal;
+  color:#2C2C2C;
+}
+
+span {
+  color:#2C2C2C;
 }

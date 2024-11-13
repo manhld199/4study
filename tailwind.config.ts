@@ -55,7 +55,9 @@ const config: Config = {
         pri2: "#5271FF",
         pri3: "#C4CEFF",
         pri4: "#FFE3FA",
-        bg1: "#F5F5F5",
+        bg1: "#F0F2F1",
+        "normal-text": "#2C2C2C",
+        hover: "#C4CEFF",
       },
       borderRadius: {
         lg: "var(--radius)",

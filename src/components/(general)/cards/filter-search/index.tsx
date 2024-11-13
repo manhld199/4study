@@ -18,11 +18,11 @@ export default function CardSchool1({
 }) {
   return (
     <div
-      className={`cursor-pointer relative border-2 rounded-md overflow-hidden ${className}`}
+      className={`cursor-pointer relative rounded-xl overflow-hidden hover:shadow-md ${className}`}
       onClick={() => setIsSelected(!isSelected)}>
-      <div className="absolute top-1 z-10 left-1 w-4 h-4">
+      <div className="absolute top-2 left-2 z-10 w-5 h-5">
         <Checkbox
-          className="bg-white border-none"
+          className="bg-white border-none w-5 h-5"
           checked={isSelected}
           onCheckedChange={setIsSelected}
         />
@@ -39,9 +39,9 @@ export default function CardSchool1({
 
       <div
         className={`absolute bottom-0 w-full p-2 ${
-          isSelected ? "bg-pri2/80" : "bg-zinc-300"
+          isSelected ? "bg-hover" : "bg-zinc-300"
         }`}>
-        <p className="text-sm line-clamp-1 font-bold">
+        <p className="text-sm line-clamp-2 font-bold">
           {(data as School).school_name || (data as Teacher).teacher_name}
         </p>
       </div>
