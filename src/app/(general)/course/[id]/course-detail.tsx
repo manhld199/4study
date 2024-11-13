@@ -1,11 +1,10 @@
-import { signIn, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { Chapter, InfoTeacher } from "@/components";
+import { Chapter, InfoTeacher, RecommendedCourses } from "@/components";
 import { Button } from "@/components/ui/button";
 import {
   capitalizeFirstSentence,
   truncateWords,
 } from "@/utils/functions/format";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 
 interface CourseDetailProps {
@@ -126,7 +125,7 @@ export default function CourseDetail({
           </Button>
         </div>
       </div>
-      <div className="flex w-full h-[300px] bg-[#11009E]"></div>
+      <RecommendedCourses/>
     </div>
   );
 }
