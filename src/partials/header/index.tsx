@@ -58,6 +58,7 @@ export default function Header() {
             Search
           </Button>
         </div>
+        {/* Khi chưa có account */}
         <div>
           <Link href="/login">
             <Button
