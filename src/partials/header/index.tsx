@@ -120,7 +120,7 @@ export default function Header() {
           )}
         </form>
         {/* Khi chưa có account */}
-        {/* <div>
+        <div>
           <Link href="/login">
             <Button
               type="submit"
@@ -128,7 +128,7 @@ export default function Header() {
               Login
             </Button>
           </Link>
-        </div> */}
+        </div>
 
         {/* My Courses Button và Avatar */}
         {/* <div className="flex items-center relative">
