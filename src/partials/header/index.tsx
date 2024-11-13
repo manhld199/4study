@@ -52,11 +52,13 @@ export default function Header() {
             placeholder="Find Your Courses..."
             className="w-full border-0 outline-none bg-transparent"
           />
-          <Button
-            type="submit"
-            className="bg-[#5271FF] text-white rounded-[18px] py-2 px-8 hover:bg-[#11009E]">
-            Search
-          </Button>
+          <Link href="/courses">
+            <Button
+              type="submit"
+              className="bg-[#5271FF] text-white rounded-[18px] py-2 px-8 hover:bg-[#11009E]">
+              Search
+            </Button>
+          </Link>
         </div>
         {/* Khi chưa có account */}
         <div>
