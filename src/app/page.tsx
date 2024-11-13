@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "next-auth/react"; 
 // import libs
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -13,6 +14,7 @@ const images: string[] = ["/imgs/test.jpg", "/imgs/test.jpg", "/imgs/test.jpg"];
 
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const { data: session, status } = useSession(); // Get session data and status
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) =>
@@ -116,3 +118,5 @@ export default function Home() {
     </>
   );
 }
+
+

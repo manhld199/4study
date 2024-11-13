@@ -1,6 +1,7 @@
 "use client";
 
 // import libs
+import { signIn } from "next-auth/react";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -42,23 +43,21 @@ export default function Login() {
     const { email, password } = data;
 
     try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ user_email: email, user_password: password }),
+      const response = await signIn("credentials", {
+        email,
+        password,
+        redirect: false, // Prevent auto redirection, allowing custom handling
       });
 
-      const result = await response.json();
-
-      if (response.ok) {
+      if (!response?.error) {
+        // Show success notification and navigate after a delay
         setIsDialogOpen(true);
         setTimeout(() => {
-          router.push("/"); 
+          router.push("/");
+          router.refresh();
         }, 3000);
       } else {
-        setLoginError(result.message || "Something went wrong.");
+        setLoginError(response.error || "Something went wrong.");
       }
     } catch (error) {
       console.error("Login error:", error);
