@@ -1,117 +1,138 @@
 "use client";
 
-import React from "react";
-import { Button } from "@/components/ui/button";
-import CardCourse from "@/components/(general)/cards/course";
-import { courses } from "@/data/courses";
-import { Search } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ImageSlider } from "@/components/(general)/image-slider"; // Import ImageSlider
+import { CourseSlider } from "@/components/(general)/course-slider"; // Import CourseSlider
 
-export default function ExplorePage() {
-  const handleExplore = () => {
-    console.log("Search button clicked");
-  };
+export default function Home() {
+  // State để lưu các khóa học
+  const [popularCourses, setPopularCourses] = useState<any[]>([]);
+  const [personalizedCourses, setPersonalizedCourses] = useState<any[]>([]);
+  const [teacherCourses, setTeacherCourses] = useState<any[]>([]);
+  const [schoolCourses, setSchoolCourses] = useState<any[]>([]);
 
-  // Filtering courses for different sections
-  const popularCourses = courses
-    .sort((a, b) => a.rank_popular - b.rank_popular)
-    .slice(0, 4);
-  const personalizedCourses = courses
-    .sort((a, b) => a.rank_personalized - b.rank_personalized)
-    .slice(0, 4);
-  const schoolCourses = courses
-    .filter((course) => course.school._id === "1")
-    .slice(0, 4); // Adjust school ID as needed
-  const teacherCourses = courses
-    .filter((course) => course.teachers.some((teacher) => teacher._id === "1"))
-    .slice(0, 4); // Adjust teacher ID as needed
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Fetch dữ liệu cho 4 mục
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch popular courses
+        const popularResponse = await fetch("/api/courses/popularity", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const popularData = await popularResponse.json();
+        setPopularCourses(popularData.data);
+
+        // Fetch personalized courses
+        const personalizedResponse = await fetch("/api/courses/personalized", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const personalizedData = await personalizedResponse.json();
+        setPersonalizedCourses(personalizedData.data);
+
+        // Fetch courses by teacher
+        const teacherResponse = await fetch("/api/courses/teacher", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const teacherData = await teacherResponse.json();
+        setTeacherCourses(teacherData.data);
+
+        // Fetch courses by school
+        const schoolResponse = await fetch("/api/courses/school", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const schoolData = await schoolResponse.json();
+        setSchoolCourses(schoolData.data);
+
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-[#FFE3FA] text-white p-6 pb-12">
-      {/* Search Bar */}
-      <div className="flex items-center justify-center mb-8">
-        <div className="bg-[#11009E] p-2 rounded-l">
-          <Search />
-        </div>
-        <input
-          type="text"
-          placeholder="Search for courses..."
-          className="flex-1 p-2 bg-white text-gray-700 mr-2 max-w-xs focus:outline-none focus:ring-0"
-        />
-        <Button onClick={handleExplore} className="bg-[#11009E] p-2">
-          Search
-        </Button>
-      </div>
+    <>
+      {/* Image Slider */}
+      <ImageSlider />
 
-      {/* Course Sections */}
-      <section className="space-y-8">
+      {/* Course Slider */}
+      <section className="py-[50px] flex flex-col gap-[30px] max-w-[1180px] justify-center items-center m-auto">
         {/* Popular Courses */}
-        <div>
-          <h2 className="text-lg text-black font-semibold mb-4">
+        <div className="w-full">
+          <h2 className="text-[32px] text-[#5271FF] font-semibold leading-[40px] pb-[10px]">
             Popular Courses
           </h2>
-          <div className="grid grid-cols-4 gap-4">
-            {popularCourses.map((course) => (
-              <CardCourse
-                key={course._id}
-                course={course}
-                className="custom-class"
-                isPersonalized={false}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <p>Loading popular courses...</p>
+          ) : popularCourses.length > 0 ? (
+            <CourseSlider courses={popularCourses} />
+          ) : (
+            <p>No popular courses available at the moment.</p>
+          )}
         </div>
 
         {/* Personalized Courses */}
-        <div>
-          <h2 className="text-lg text-black font-semibold mb-4">
+        <div className="w-full">
+          <h2 className="text-[32px] text-[#5271FF] font-semibold leading-[40px] pb-[10px]">
             Personalized Courses
           </h2>
-          <div className="grid grid-cols-4 gap-4">
-            {personalizedCourses.map((course) => (
-              <CardCourse
-                key={course._id}
-                course={course}
-                className="custom-class"
-                isPersonalized={true}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <p>Loading personalized courses...</p>
+          ) : personalizedCourses.length > 0 ? (
+            <CourseSlider courses={personalizedCourses} />
+          ) : (
+            <p>No personalized courses available at the moment.</p>
+          )}
         </div>
 
-        {/* School-Based Courses */}
-        <div>
-          <h2 className="text-lg text-black font-semibold mb-4">
-            Courses by School
-          </h2>
-          <div className="grid grid-cols-4 gap-4">
-            {schoolCourses.map((course) => (
-              <CardCourse
-                key={course._id}
-                course={course}
-                className="custom-class"
-                isPersonalized={false}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Teacher-Based Courses */}
-        <div>
-          <h2 className="text-lg text-black font-semibold mb-4">
+        {/* Courses by Teacher */}
+        <div className="w-full">
+          <h2 className="text-[32px] text-[#5271FF] font-semibold leading-[40px] pb-[10px]">
             Courses by Teacher
           </h2>
-          <div className="grid grid-cols-4 gap-4">
-            {teacherCourses.map((course) => (
-              <CardCourse
-                key={course._id}
-                course={course}
-                className="custom-class"
-                isPersonalized={false}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <p>Loading teacher courses...</p>
+          ) : teacherCourses.length > 0 ? (
+            <CourseSlider courses={teacherCourses} />
+          ) : (
+            <p>No teacher courses available at the moment.</p>
+          )}
         </div>
+
+        {/* Courses by School */}
+        <div className="w-full">
+          <h2 className="text-[32px] text-[#5271FF] font-semibold leading-[40px] pb-[10px]">
+            Courses by School
+          </h2>
+          {loading ? (
+            <p>Loading school courses...</p>
+          ) : schoolCourses.length > 0 ? (
+            <CourseSlider courses={schoolCourses} />
+          ) : (
+            <p>No school courses available at the moment.</p>
+          )}
+        </div>
+
       </section>
-    </div>
+    </>
   );
 }

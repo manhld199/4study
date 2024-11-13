@@ -27,4 +27,18 @@ export const schools: School[] = [
       "https://thepet.vn/wp-content/uploads/2023/05/angry_cat_2-scaled-1-1024x683.webp",
     school_about: "Offers various business and management programs.",
   },
+  {
+    _id: "5",
+    school_name: "Web Development Bootcamp 2",
+    school_img:
+      "https://thepet.vn/wp-content/uploads/2023/05/angry_cat_2-scaled-1-1024x683.webp",
+    school_about: "Intensive training for aspiring web developers 2.",
+  },
+  {
+    _id: "6",
+    school_name: "Business Institute 2",
+    school_img:
+      "https://thepet.vn/wp-content/uploads/2023/05/angry_cat_2-scaled-1-1024x683.webp",
+    school_about: "Offers various business and management programs 2.",
+  },
 ];
