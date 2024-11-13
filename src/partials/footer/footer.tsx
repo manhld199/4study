@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { FormEvent } from "react";
 import Image from "next/image";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
