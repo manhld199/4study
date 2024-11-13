@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null); 
-  const avatarRef = useRef<HTMLImageElement>(null); 
+  const menuRef = useRef<HTMLDivElement>(null);
+  const avatarRef = useRef<HTMLImageElement>(null);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -55,12 +55,21 @@ export default function Header() {
           <Button
             type="submit"
             className="bg-[#5271FF] text-white rounded-[18px] py-2 px-8 hover:bg-[#11009E]">
-              Search
+            Search
+          </Button>
+        </div>
+        <div>
+          <Link href="/login">
+            <Button
+              type="submit"
+              className="bg-[#5271FF] text-white rounded-[18px] py-2 px-8 hover:bg-[#11009E]">
+              Login
             </Button>
+          </Link>
         </div>
 
         {/* My Courses Button và Avatar */}
-        <div className="flex items-center relative">
+        {/* <div className="flex items-center relative">
           <img
             ref={avatarRef}
             src="/imgs/test.jpg"
@@ -77,7 +86,7 @@ export default function Header() {
           </Link>
 
           {/* Menu thả xuống */}
-          {isMenuOpen && (
+        {/* {isMenuOpen && (
             <div
               ref={menuRef}
               className="absolute top-12 right-0 bg-white shadow-2xl rounded-lg p-3 w-auto min-w-max z-50"
@@ -102,7 +111,7 @@ export default function Header() {
               </Button>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </header>
   );
