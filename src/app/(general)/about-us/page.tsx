@@ -1,43 +1,113 @@
 // import libs
-import Head from 'next/head';
+import Head from "next/head";
+import Image from "next/image";
 
 export default function AboutUsPage() {
   return (
-    <div className="bg-[#FFE3FA] min-h-screen ">
+    <div className="min-h-screen ">
       <Head>
         <title>About Us</title>
         <meta name="description" content="Learn more about us." />
       </Head>
-      <div className="flex-1 flex flex-col">
-        <div className="bg-[#FFE3FA] text-black p-8 mx-[240px] flex-1">
-          <h1 className="text-3xl font-semibold mb-2 text-center text-[#11009E]">🫧｡ Who Are We? ࣪ ˖🪼</h1>
-          <p>
-            <strong>Website</strong> was established with the mission of providing learners with the most accurate and useful information about online courses. Our team consists of technology students, all passionate about helping you find the most suitable learning opportunities.
-          </p>
+      <div className="flex flex-col">
+        <div className="flex flex-col items-center">
+          <Image
+            src="/imgs/about-1.png"
+            alt="about-1"
+            width={1440}
+            height={500}
+          />
         </div>
-        <p className="text-4xl text-center my-4">✧˖°.🐋☁️.°˖✧</p>
-        <div className="bg-[#FFE3FA] text-black p-8 mx-[240px] flex-1">
-          <h1 className="text-3xl font-semibold mb-2 text-center text-[#11009E]">Our Mission</h1>
-          <p>
-            We believe that education is the key to unlocking the door to the future. That’s why we are committed to bringing you quality course recommendations to help you enhance your skills and advance your career. Whether you are a student, a working professional, or seeking a change, we are here to support you on your learning journey.
-          </p>
-          <h2 className="text-2xl font-semibold mt-6 mb-2 p-4 text-[#11009E]">Why Choose Us? 🐋</h2>
-          <ul className="list-disc list-inside mb-4">
-            <li><strong className="text-[#5271FF]">Reliability:</strong> We thoroughly survey and evaluate each course to ensure the information you receive is accurate and up-to-date.</li>
-            <li><strong className="text-[#5271FF]">Diversity:</strong> From online courses to intensive training programs, we offer a wide range of options to meet your needs and goals.</li>
-            <li><strong className="text-[#5271FF]">Dedicated Support:</strong> Our customer support team is always ready to assist you in selecting courses and answering any questions you may have.</li>
-          </ul>
-        </div>
-        <p className="text-3xl text-center my-4">🎧💌🍓🧺🫧</p>
-        <div className="bg-[#FFE3FA] text-black p-4 mx-[240px] flex-1">
-          <h1 className="text-3xl font-semibold mb-2 text-center text-[#11009E]">Contact Us</h1>
-          <p>
-            We look forward to hearing from you! If you have any questions or would like more information, please don’t hesitate to reach out to us.
-          </p>
-          <p>Thank you for visiting <strong>Website</strong>. Let’s explore wonderful learning opportunities together!</p>
+        <div className="bg-white flex flex-row px-[130px] pt-[50px] pb-[50px] justify-center justify-between">
+          <div className="flex flex-col item-center">
+            <Image
+              src="/imgs/about-2.png"
+              alt="about-2"
+              width={490}
+              height={386}
+            />
+          </div>
+          <div className="flex flex-col gap-5">
+            <div className="border border-[#D4D1D1] w-[635px] h-[200px] px-10 py-5 rounded-[18px]">
+              <h1 className="text-2xl font-semibold mb-2 text-[#5271FF]">
+                Who Are We?
+              </h1>
+              <p className="text-justify">
+                <span className="text-[#5271FF] font-semibold">4STUDY</span> was
+                established with the mission of providing learners with the most
+                accurate and useful information about online courses. Our team
+                consists of technology students, all passionate about helping
+                you find the most suitable learning opportunities.
+              </p>
+            </div>
+            <div className="border border-[#D4D1D1] w-[635px] h-[200px] px-10 py-5 rounded-[18px]">
+              <h1 className="text-2xl font-semibold mb-2 text-[#5271FF]">
+                Our Mission
+              </h1>
+              <p className="text-justify">
+                We believe that education is the key to unlocking the door to
+                the future. That&apos;s why we are committed to bringing you
+                quality course recommendations to help you enhance your skills
+                and advance your career. Whether you are a student, a working
+                professional, or seeking a change, we are here to support you on
+                your learning journey.
+              </p>
+            </div>
+          </div>
         </div>
 
+        <div className="bg-white text-black px-[130px] pt-[50px] pb-[50px] flex-1 flex-col">
+          <h1 className="text-3xl font-semibold pb-8 text-center text-[#5271FF]">
+            Why choose us?
+          </h1>
+          <div className="flex flex-row gap-5">
+            <div className=" bg-[#9BACFF] border border-[#D4D1D1] w-[380px] h-[180px] px-5 py-5 rounded-[18px]">
+              <h1 className="text-2xl font-semibold pb-2 text-white text-center">
+                Reliability
+              </h1>
+              <p className="text-center text-white">
+                We thoroughly survey and evaluate each course to ensure the
+                information you receive is accurate and up-to-date.
+              </p>
+            </div>
+            <div className="bg-[#5271FF] border border-[#D4D1D1] w-[380px] h-[180px] px-5 py-5 rounded-[18px]">
+              <h1 className="text-2xl font-semibold pb-2 text-white text-center">
+                Diversity
+              </h1>
+              <p className="text-center text-white">
+                From online courses to intensive training programs, we offer a
+                wide range of options to meet your needs and goals.g a change,
+                we are here to support you on your learning journey.
+              </p>
+            </div>
+            <div className="bg-[#11009E] border border-[#D4D1D1] w-[380px] h-[180px] px-5 py-5 rounded-[18px]">
+              <h1 className="text-2xl font-semibold pb-2 text-white text-center">
+                Diversity
+              </h1>
+              <p className="text-center text-white">
+                From online courses to intensive training programs, we offer a
+                wide range of options to meet your needs and goals.g a change,
+                we are here to support you on your learning journey.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="px-[130px] py-[50px] flex-1">
+          <h1 className="pb-8 text-3xl font-semibold text-center text-[#5271FF]">
+            Contact Us
+          </h1>
+          <p className="text-center">
+            We look forward to hearing from you! If you have any questions or
+            would like more information, please don&apos;t hesitate to reach out
+            to us.
+          </p>
+          <p className="text-center">
+            Thank you for visiting{" "}
+            <span className="text-[#5271FF] font-semibold">4STUDY</span>.
+            Let&apos;s explore wonderful learning opportunities together!
+          </p>
         </div>
       </div>
+    </div>
   );
 }

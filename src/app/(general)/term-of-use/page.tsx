@@ -3,17 +3,16 @@ import Head from 'next/head';
 
 export default function TermsOfUsePage() {
   return (
-    <div className="bg-[#FFE3FA] min-h-screen">
+    <div className="min-h-screen">
       <Head>
         <title>Terms of Use</title>
         <meta name="description" content="Read our terms of use." />
       </Head>
       <div className="flex-1 flex flex-col">
-        <div className="bg-[#FFE3FA] text-black p-8 mx-[280px] flex-1">
-          <h1 className="text-6xl font-semibold mb-2 text-center text-[#11009E]">📜｡ Terms of Use ࣪ ˖📖</h1>
+        <div className="text-black p-8 flex-1">
+          <h1 className="text-6xl font-semibold mb-2 text-center text-[#11009E]">Terms of Use</h1>
         </div>
-        <p className="text-4xl text-center my-4">✧˖°.📚☁️.°˖✧</p>
-        <div className="bg-[#FFE3FA] text-black p-8 mx-[240px] flex-1">
+        <div className="text-black p-8 flex-1">
           <h2 className="text-2xl font-semibold mb-2 text-[#11009E]"><u>1. Introduction</u></h2>
           <p>
             Welcome to [Website Name]. These terms govern the use of our services and content. By accessing and using our services, you agree to comply with these terms.
