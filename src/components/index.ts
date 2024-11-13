@@ -2,6 +2,7 @@
 
 // CARDS
 export { default as CardCourse } from "./(general)/cards/course";
+export { default as CardCourseMini } from "./(general)/cards/course-mini";
 export { default as CardFilterSearch } from "./(general)/cards/filter-search";
 
 // SELECTS
