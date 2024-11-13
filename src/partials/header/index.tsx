@@ -120,7 +120,7 @@ export default function Header() {
           )}
         </form>
         {/* Khi chưa có account */}
-        <div>
+        {/* <div>
           <Link href="/login">
             <Button
               type="submit"
@@ -128,7 +128,7 @@ export default function Header() {
               Login
             </Button>
           </Link>
-        </div>
+        </div> */}
 
         {/* My Courses Button và Avatar */}
         {/* <div className="flex items-center relative">
@@ -148,11 +148,11 @@ export default function Header() {
           </Link>
 
           {/* Menu thả xuống */}
-        {/* {isMenuOpen && (
+        {/*
+          {isMenuOpen && (
             <div
               ref={menuRef}
-              className="absolute top-12 right-0 bg-white shadow-2xl rounded-lg p-3 w-auto min-w-max z-50"
-            >
+              className="absolute top-12 right-0 bg-white shadow-2xl rounded-lg p-3 w-auto min-w-max z-50">
               <div className="flex items-center mb-3 gap-2 w-full">
                 <img
                   src="/imgs/test.jpg"
@@ -168,7 +168,7 @@ export default function Header() {
               </div>
               <Button
                 onClick={handleLogout}
-                className="w-full text-left text-white bg-[#5271FF] hover:bg-[#11009E] font-medium py-1 rounded-md">
+                className="w-full text-left text-white bg-[#5271FF] rounded-[50px] hover:bg-[#11009E] font-medium py-1 rounded-md">
                 LOG OUT
               </Button>
             </div>
