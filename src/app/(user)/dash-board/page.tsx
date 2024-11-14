@@ -231,7 +231,7 @@ export default function ProfilePage() {
             )}
           </div>
           <Link
-            href="/courses"
+            href="/search"
             className="text-white text-[16px] mt-2 hover:underline flex items-center space-x-2 justify-center pb-[5px] pt-[30px]">
             See more
             <ChevronRight className="ml-2 w-[24px] h-[24px] stroke-1" />

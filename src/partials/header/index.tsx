@@ -83,7 +83,7 @@ export default function Header() {
       <div className="w-4/5 m-auto h-20 flex items-center justify-between px-5">
         {/* Logo */}
         <Link href="/">
-          <img src="/imgs/Logone.png" alt="Logo" className="h-10" />
+          <img src="/imgs/Logone.png" alt="Logo" className="h-16" />
         </Link>
 
         {/* Search bar */}
@@ -98,7 +98,7 @@ export default function Header() {
             value={searchQuery}
             onChange={handleSearchChange}
           />
-          <Link href="/courses">
+          <Link href={`/search?keyword=${searchQuery}`}>
             <Button
               type="submit"
               className="bg-[#5271FF] text-white rounded-[18px] py-2 px-8 hover:bg-[#11009E]">
