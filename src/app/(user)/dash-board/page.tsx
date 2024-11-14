@@ -1,117 +1,243 @@
 "use client";
 
 import React from "react";
-// import { Button } from "@/components/ui/button";
-import CardCourse from "@/components/(general)/cards/course";
+import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 import { courses } from "@/data/courses";
-// import { Search } from "lucide-react";
+import CardCourse from "@/components/(general)/cards/course";
+import { ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react";
+// import { ImageSlider } from "@/components/(general)/image-slider"; // Import ImageSlider
+import { CourseSlider } from "@/components/(general)/course-slider"; // Import CourseSlider
 
-export default function ExplorePage() {
-  // const handleExplore = () => {
-  //   console.log("Search button clicked");
-  // };
+export default function ProfilePage() {
+  // State để lưu các khóa học
+  const [popularCourses, setPopularCourses] = useState<any[]>([]);
+  const [personalizedCourses, setPersonalizedCourses] = useState<any[]>([]);
 
-  // Filtering courses for different sections
-  const popularCourses = courses
-    .sort((a, b) => a.rank_popular - b.rank_popular)
-    .slice(0, 4);
-  const personalizedCourses = courses
-    .sort((a, b) => a.rank_personalized - b.rank_personalized)
-    .slice(0, 4);
-  // const schoolCourses = courses
-  //   .filter((course) => course.school._id === "1")
-  //   .slice(0, 4); // Adjust school ID as needed
-  // const teacherCourses = courses
-  //   .filter((course) => course.teachers.some((teacher) => teacher._id === "1"))
-  //   .slice(0, 4); // Adjust teacher ID as needed
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Fetch dữ liệu cho 4 mục
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch popular courses
+        const popularResponse = await fetch("/api/courses/popularity", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const popularData = await popularResponse.json();
+        setPopularCourses(popularData.data);
+
+        // Fetch personalized courses
+        const personalizedResponse = await fetch("/api/courses/personalized", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const personalizedData = await personalizedResponse.json();
+        setPersonalizedCourses(personalizedData.data);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-[#FFE3FA] p-6 pb-12">
-      {/* Search Bar */}
-      {/* <div className="flex items-center justify-center mb-8">
-        <div className="bg-[#11009E] p-2 rounded-l">
-          <Search />
-        </div>
-        <input
-          type="text"
-          placeholder="Search for courses..."
-          className="flex-1 p-2 bg-white text-gray-700 mr-2 max-w-xs focus:outline-none focus:ring-0"
-        />
-        <Button onClick={handleExplore} className="bg-[#11009E] p-2">
-          Search
-        </Button>
-      </div> */}
+    <div className="">
+      <div className="flex justify-center py-4">
+        <div className="bg-white w-full h-[302px] rounded-[18px] shadow-lg p-6">
+          <div className="space-y-1">
+            <h4 className="text-[32px] text-[#5271FF] font-medium leading-none">
+              Dash Board
+            </h4>
+            <p className="text-[22px] pt-[12px]">
+              Discover your study progress
+            </p>
+          </div>
+          <Separator className="my-4" />
 
-      {/* Course Sections */}
-      <section className="space-y-8">
-        {/* Popular Courses */}
-        <div>
-          <h2 className="text-lg text-black font-semibold mb-4">
-            Attended Courses
-          </h2>
-          <div className="grid grid-cols-4 gap-4">
-            {popularCourses.map((course) => (
-              <CardCourse
-                key={course._id}
-                course={course}
-                className="custom-class"
-                isPersonalized={false}
-              />
-            ))}
+          {/* Main flex container with even distribution of space */}
+          <div className="flex  justify-between text-sm">
+            {/* First column */}
+            <div className="flex flex-col items-left space-y-4">
+              <div className="text-[24px]">Completed Courses</div>
+              <div className="text-[32px] pt-[32px] pb-[24px]">
+                {popularCourses.length}
+              </div>
+              <button
+                className="text-blue-500 text-[16px] mt-2 hover:underline text-left"
+                onClick={() => {
+                  // Scroll đến phần tử mục tiêu, ví dụ: cuộn đến phần "completed-courses"
+                  const target = document.getElementById("completed-courses");
+                  if (target) {
+                    target.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}>
+                See all
+              </button>
+            </div>
+
+            {/* Vertical Separator */}
+            <Separator
+              orientation="vertical"
+              className="h-[100px] w-[1px] bg-gray-300 mx-4" // Added fixed height and width
+            />
+
+            {/* Second column */}
+            <div className="flex flex-col items-left space-y-4">
+              <div className="text-[24px]">Personalize Courses</div>
+              <div className="text-[32px] pt-[32px] pb-[24px]">
+                {personalizedCourses.length}+
+              </div>
+              <button
+                className="text-blue-500 text-[16px] mt-2 hover:underline text-left"
+                onClick={() => {
+                  const target = document.getElementById(
+                    "personalized-courses"
+                  );
+                  if (target) {
+                    target.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}>
+                See all
+              </button>
+            </div>
+
+            {/* Vertical Separator */}
+            <Separator
+              orientation="vertical"
+              className="h-[100px] w-[1px] bg-gray-300 mx-4" // Added fixed height and width
+            />
+
+            {/* Third column */}
+            <div className="flex flex-col items-left space-y-4">
+              <div className="text-[24px]">Popular Courses</div>
+              <div className="text-[32px] pt-[32px] pb-[24px]">
+                {popularCourses.length}+
+              </div>
+              <Link
+                href="/explore"
+                className="text-blue-500 text-[16px] mt-2 hover:underline">
+                See all
+              </Link>
+            </div>
+
+            {/* Vertical Separator */}
+            <Separator
+              orientation="vertical"
+              className="h-[100px] w-[1px] bg-gray-300 mx-4" // Added fixed height and width
+            />
+
+            {/* Fourth column */}
+            <div className="flex flex-col items-left space-y-4">
+              <div className="text-[24px] pr-[200px]">All Courses</div>
+              <div className="text-[32px] pt-[32px] pb-[24px]">
+                {popularCourses.length}+
+              </div>
+              <Link
+                href="/courses"
+                className="text-blue-500 text-[16px] mt-2 hover:underline">
+                See all
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        {/*Completed Courses*/}
+        <div id="completed-courses">
+          <h4 className="text-[32px] text-[#5271FF] font-medium leading-none pt-[30px] pb-[30px]">
+            Completed Courses
+          </h4>
+          <div className="">
+            {loading ? (
+              <p>Loading completed courses...</p>
+            ) : popularCourses?.length > 0 ? (
+              <CourseSlider courses={popularCourses} />
+            ) : (
+              <p>No completed courses available at the moment.</p>
+            )}
+          </div>
+
+          <div className="pt-[30px]">
+            {loading ? (
+              <p>Loading completed courses...</p>
+            ) : popularCourses?.length > 0 ? (
+              <CourseSlider courses={popularCourses} />
+            ) : (
+              <p>No completed courses available at the moment.</p>
+            )}
           </div>
         </div>
 
         {/* Personalized Courses */}
-        <div>
-          <h2 className="text-lg text-black font-semibold mb-4">
+        <div id="personalized-courses">
+          <h4 className="text-[32px] text-[#5271FF] font-medium leading-none pt-[30px] pb-[30px]">
             Personalized Courses
-          </h2>
-          <div className="grid grid-cols-4 gap-4">
-            {personalizedCourses.map((course) => (
-              <CardCourse
-                key={course._id}
-                course={course}
-                className="custom-class"
-                isPersonalized={true}
-              />
-            ))}
+          </h4>
+          <div className="">
+            {loading ? (
+              <p>Loading personalized courses...</p>
+            ) : personalizedCourses?.length > 0 ? (
+              <CourseSlider courses={personalizedCourses} />
+            ) : (
+              <p>
+                No personalized courses available at the moment.&nbsp;
+                <Link href="/login" className="underline text-[#5271FF]">
+                  Log in right now
+                </Link>
+              </p>
+            )}
           </div>
+          <Link
+            href="/explore"
+            className="text-blue-500 text-[16px] mt-2 hover:underline flex items-center space-x-2 justify-center pb-[50px] pt-[30px]">
+            See more
+            <ChevronRight className="ml-2 w-[24px] h-[24px] stroke-1" />
+          </Link>
         </div>
+      </div>
 
-        {/* School-Based Courses */}
-        {/* <div>
-          <h2 className="text-lg text-black font-semibold mb-4">
-            Courses by School
-          </h2>
-          <div className="grid grid-cols-4 gap-4">
-            {schoolCourses.map((course) => (
-              <CardCourse
-                key={course._id}
-                course={course}
-                className="custom-class"
-                isPersonalized={false}
-              />
-            ))}
+      {/* What Is Your Next? */}
+      <div className="w-full">
+        <div
+          className="bg-[#11009E] left-0 top-0 w-full h-auto p-6"
+          style={{ width: "100% !important" }}>
+          <h4 className="text-[32px] text-white font-semibold leading-none pb-[30px]">
+            What Is Your Next?
+          </h4>
+          <div className="">
+            {loading ? (
+              <p>Loading personalized courses...</p>
+            ) : personalizedCourses?.length > 0 ? (
+              <CourseSlider courses={personalizedCourses} />
+            ) : (
+              <p>
+                No personalized courses available at the moment.&nbsp;
+                <Link href="/login" className="underline text-[#5271FF]">
+                  Log in right now
+                </Link>
+              </p>
+            )}
           </div>
-        </div> */}
-
-        {/* Teacher-Based Courses */}
-        {/* <div>
-          <h2 className="text-lg text-black font-semibold mb-4">
-            Courses by Teacher
-          </h2>
-          <div className="grid grid-cols-4 gap-4">
-            {teacherCourses.map((course) => (
-              <CardCourse
-                key={course._id}
-                course={course}
-                className="custom-class"
-                isPersonalized={false}
-              />
-            ))}
-          </div>
-        </div> */}
-      </section>
+          <Link
+            href="/courses"
+            className="text-white text-[16px] mt-2 hover:underline flex items-center space-x-2 justify-center pb-[5px] pt-[30px]">
+            See more
+            <ChevronRight className="ml-2 w-[24px] h-[24px] stroke-1" />
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
