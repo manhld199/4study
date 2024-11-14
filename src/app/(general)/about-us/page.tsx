@@ -18,8 +18,8 @@ export default function AboutUsPage() {
             height={500}
           />
         </div>
-        <div className="bg-white flex flex-row px-[130px] pt-[50px] pb-[50px] justify-center justify-between">
-          <div className="flex flex-col item-center">
+        <div className="bg-white flex flex-row px-[130px] pt-[50px] pb-[50px] justify-center gap-10 items-center">
+          <div>
             <Image
               src="/imgs/about-2.png"
               alt="about-2"
@@ -28,7 +28,7 @@ export default function AboutUsPage() {
             />
           </div>
           <div className="flex flex-col gap-5">
-            <div className="border border-[#D4D1D1] w-[635px] h-[200px] px-10 py-5 rounded-[18px]">
+            <div className="border border-[#D4D1D1] w-[600px] h-auto px-10 py-5 rounded-[18px]">
               <h1 className="text-2xl font-semibold mb-2 text-[#5271FF]">
                 Who Are We?
               </h1>
@@ -40,7 +40,7 @@ export default function AboutUsPage() {
                 you find the most suitable learning opportunities.
               </p>
             </div>
-            <div className="border border-[#D4D1D1] w-[635px] h-[200px] px-10 py-5 rounded-[18px]">
+            <div className="border border-[#D4D1D1] w-[600px] h-auto px-10 py-5 rounded-[18px]">
               <h1 className="text-2xl font-semibold mb-2 text-[#5271FF]">
                 Our Mission
               </h1>
@@ -61,7 +61,7 @@ export default function AboutUsPage() {
             Why choose us?
           </h1>
           <div className="flex flex-row gap-5">
-            <div className=" bg-[#9BACFF] border border-[#D4D1D1] w-[380px] h-[180px] px-5 py-5 rounded-[18px]">
+            <div className=" bg-[#9BACFF] border border-[#D4D1D1] w-[380px] h-auto px-5 py-5 rounded-[18px]">
               <h1 className="text-2xl font-semibold pb-2 text-white text-center">
                 Reliability
               </h1>
@@ -70,7 +70,7 @@ export default function AboutUsPage() {
                 information you receive is accurate and up-to-date.
               </p>
             </div>
-            <div className="bg-[#5271FF] border border-[#D4D1D1] w-[380px] h-[180px] px-5 py-5 rounded-[18px]">
+            <div className="bg-[#5271FF] border border-[#D4D1D1] w-[380px] h-auto px-5 py-5 rounded-[18px]">
               <h1 className="text-2xl font-semibold pb-2 text-white text-center">
                 Diversity
               </h1>
@@ -80,7 +80,7 @@ export default function AboutUsPage() {
                 we are here to support you on your learning journey.
               </p>
             </div>
-            <div className="bg-[#11009E] border border-[#D4D1D1] w-[380px] h-[180px] px-5 py-5 rounded-[18px]">
+            <div className="bg-[#11009E] border border-[#D4D1D1] w-[380px] h-auto px-5 py-5 rounded-[18px]">
               <h1 className="text-2xl font-semibold pb-2 text-white text-center">
                 Diversity
               </h1>
@@ -106,6 +106,14 @@ export default function AboutUsPage() {
             <span className="text-[#5271FF] font-semibold">4STUDY</span>.
             Let&apos;s explore wonderful learning opportunities together!
           </p>
+        </div>
+        <div className="flex flex-col items-center">
+          <Image
+            src="/imgs/about-3.png"
+            alt="about-1"
+            width={1440}
+            height={500}
+          />
         </div>
       </div>
     </div>
