@@ -1,12 +1,17 @@
 "use client";
 
+import { useSession } from "next-auth/react"; 
+// import libs
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CardCourse, CardCourseMini } from "@/components";
+import { CourseMiniSlider } from "@/components/(general)/cards/course-mini-slider";
+import { CourseSlider } from "@/components/(general)/course-slider";
 
 export default function Home() {
   const [popularCourses, setPopularCourses] = useState<Course[]>([]);
+  const [otherCourses, setOtherCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   // Fetch dữ liệu khóa học
@@ -22,6 +27,16 @@ export default function Home() {
         });
         const popularData = await popularResponse.json();
         setPopularCourses(popularData.data);
+
+        // Fetch other courses
+        const otherResponse = await fetch("/api/courses/all-course", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const otherData = await otherResponse.json();
+        setOtherCourses(otherData.data);
       } catch (error) {
         console.error("Error fetching courses:", error);
       } finally {
@@ -32,13 +47,14 @@ export default function Home() {
     fetchCourses();
   }, []);
 
+  const { data: session, status } = useSession(); // Get session data and status
   return (
     <>
       {/* Phần ảnh nền và nội dung chữ */}
       <div className="relative overflow-hidden">
         <img
           src="/imgs/homepage-1.png"
-          alt=""
+          alt="Home page"
           className="w-full h-auto object-cover"
         />
         <div className="absolute top-0 left-0 w-full h-full flex flex-col gap-[50px] justify-center items-start px-[130px] text-left">
@@ -49,7 +65,9 @@ export default function Home() {
               <br />
               And Improve Your <span className="text-[#5271FF]">Skills</span>
             </h1>
-            <p className="font-regular">It&apos;s Time To Get Started With Us</p>
+            <p className="font-regular">
+              It&apos;s Time To Get Started With Us
+            </p>
           </div>
           <Link href="/explore">
             <Button className="px-6 py-2 bg-[#5271FF] text-white rounded-[18px] hover:bg-[#405DC3]">
@@ -63,12 +81,12 @@ export default function Home() {
       <div className="relative overflow-hidden">
         <img
           src="/imgs/homepage-2.png"
-          alt=""
+          alt="Home page"
           className="w-full h-auto object-cover"
         />
         <div className="absolute top-0 right-0 w-1/2 h-full flex flex-col gap-[50px] justify-center items-start p-10 bg-white bg-opacity-80 text-left">
           <div className="flex flex-col gap-[10px]">
-          <p className="text-[22px]">WHAT&apos;S OUR MAIN GOAL</p>
+            <p className="text-[22px]">WHAT&apos;S OUR MAIN GOAL</p>
             <h2 className="text-[32px] font-semibold text-[#5271FF] leading-10">
               Professional Courses For Students
             </h2>
@@ -97,21 +115,17 @@ export default function Home() {
             4STUDY
           </p>
         </div>
-        
+
         {loading ? (
-          <p>Loading popular courses...</p>  
+          <p>Loading popular courses...</p>
         ) : (
-          <div className="grid grid-cols-3 gap-4">
-            {popularCourses.slice(0, 3).map((course) => (
-              <CardCourseMini key={course._id} course={course} />
-            ))}
-          </div>
+          <CourseMiniSlider courses={popularCourses} />
         )}
       </div>
 
       <img
         src="/imgs/homepage-3.png"
-        alt=""
+        alt="Home page"
         className="w-full h-auto object-cover"
       />
 
@@ -127,17 +141,15 @@ export default function Home() {
             4STUDY
           </p>
         </div>
-        
+
         {loading ? (
-          <p>Loading recommended courses...</p> 
+          <p>Loading recommended courses...</p>
         ) : (
-          <div className="grid grid-cols-4 gap-4">
-            {popularCourses.slice(0, 4).map((course) => (
-              <CardCourse key={course._id} course={course} isPersonalized={true} />
-            ))}
-          </div>
+          <CourseSlider courses={otherCourses} />
         )}
       </div>
     </>
   );
 }
+
+
