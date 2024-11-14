@@ -115,3 +115,42 @@ export default function ExplorePage() {
     </div>
   );
 }
+
+// Ví dụ khi người dùng chưa đăng nhập thì không truy cập vào dash-broad
+// "use client";
+
+// import { useEffect } from "react";
+// import { useSession, signIn } from "next-auth/react";
+// import { useRouter } from "next/navigation";
+// import { signOut } from "next-auth/react";
+
+// const DashBoard = () => {
+//   const { data: session, status } = useSession();
+//   const router = useRouter();
+
+//   console.log("Session:", session);
+//   console.log("Status:", status);
+
+//   useEffect(() => {
+//     if (status === "loading") return;
+//     if (!session) {
+//       router.push("/login");
+//     }
+//   }, [session, status, router]);
+
+//   if (!session) {
+//     return <div>Redirecting to login...</div>;
+//   }
+
+//   return (
+//     <div>
+//       <h1>Welcome to your dashboard, {session.user?.name}</h1>
+
+//       <button onClick={() => signOut({ callbackUrl: "/login" })}>
+//         Log out
+//       </button>
+//     </div>
+//   );
+// };
+
+// export default DashBoard;

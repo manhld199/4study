@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button"; // Component Button của bạn
 import { CardCourse } from "@/components"; // Component CardCourse hiển thị khóa học
-import { Course } from "@/libs/models"; // Định nghĩa kiểu Course
 
 interface CourseSliderProps {
   courses: Course[]; // Prop truyền vào danh sách các khóa học
