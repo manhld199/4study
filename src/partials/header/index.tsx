@@ -21,13 +21,12 @@ export default function Header() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      const searchBar = document.getElementById("search-bar");
       if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target as Node) && // Kiểm tra nếu click không nằm trong menu
-        avatarRef.current &&
-        !avatarRef.current.contains(event.target as Node) // Kiểm tra nếu click không nằm trong avatar
+        searchBar &&
+        !searchBar.contains(event.target as Node) // Click outside search bar
       ) {
-        setIsMenuOpen(false);
+        setShowSuggestions(false);
       }
     };
 
@@ -40,6 +39,7 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState<string>(""); // Lưu trữ giá trị tìm kiếm
   const [suggestions, setSuggestions] = useState<string[]>([]); // Lưu trữ danh sách gợi ý
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [showSuggestions, setShowSuggestions] = useState<boolean>(true); // Quản lý hiển thị gợi ý
 
   // Hàm tìm kiếm gợi ý
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +64,8 @@ export default function Header() {
   const handleSuggestionClick = (suggestion: string) => {
     setSearchQuery(suggestion); // Cập nhật input thành gợi ý đã chọn
     setSuggestions([]); // Ẩn danh sách gợi ý
+    setIsSubmitting(false);
+    setShowSuggestions(false); // Đóng gợi ý khi chọn
   };
 
   // Xử lý sự kiện khi người dùng nhấn "Search"
@@ -75,6 +77,15 @@ export default function Header() {
       console.log("Searching for:", searchQuery); // Tìm kiếm với query
       setIsSubmitting(false);
       setSuggestions([]); // Xóa gợi ý sau khi tìm kiếm
+      setShowSuggestions(false); // Đóng gợi ý khi tìm kiếm
+    }
+  };
+
+  // Đóng gợi ý khi người dùng nhấn vào bên ngoài search bar
+  const handleClickOutside = (e: MouseEvent) => {
+    const searchBar = document.getElementById("search-bar");
+    if (searchBar && !searchBar.contains(e.target as Node)) {
+      setShowSuggestions(false); // Ẩn gợi ý khi nhấn ra ngoài
     }
   };
 
@@ -83,11 +94,12 @@ export default function Header() {
       <div className="w-4/5 m-auto h-20 flex items-center justify-between px-5">
         {/* Logo */}
         <Link href="/">
-          <img src="/imgs/Logone.png" alt="Logo" className="h-16" />
+          <img src="/imgs/Logo.png" alt="Logo" className="h-16" />
         </Link>
 
         {/* Search bar */}
         <form
+          id="search-bar"
           onSubmit={handleSearch}
           className="relative flex items-center justify-between w-full max-w-[480px] min-w-[700px] border-[#D9D9D9] border-[1.4px] rounded-[18px] px-1 min-h-12  bg-opacity-50">
           <FiSearch className="min-w-[30px] min-h-[30px] p-[7px] rounded-full stroke-[#5271FF]" />
@@ -106,7 +118,7 @@ export default function Header() {
             </Button>
           </Link>
           {/* Hiển thị gợi ý tìm kiếm */}
-          {suggestions.length > 0 && (
+          {showSuggestions && suggestions.length > 0 && (
             <ul className="absolute top-[100%] left-0 w-full bg-white border border-[#D9D9D9] rounded-[12px] max-h-[200px] overflow-y-auto z-50">
               {suggestions.map((suggestion, index) => (
                 <li
