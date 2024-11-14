@@ -1,11 +1,12 @@
 "use client";
 
 // import libs
+import { signIn } from "next-auth/react";
+import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Eye, EyeOff } from "lucide-react";
 
 // import components
 import { NotificationSuccess } from "@/components";
@@ -38,111 +39,120 @@ export default function Login() {
     setLoginError("");
   }, [emailValue, passwordValue]);
 
-  const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
+  const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     const { email, password } = data;
 
-    if (email === "admin@example.com" && password === "password") {
-      setIsDialogOpen(true);
-      setTimeout(() => {
-        router.push("/");
-      }, 3000);
-      return;
-    }
+    try {
+      const response = await signIn("credentials", {
+        email,
+        password,
+        redirect: false, // Prevent auto redirection, allowing custom handling
+      });
 
-    setLoginError("Incorrect email or password.");
+      if (!response?.error) {
+        // Show success notification and navigate after a delay
+        setIsDialogOpen(true);
+        setTimeout(() => {
+          router.push("/");
+          router.refresh();
+        }, 3000);
+      } else {
+        setLoginError(response.error || "Something went wrong.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setLoginError("Failed to login. Please try again.");
+    }
   };
 
   return (
-    <div className="bg-white flex items-center justify-center min-h-screen p-6">
-      <div className="bg-[#C4CEFF] p-16 rounded-lg shadow-lg w-full max-w-[1300px] flex">
-        <div className="w-1/2 p-16 rounded-l-lg">
-          <div className="text-center mb-12">
-            <Image
-              src="/imgs/logo.png"
-              alt="Logo"
-              width={500}
-              height={500}
-              className="mx-auto mb-8"
+    <div className="flex items-center justify-between p-[50px]">
+      <div className="flex-col justify-between gap-[30px] rounded-l-lg">
+        <div className="text-center">
+          <Image
+            src="/imgs/logo.png"
+            alt="Logo"
+            width={375}
+            height={127}
+            className="text-center"
+          />
+        </div>
+        <div className="text-center">
+          <p className="text-[45px] font-bold text-[#5271FF]">WELCOME BACK</p>
+          <p className="text-gray-600 text-[16px]">
+            Log in to continue accessing the page
+          </p>
+        </div>
+      </div>
+
+      <div className="rounded-lg bg-white p-[50px] w-[512px]">
+        <h2 className="text-center font-bold mb-6 text-[#5271FF] text-[45px]">
+          Log In
+        </h2>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <div className="mb-4">
+            <Label
+              htmlFor="email"
+              className="block text-[22px] text-[#000000] mb-2">
+              Email
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+              {...register("email", {
+                required: "Email is required.",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Invalid email format.",
+                },
+              })}
+              className="border border-[#D4D1D1] focus:border-blue-500 focus:!ring-2 focus:!ring-blue-300 focus:!ring-offset-0 focus:outline-none pr-10 rounded-[18px] bg-white"
             />
-            <h2 className="text-5xl font-bold text-[#5271FF]">WELCOME BACK</h2>
-            <p className="text-gray-600 text-2xl">
-              Log in to continue accessing the page
-            </p>
+
+            {errors.email && (
+              <p className="text-red-500">{errors.email.message}</p>
+            )}
           </div>
-        </div>
 
-        <div className="w-1/2 bg-white p-16 rounded-lg">
-          <h2 className="text-3xl font-bold mb-6 text-[#11009E]">Log In</h2>
-          <form onSubmit={handleSubmit(onSubmit)} noValidate>
-            <div className="mb-4">
-              <Label
-                htmlFor="email"
-                className="block text-[#11009E] text-lg mb-2">
-                Email
-              </Label>
+          <div className="mb-4 relative text-[22px]">
+            <Label
+              htmlFor="password"
+              className="block text-[22px] text-[#000000] mb-2">
+              Password
+            </Label>
+            <div className="relative">
               <Input
-                id="email"
-                type="email"
-                placeholder="Email"
-                {...register("email", {
-                  required: "Email is required.",
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Invalid email format.",
-                  },
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                {...register("password", {
+                  required: "Password is required.",
                 })}
-                className="border-2 border-[#C4CEFF] focus:border-blue-500 focus:!ring-2 focus:!ring-blue-300 focus:!ring-offset-0 focus:outline-none rounded-lg"
+                className="border border-[#D4D1D1] focus:border-blue-500 focus:!ring-2 focus:!ring-blue-300 focus:!ring-offset-0 focus:outline-none pr-10 rounded-[18px] bg-white"
               />
-
-              {errors.email && (
-                <p className="text-red-500">{errors.email.message}</p>
-              )}
-            </div>
-
-            <div className="mb-4 relative">
-              <Label
-                htmlFor="password"
-                className="block text-[#11009E] text-lg mb-2">
-                Password
-              </Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password"
-                  {...register("password", {
-                    required: "Password is required.",
-                  })}
-                  className="border-2 border-[#C4CEFF] focus:border-blue-500 focus:!ring-2 focus:!ring-blue-300 focus:!ring-offset-0 focus:outline-none rounded-lg pr-10 bg-blue-100"
-                />
-                <div
-                  className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
-                  onClick={() => setShowPassword(!showPassword)}>
-                  {showPassword ? (
-                    <EyeOff className="text-gray-500" />
-                  ) : (
-                    <Eye className="text-gray-500" />
-                  )}
-                </div>
+              <div
+                className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? (
+                  <EyeOff className="text-gray-500" />
+                ) : (
+                  <Eye className="text-gray-500" />
+                )}
               </div>
-              {errors.password && (
-                <p className="text-red-500">{errors.password.message}</p>
-              )}
             </div>
+            {errors.password && (
+              <p className="text-red-500">{errors.password.message}</p>
+            )}
+          </div>
 
-            {loginError && <p className="text-red-500 mb-4">{loginError}</p>}
-            <Button
-              type="submit"
-              disabled={!isValid}
-              className={`w-full h-12 py-3 rounded-lg text-lg mt-12 ${
-                isValid
-                  ? "bg-[#5271FF] text-white hover:bg-[#11009E]"
-                  : "bg-gray-400 text-gray-700 cursor-not-allowed"
-              }`}>
-              Log In
-            </Button>
-          </form>
-        </div>
+          {loginError && <p className="text-red-500 mb-4">{loginError}</p>}
+          <Button
+            type="submit"
+            className="w-full py-3 rounded-[18px] text-lg mt-12 bg-[#5271FF] text-white hover:bg-[#11009E]">
+            Login
+          </Button>
+        </form>
       </div>
 
       <NotificationSuccess

@@ -3,7 +3,7 @@ import Head from "next/head";
 
 export default function TermsOfUsePage() {
   return (
-    <div className=" min-h-screen">
+    <div className="min-h-screen">
       <Head>
         <title>Terms of Use</title>
         <meta name="description" content="Read our terms of use." />
