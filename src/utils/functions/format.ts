@@ -24,3 +24,25 @@ export const formatDateTimeStr = (dateTimeString: string) => {
   // Định dạng chuỗi theo yêu cầu
   return `${day}/${month}/${year} - ${hours}:${minutes}`;
 };
+
+// Hàm rút gọn số lượng từ
+export const truncateWords = (text: string, maxWords: number): string => {
+  if (!text) return "";
+
+  // Tách chuỗi thành mảng các từ
+  const wordsArray = text.trim().split(/\s+/);
+
+  // Nếu số từ ít hơn hoặc bằng `maxWords`, trả về chuỗi gốc
+  if (wordsArray.length <= maxWords) return text;
+
+  // Cắt mảng từ và nối lại thành chuỗi với dấu `...`
+  const truncated = wordsArray.slice(0, maxWords).join(" ") + "...";
+  return truncated;
+};
+
+// Viết hoa chữ cái đầu tiên của chuỗi
+export const capitalizeFirstSentence = (text: string): string => {
+  if (!text) return "";
+
+  return text.charAt(0).toUpperCase() + text.slice(1);
+};

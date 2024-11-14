@@ -1,8 +1,8 @@
 import { User } from "@/libs/models";
 import {
-  successResponse,
-  notFoundResponse,
   errorResponse,
+  notFoundResponse,
+  successResponse,
 } from "@/utils/functions/server";
 
 // [GET] /api/user
