@@ -71,7 +71,9 @@ export default function ProfilePage() {
             {/* First column */}
             <div className="flex flex-col items-left space-y-4">
               <div className="text-[24px]">Completed Courses</div>
-              <div className="text-[32px] pt-[32px] pb-[24px]">{10000}</div>
+              <div className="text-[32px] pt-[32px] pb-[24px]">
+                {popularCourses.length}
+              </div>
               <button
                 className="text-blue-500 text-[16px] mt-2 hover:underline text-left"
                 onClick={() => {
@@ -94,7 +96,9 @@ export default function ProfilePage() {
             {/* Second column */}
             <div className="flex flex-col items-left space-y-4">
               <div className="text-[24px]">Personalize Courses</div>
-              <div className="text-[32px] pt-[32px] pb-[24px]">{126}+</div>
+              <div className="text-[32px] pt-[32px] pb-[24px]">
+                {personalizedCourses.length}+
+              </div>
               <button
                 className="text-blue-500 text-[16px] mt-2 hover:underline text-left"
                 onClick={() => {
@@ -118,7 +122,9 @@ export default function ProfilePage() {
             {/* Third column */}
             <div className="flex flex-col items-left space-y-4">
               <div className="text-[24px]">Popular Courses</div>
-              <div className="text-[32px] pt-[32px] pb-[24px]">{126}+</div>
+              <div className="text-[32px] pt-[32px] pb-[24px]">
+                {popularCourses.length}+
+              </div>
               <Link
                 href="/explore"
                 className="text-blue-500 text-[16px] mt-2 hover:underline">
@@ -135,7 +141,9 @@ export default function ProfilePage() {
             {/* Fourth column */}
             <div className="flex flex-col items-left space-y-4">
               <div className="text-[24px] pr-[200px]">All Courses</div>
-              <div className="text-[32px] pt-[32px] pb-[24px]">{100000}+</div>
+              <div className="text-[32px] pt-[32px] pb-[24px]">
+                {popularCourses.length}+
+              </div>
               <Link
                 href="/courses"
                 className="text-blue-500 text-[16px] mt-2 hover:underline">
