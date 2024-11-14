@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { FiSearch } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
-import coursesData from "../../../database/preprocessed-data/course.json";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,19 +40,33 @@ export default function Header() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [showSuggestions, setShowSuggestions] = useState<boolean>(true); // Quản lý hiển thị gợi ý
 
-  // Hàm tìm kiếm gợi ý
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-
-    if (query.length > 0) {
-      // Tìm kiếm các khóa học phù hợp với truy vấn
-      const filteredSuggestions = coursesData
-        .map((course) => course.course_name) // Chỉ lấy tên khóa học
-        .filter((courseName) =>
+  // Hàm gọi API để lấy khóa học
+  const fetchCourses = async (query: string) => {
+    try {
+      const response = await fetch(`/api/courses/popularity`); // Thay đổi API endpoint tại đây
+      if (!response.ok) {
+        throw new Error("Failed to fetch courses");
+      }
+      const data = await response.json();
+      return data.data
+        .map((course: { course_name: string }) => course.course_name) // Chỉ lấy tên khóa học
+        .filter((courseName: string) =>
           courseName.toLowerCase().includes(query.toLowerCase())
         );
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+      return [];
+    }
+  };
 
+  // Hàm tìm kiếm gợi ý
+  const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query); // Cập nhật giá trị tìm kiếm
+
+    if (query.length > 0) {
+      // Nếu có giá trị tìm kiếm, gọi API để tìm kiếm gợi ý
+      const filteredSuggestions = await fetchCourses(query);
       setSuggestions(filteredSuggestions);
     } else {
       setSuggestions([]); // Nếu không có gì nhập, xóa gợi ý
@@ -90,7 +103,7 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-white pt-[24px]">
+    <header className="bg-white pt-[24px] fixed top-0 left-0 right-0 z-[100]">
       <div className="w-4/5 m-auto h-20 flex items-center justify-between px-5">
         {/* Logo */}
         <Link href="/">
@@ -132,7 +145,7 @@ export default function Header() {
           )}
         </form>
         {/* Khi chưa có account */}
-        <div>
+        {/* <div>
           <Link href="/login">
             <Button
               type="submit"
@@ -140,10 +153,10 @@ export default function Header() {
               Login
             </Button>
           </Link>
-        </div>
+        </div> */}
 
         {/* My Courses Button và Avatar */}
-        {/* <div className="flex items-center relative">
+        <div className="flex items-center relative">
           <img
             ref={avatarRef}
             src="/imgs/test.jpg"
@@ -160,32 +173,31 @@ export default function Header() {
           </Link>
 
           {/* Menu thả xuống */}
-        {/*
           {isMenuOpen && (
             <div
               ref={menuRef}
-              className="absolute top-12 right-0 bg-white shadow-2xl rounded-lg p-3 w-auto min-w-max z-50">
+              className="w-[290px] absolute top-12 right-0 bg-white shadow-2xl rounded-lg p-3 w-auto min-w-max z-50">
               <div className="flex items-center mb-3 gap-2 w-full">
                 <img
                   src="/imgs/test.jpg"
                   alt="Avatar"
                   className="h-[60px] w-[60px] rounded-full"
                 />
-                <div className="flex-grow">
-                  <p className="font-medium">User name</p>
+                <div className="pl-[10px] pb-[20px] flex-grow">
+                  <p className="font-medium">user user_name</p>
                   <p className="text-sm text-gray-500 break-all">
-                    Emailllhhhhhhhhh@gmail.com
+                    user user_email
                   </p>
                 </div>
               </div>
               <Button
                 onClick={handleLogout}
-                className="w-full text-left text-white bg-[#5271FF] rounded-[50px] hover:bg-[#11009E] font-medium py-1 rounded-md">
-                LOG OUT
+                className="w-full text-left text-white bg-[#5271FF] rounded-[18px] h-[40px] hover:bg-[#11009E] pt-[30px] font-medium py-1">
+                Log out
               </Button>
             </div>
           )}
-        </div> */}
+        </div>
       </div>
     </header>
   );

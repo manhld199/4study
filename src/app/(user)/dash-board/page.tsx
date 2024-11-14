@@ -7,10 +7,14 @@ import { courses } from "@/data/courses";
 import CardCourse from "@/components/(general)/cards/course";
 import { ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
-// import { ImageSlider } from "@/components/(general)/image-slider"; // Import ImageSlider
 import { CourseSlider } from "@/components/(general)/course-slider"; // Import CourseSlider
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
+  const { data: session, status } = useSession(); // Lấy thông tin session
+  const router = useRouter(); // Dùng router để chuyển hướng
+
   // State để lưu các khóa học
   const [popularCourses, setPopularCourses] = useState<any[]>([]);
   const [personalizedCourses, setPersonalizedCourses] = useState<any[]>([]);
@@ -19,39 +23,53 @@ export default function ProfilePage() {
 
   // Fetch dữ liệu cho 4 mục
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        setLoading(true);
+    if (status === "loading") return; // Chờ khi loading
+    if (!session) {
+      router.push("/login"); // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
+    } else {
+      // Fetch dữ liệu nếu người dùng đã đăng nhập
+      const fetchCourses = async () => {
+        try {
+          setLoading(true);
 
-        // Fetch popular courses
-        const popularResponse = await fetch("/api/courses/popularity", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const popularData = await popularResponse.json();
-        setPopularCourses(popularData.data);
+          // Fetch popular courses
+          const popularResponse = await fetch("/api/courses/popularity", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const popularData = await popularResponse.json();
+          setPopularCourses(popularData.data);
 
-        // Fetch personalized courses
-        const personalizedResponse = await fetch("/api/courses/personalized", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const personalizedData = await personalizedResponse.json();
-        setPersonalizedCourses(personalizedData.data);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+          // Fetch personalized courses
+          const personalizedResponse = await fetch(
+            "/api/courses/personalized",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const personalizedData = await personalizedResponse.json();
+          setPersonalizedCourses(personalizedData.data);
+        } catch (error) {
+          console.error("Error fetching courses:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
 
-    fetchCourses();
-  }, []);
+      fetchCourses();
+    }
+  }, [session, status, router]);
 
+  // Nếu session đang loading hoặc người dùng chưa đăng nhập, không render content
+  if (status === "loading" || !session) {
+    return <div>Redirecting to login...</div>;
+  }
+  
   return (
     <div className="">
       <div className="flex justify-center py-4">
