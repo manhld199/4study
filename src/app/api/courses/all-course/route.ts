@@ -53,9 +53,6 @@ export async function GET() {
     // Kiểm tra nếu không có dữ liệu
     if (!result.length) return notFoundResponse();
 
-    // Sắp xếp các khóa học theo `enrollment_count` giảm dần
-    result.sort((a, b) => b.enrolled_users - a.enrolled_users);
-
     return successResponse({
       data: result,
     });
