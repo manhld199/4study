@@ -3,27 +3,14 @@
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { courses } from "@/data/courses";
 import CardCourse from "@/components/(general)/cards/course";
 import { ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
-import { CourseSlider } from "@/components/(general)/course-slider"; // Import CourseSlider
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Pagination from "./paginationc";
 
-export default function ProfilePage({
-  pageNumber,
-  keyword,
-  className = "",
-  isPersonalized = false,
-}: {
-  course: Course;
-  keyword: string;
-  className?: string;
-  isPersonalized: boolean;
-  pageNumber: number;
-}) {
+export default function ProfilePage() {
   const { data: session, status } = useSession(); // Lấy thông tin session
   const router = useRouter(); // Dùng router để chuyển hướng
 
@@ -32,7 +19,7 @@ export default function ProfilePage({
   const [personalizedCourses, setPersonalizedCourses] = useState<any[]>([]);
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [page, setPage] = useState<number>(isNaN(pageNumber) ? 1 : pageNumber);
+  const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
 
   // useEffect(() => {
