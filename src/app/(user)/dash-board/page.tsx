@@ -14,7 +14,6 @@ import Pagination from "./paginationc";
 
 export default function ProfilePage({
   pageNumber,
-  course,
   keyword,
   className = "",
   isPersonalized = false,
