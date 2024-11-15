@@ -15,10 +15,12 @@ import Pagination from "./paginationc";
 export default function ProfilePage({
   pageNumber,
   course,
+  keyword,
   className = "",
   isPersonalized = false,
 }: {
   course: Course;
+  keyword: string;
   className?: string;
   isPersonalized: boolean;
   pageNumber: number;
@@ -31,10 +33,22 @@ export default function ProfilePage({
   const [personalizedCourses, setPersonalizedCourses] = useState<any[]>([]);
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [sortState, setSortState] = useState<string>("Top");
   const [page, setPage] = useState<number>(isNaN(pageNumber) ? 1 : pageNumber);
   const [totalPages, setTotalPages] = useState<number>(1);
+
+  // useEffect(() => {
+  //   const params = new URLSearchParams();
+  //   if (keyword) {
+  //     params.set("keyword", keyword);
+  //   }
+  //   if (page) {
+  //     params.set("page", page.toString());
+  //   }
+
+  //   // Update the URL with only the relevant query params (keyword, page)
+  //   router.push(`?${params.toString()}`, { scroll: false });
+  // }, [keyword, page]);
+
   // Fetch dữ liệu cho 4 mục
   useEffect(() => {
     if (status === "loading") return; // Chờ khi loading
@@ -45,7 +59,6 @@ export default function ProfilePage({
       const fetchCourses = async () => {
         try {
           setLoading(true);
-
           // Fetch popular courses
           const popularResponse = await fetch("/api/courses/popularity", {
             method: "GET",
@@ -55,7 +68,7 @@ export default function ProfilePage({
           });
           const popularData = await popularResponse.json();
           setPopularCourses(popularData.data);
-
+          setTotalPages(popularData.totalPages);
           // Fetch personalized courses
           const personalizedResponse = await fetch(
             "/api/courses/personalized",
@@ -77,7 +90,7 @@ export default function ProfilePage({
 
       fetchCourses();
     }
-  }, [session, status, router]);
+  }, [session, status, router, page]);
 
   // Nếu session đang loading hoặc người dùng chưa đăng nhập, không render content
   if (status === "loading" || !session) {
@@ -191,30 +204,23 @@ export default function ProfilePage({
           <h4 className="text-[32px] text-[#5271FF] font-medium leading-none pt-[30px] pb-[30px]">
             Completed Courses
           </h4>
-          <div className="">
+          <div className="w-full grid grid-cols-4 gap-4 pt-[30px]">
             {loading ? (
               <p>Loading completed courses...</p>
             ) : popularCourses?.length > 0 ? (
-              <CourseSlider courses={popularCourses} />
+              // Hiển thị các khóa học của trang hiện tại (tối đa 8 khóa học)
+
+              popularCourses
+                .slice((page - 1) * 8, page * 8)
+                .map((course, index) => (
+                  <CardCourse
+                    key={`course card ${index}`}
+                    isPersonalized={false && index <= 5}
+                    course={course}
+                  />
+                ))
             ) : (
               <p>No completed courses available at the moment.</p>
-            )}
-          </div>
-
-          <div className="w-full grid grid-cols-4 gap-4 pt-[30px]">
-            {loading ? (
-              <p>Loading popular courses...</p>
-            ) : popularCourses?.length > 0 ? (
-              // Lặp qua tất cả khóa học trong mảng popularCourses và truyền từng khóa học vào CardCourse
-              popularCourses.map((course) => (
-                <CardCourse
-                  key={course._id} // Dùng _id của khóa học làm key cho mỗi CardCourse
-                  isPersonalized={false} // Hoặc dùng một điều kiện để xác định giá trị isPersonalized
-                  course={course} // Truyền khóa học vào prop 'course'
-                />
-              ))
-            ) : (
-              <p>No popular courses available at the moment.</p>
             )}
           </div>
         </div>
@@ -228,17 +234,26 @@ export default function ProfilePage({
           <h4 className="text-[32px] text-[#5271FF] font-medium leading-none pt-[30px] pb-[30px]">
             Personalized Courses
           </h4>
-          <div className="">
+          <div className="w-full grid grid-cols-4 gap-4 pt-[30px]">
             {loading ? (
               <p>Loading personalized courses...</p>
             ) : personalizedCourses?.length > 0 ? (
-              <CourseSlider courses={personalizedCourses} />
+              // Hiển thị các khóa học của trang hiện tại (tối đa 8 khóa học)
+              personalizedCourses
+                .slice(0, 4)
+                .map((course, index) => (
+                  <CardCourse
+                    key={`course card ${index}`}
+                    isPersonalized={true}
+                    course={course}
+                  />
+                ))
             ) : (
               <p>
                 No personalized courses available at the moment.&nbsp;
-                <Link href="/login" className="underline text-[#5271FF]">
+                {/* <Link href="/login" className="underline text-[#5271FF]">
                   Log in right now
-                </Link>
+                </Link> */}
               </p>
             )}
           </div>
@@ -259,18 +274,22 @@ export default function ProfilePage({
           <h4 className="text-[32px] text-white font-semibold leading-none pb-[30px]">
             What Is Your Next?
           </h4>
-          <div className="">
+          <div className="w-full grid grid-cols-4 gap-4 pt-[30px]">
             {loading ? (
-              <p>Loading personalized courses...</p>
-            ) : personalizedCourses?.length > 0 ? (
-              <CourseSlider courses={personalizedCourses} />
+              <p>Loading next courses...</p>
+            ) : popularCourses?.length > 0 ? (
+              // Hiển thị các khóa học của trang hiện tại (tối đa 8 khóa học)
+              popularCourses
+                .slice(0, 4)
+                .map((course, index) => (
+                  <CardCourse
+                    key={`course card ${index}`}
+                    isPersonalized={false}
+                    course={course}
+                  />
+                ))
             ) : (
-              <p>
-                No personalized courses available at the moment.&nbsp;
-                <Link href="/login" className="underline text-[#5271FF]">
-                  Log in right now
-                </Link>
-              </p>
+              <p>No next courses available at the moment.</p>
             )}
           </div>
           <Link

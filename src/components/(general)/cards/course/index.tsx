@@ -63,7 +63,7 @@ export default function CardCourse({
           <p className="text-zinc-500 line-clamp-2">{course?.course_about}</p>
         </div>
 
-        <p className="px-4 font-bold text-pri2">{course?.school.school_name}</p>
+        {/* <p className="px-4 font-bold text-pri2">{course?.school.school_name}</p> */}
       </div>
     </Link>
   );
