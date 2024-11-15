@@ -10,8 +10,19 @@ import { useState, useEffect } from "react";
 import { CourseSlider } from "@/components/(general)/course-slider"; // Import CourseSlider
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Pagination from "./paginationc";
 
-export default function ProfilePage() {
+export default function ProfilePage({
+  pageNumber,
+  course,
+  className = "",
+  isPersonalized = false,
+}: {
+  course: Course;
+  className?: string;
+  isPersonalized: boolean;
+  pageNumber: number;
+}) {
   const { data: session, status } = useSession(); // Lấy thông tin session
   const router = useRouter(); // Dùng router để chuyển hướng
 
@@ -20,7 +31,10 @@ export default function ProfilePage() {
   const [personalizedCourses, setPersonalizedCourses] = useState<any[]>([]);
 
   const [loading, setLoading] = useState<boolean>(true);
-
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [sortState, setSortState] = useState<string>("Top");
+  const [page, setPage] = useState<number>(isNaN(pageNumber) ? 1 : pageNumber);
+  const [totalPages, setTotalPages] = useState<number>(1);
   // Fetch dữ liệu cho 4 mục
   useEffect(() => {
     if (status === "loading") return; // Chờ khi loading
@@ -187,19 +201,26 @@ export default function ProfilePage() {
             )}
           </div>
 
-          <div className="pt-[30px]">
+          <div className="w-full grid grid-cols-4 gap-4 pt-[30px]">
             {loading ? (
-              <p>Loading completed courses...</p>
+              <p>Loading popular courses...</p>
             ) : popularCourses?.length > 0 ? (
-              <CourseSlider courses={popularCourses} />
+              // Lặp qua tất cả khóa học trong mảng popularCourses và truyền từng khóa học vào CardCourse
+              popularCourses.map((course) => (
+                <CardCourse
+                  key={course._id} // Dùng _id của khóa học làm key cho mỗi CardCourse
+                  isPersonalized={false} // Hoặc dùng một điều kiện để xác định giá trị isPersonalized
+                  course={course} // Truyền khóa học vào prop 'course'
+                />
+              ))
             ) : (
-              <p>No completed courses available at the moment.</p>
+              <p>No popular courses available at the moment.</p>
             )}
           </div>
         </div>
 
         <div className="pt-[30px] pb-[30px] w-full text-center">
-          {/* <Pagination page={page} setPage={setPage} totalPages={totalPages} /> */}
+          <Pagination page={page} setPage={setPage} totalPages={totalPages} />
         </div>
 
         {/* Personalized Courses */}
