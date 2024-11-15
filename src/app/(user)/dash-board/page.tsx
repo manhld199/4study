@@ -69,7 +69,7 @@ export default function ProfilePage() {
   if (status === "loading" || !session) {
     return <div>Redirecting to login...</div>;
   }
-  
+
   return (
     <div className="">
       <div className="flex justify-center py-4">
@@ -196,6 +196,10 @@ export default function ProfilePage() {
               <p>No completed courses available at the moment.</p>
             )}
           </div>
+        </div>
+
+        <div className="pt-[30px] pb-[30px] w-full text-center">
+          {/* <Pagination page={page} setPage={setPage} totalPages={totalPages} /> */}
         </div>
 
         {/* Personalized Courses */}
