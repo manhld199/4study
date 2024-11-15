@@ -3,6 +3,9 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { FiSearch } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
+import { useSession, signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,6 +18,7 @@ export default function Header() {
 
   const handleLogout = () => {
     console.log("User logged out");
+    signOut();
     setIsMenuOpen(false);
   };
 
@@ -102,6 +106,77 @@ export default function Header() {
     }
   };
 
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  console.log("Session:", session);
+  console.log("Status:", status);
+
+  useEffect(() => {
+    if (status === "loading") return;
+    if (!session) {
+      router.push("/login");
+    }
+  }, [session, status, router]);
+
+  if (!session) {
+    return (
+      <header className="bg-white pt-[24px] fixed top-0 left-0 right-0 z-[100]">
+        <div className="w-4/5 m-auto h-20 flex items-center justify-between px-5">
+          {/* Logo */}
+          <Link href="/">
+            <img src="/imgs/Logo.png" alt="Logo" className="h-16" />
+          </Link>
+
+          {/* Search bar */}
+          <form
+            id="search-bar"
+            onSubmit={handleSearch}
+            className="relative flex items-center justify-between w-full max-w-[480px] min-w-[700px] border-[#D9D9D9] border-[1.4px] rounded-[18px] px-1 min-h-12  bg-opacity-50">
+            <FiSearch className="min-w-[30px] min-h-[30px] p-[7px] rounded-full stroke-[#5271FF]" />
+            <input
+              type="text"
+              placeholder="Find Your Courses..."
+              className="w-full border-0 outline-none bg-transparent"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+            <Link href={`/search?keyword=${searchQuery}`}>
+              <Button
+                type="submit"
+                className="bg-[#5271FF] text-white rounded-[18px] py-2 px-8 hover:bg-[#11009E]">
+                {isSubmitting ? "Submitting..." : "Search"}
+              </Button>
+            </Link>
+            {/* Hiển thị gợi ý tìm kiếm */}
+            {showSuggestions && suggestions.length > 0 && (
+              <ul className="absolute top-[100%] left-0 w-full bg-white border border-[#D9D9D9] rounded-[12px] max-h-[200px] overflow-y-auto z-50">
+                {suggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    className="p-2 cursor-pointer hover:bg-[#f0f0f0]"
+                    onClick={() => handleSuggestionClick(suggestion)}>
+                    {suggestion}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </form>
+          {/* Khi chưa có account */}
+          <div>
+            <Link href="/login">
+              <Button
+                type="submit"
+                className="bg-[#5271FF] text-white rounded-[18px] py-2 px-8 hover:bg-[#11009E]">
+                Login
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </header>
+    );
+  }
+
   return (
     <header className="bg-white pt-[24px] fixed top-0 left-0 right-0 z-[100]">
       <div className="w-4/5 m-auto h-20 flex items-center justify-between px-5">
@@ -144,16 +219,6 @@ export default function Header() {
             </ul>
           )}
         </form>
-        {/* Khi chưa có account */}
-        {/* <div>
-          <Link href="/login">
-            <Button
-              type="submit"
-              className="bg-[#5271FF] text-white rounded-[18px] py-2 px-8 hover:bg-[#11009E]">
-              Login
-            </Button>
-          </Link>
-        </div> */}
 
         {/* My Courses Button và Avatar */}
         <div className="flex items-center relative">

@@ -226,7 +226,7 @@ export default function ProfilePage({
         </div>
 
         <div className="pt-[30px] pb-[30px] w-full text-center">
-          <Pagination page={page} setPage={setPage} totalPages={totalPages} />
+          <Pagination page={page} setPage={setPage} />
         </div>
 
         {/* Personalized Courses */}
