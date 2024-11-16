@@ -1,9 +1,9 @@
 import { User } from "@/libs/models";
 import bcrypt from "bcrypt";
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth"; 
 import CredentialsProvider from "next-auth/providers/credentials";
 
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
@@ -47,7 +47,7 @@ const handler = NextAuth({
             id: foundUser._id.toString(),
             email: foundUser.user_email,
             name: foundUser.user_name,
-            image:foundUser.user_img
+            image: foundUser.user_img,
           };
         } catch (error) {
           if (error instanceof Error) {
@@ -62,7 +62,7 @@ const handler = NextAuth({
     async session({ session, token }) {
       session.user = {
         ...session.user,
-        id: token.id as string,  
+        id: token.id as string,
         name: token.name as string,
         email: token.email as string,
         image: token.image as string,
@@ -74,12 +74,14 @@ const handler = NextAuth({
         token.id = user.id;
         token.name = user.name;
         token.email = user.email;
-        token.image=user.image
+        token.image = user.image;
       }
       return token;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
