@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-
+import { useSearchParams } from "next/navigation";
 // import components
 import { NotificationSuccess } from "@/components";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,7 @@ interface LoginFormInputs {
 
 export default function Login() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const {
     register,
     handleSubmit,
@@ -28,6 +29,11 @@ export default function Login() {
     watch,
   } = useForm<LoginFormInputs>({ mode: "onChange" });
 
+  let returnUrl = searchParams.get("returnUrl") || "/";
+  if (returnUrl === "/login") {
+    returnUrl = "/";
+  }
+  console.log("returnUrl",returnUrl);
   const [loginError, setLoginError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -53,7 +59,7 @@ export default function Login() {
         // Show success notification and navigate after a delay
         setIsDialogOpen(true);
         setTimeout(() => {
-          router.push("/");
+          router.push(returnUrl as string);
           router.refresh();
         }, 3000);
       } else {
