@@ -38,6 +38,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const successMessage = "You have successfully logged in. Welcome back!";
+  const titleMessage="Login Successful!"
   const emailValue = watch("email");
   const passwordValue = watch("password");
 
@@ -164,6 +165,7 @@ export default function Login() {
       <NotificationSuccess
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
+        title={titleMessage}
         message={successMessage}
       />
     </div>
