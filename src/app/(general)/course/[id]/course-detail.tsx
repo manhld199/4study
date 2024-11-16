@@ -1,4 +1,9 @@
-import { Chapter, InfoTeacher, RecommendedCourses } from "@/components";
+import {
+  Chapter,
+  InfoTeacher,
+  RecommendedCourses,
+  NotificationSuccess,
+} from "@/components";
 import { Button } from "@/components/ui/button";
 import {
   capitalizeFirstSentence,
@@ -6,7 +11,7 @@ import {
 } from "@/utils/functions/format";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
-
+import { useState } from "react";
 interface CourseDetailProps {
   courseData: Course;
   isRegistered: boolean;
@@ -20,10 +25,21 @@ export default function CourseDetail({
 }: CourseDetailProps) {
   const { data: session, status } = useSession();
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const successMessage = "You have successfully enrolled in this course!";
+  const titleMessage = "Enrollment Successful!";
+  const notificationMessage =
+    "You have already registered for this course. No need to register again.";
   const handleRegister = async () => {
     if (!session) {
-      // If not logged in, prompt user to log in
-      signIn(); // This will redirect the user to the login page
+      // Nếu chưa đăng nhập, yêu cầu đăng nhập
+      signIn(); // Chuyển hướng đến trang đăng nhập
+      return;
+    }
+    console.log(session);
+    if (isRegistered) {
+      setIsDialogOpen(true);
+      console.log("Already registered for this course.");
       return;
     }
 
@@ -44,6 +60,7 @@ export default function CourseDetail({
 
       if (response.ok) {
         setIsRegistered(true);
+        setIsDialogOpen(true);
         console.log("Course registered successfully!");
       } else {
         console.log("Failed to register the course.");
@@ -117,15 +134,19 @@ export default function CourseDetail({
           <Button
             onClick={handleRegister}
             className={`mt-6 w-full text-white py-3 text-[16px] rounded-[18px] bg-[#5271FF] hover:bg-[#11009E] ${
-              isRegistered
-                ? "bg-[#11009E] disabled:opacity-50 cursor-not-allowed pointer-events-none"
-                : ""
+              isRegistered ? "bg-[#11009E] disabled:opacity-50" : ""
             }`}>
             {isRegistered ? "Enrolled" : "Enroll now"}
           </Button>
         </div>
       </div>
-      <RecommendedCourses/>
+      <RecommendedCourses />
+      <NotificationSuccess
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        title={titleMessage}
+        message={isRegistered ? notificationMessage : successMessage}
+      />
     </div>
   );
 }
