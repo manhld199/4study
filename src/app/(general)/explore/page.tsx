@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { ImageSlider } from "@/components/(general)/image-slider"; // Import ImageSlider
 import { CourseSlider } from "@/components/(general)/course-slider"; // Import CourseSlider
+import Link from "next/link";
 
 export default function Home() {
   // State để lưu các khóa học
@@ -47,7 +48,7 @@ export default function Home() {
           },
         });
         const teacherData = await teacherResponse.json();
-        setTeacherCourses(teacherData.data);
+        setTeacherCourses(teacherData.data.courses);
 
         // Fetch courses by school
         const schoolResponse = await fetch("/api/courses/school", {
@@ -57,8 +58,7 @@ export default function Home() {
           },
         });
         const schoolData = await schoolResponse.json();
-        setSchoolCourses(schoolData.data);
-
+        setSchoolCourses(schoolData.data.courses);
       } catch (error) {
         console.error("Error fetching courses:", error);
       } finally {
@@ -76,20 +76,6 @@ export default function Home() {
 
       {/* Course Slider */}
       <section className="py-[50px] flex flex-col gap-[30px] max-w-[1180px] justify-center items-center m-auto">
-        {/* Popular Courses */}
-        <div className="w-full">
-          <h2 className="text-[32px] text-[#5271FF] font-semibold leading-[40px] pb-[10px]">
-            Popular Courses
-          </h2>
-          {loading ? (
-            <p>Loading popular courses...</p>
-          ) : popularCourses.length > 0 ? (
-            <CourseSlider courses={popularCourses} />
-          ) : (
-            <p>No popular courses available at the moment.</p>
-          )}
-        </div>
-
         {/* Personalized Courses */}
         <div className="w-full">
           <h2 className="text-[32px] text-[#5271FF] font-semibold leading-[40px] pb-[10px]">
@@ -97,17 +83,36 @@ export default function Home() {
           </h2>
           {loading ? (
             <p>Loading personalized courses...</p>
-          ) : personalizedCourses.length > 0 ? (
+          ) : personalizedCourses?.length > 0 ? (
             <CourseSlider courses={personalizedCourses} />
           ) : (
-            <p>No personalized courses available at the moment.</p>
+            <p>
+              No personalized courses available at the moment.&nbsp;
+              <Link href="/login" className="underline text-[#5271FF]">
+                Log in right now
+              </Link>
+            </p>
+          )}
+        </div>
+
+        {/* Popular Courses */}
+        <div className="w-full">
+          <h2 className="text-[32px] text-[#5271FF] font-semibold leading-[40px] pb-[10px]">
+            Popular Courses
+          </h2>
+          {loading ? (
+            <p>Loading popular courses...</p>
+          ) : popularCourses?.length > 0 ? (
+            <CourseSlider courses={popularCourses} />
+          ) : (
+            <p>No popular courses available at the moment.</p>
           )}
         </div>
 
         {/* Courses by Teacher */}
         <div className="w-full">
           <h2 className="text-[32px] text-[#5271FF] font-semibold leading-[40px] pb-[10px]">
-            Courses by Teacher
+            Courses by Teacher with Top
           </h2>
           {loading ? (
             <p>Loading teacher courses...</p>
@@ -121,7 +126,7 @@ export default function Home() {
         {/* Courses by School */}
         <div className="w-full">
           <h2 className="text-[32px] text-[#5271FF] font-semibold leading-[40px] pb-[10px]">
-            Courses by School
+            Courses by School with Top
           </h2>
           {loading ? (
             <p>Loading school courses...</p>
@@ -131,7 +136,6 @@ export default function Home() {
             <p>No school courses available at the moment.</p>
           )}
         </div>
-
       </section>
     </>
   );

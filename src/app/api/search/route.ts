@@ -22,9 +22,11 @@ export const GET = async (req: NextRequest) => {
     const limit = parseInt(searchParams.get("limit") || "9", 10); // Default to 9 items per page
     const skip = (page - 1) * limit; // Skip based on the current page
 
-    // Build the common part of the pipeline
-    const basePipeline: any[] = [
-      {
+    // keyword
+    let keywordStage = {};
+    if (keyword == "" || !keyword) keywordStage = { $match: {} };
+    else
+      keywordStage = {
         $search: {
           index: "search",
           text: {
@@ -34,7 +36,11 @@ export const GET = async (req: NextRequest) => {
             },
           },
         },
-      },
+      };
+
+    // Build the common part of the pipeline
+    const basePipeline: any[] = [
+      keywordStage,
       {
         $lookup: {
           from: "schools",
