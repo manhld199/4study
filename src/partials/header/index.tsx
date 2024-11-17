@@ -73,8 +73,10 @@ export default function Header() {
       // Nếu có giá trị tìm kiếm, gọi API để tìm kiếm gợi ý
       const filteredSuggestions = await fetchCourses(query);
       setSuggestions(filteredSuggestions);
+      setShowSuggestions(filteredSuggestions.length > 0);
     } else {
       setSuggestions([]); // Nếu không có gì nhập, xóa gợi ý
+      setShowSuggestions(false);
     }
   };
 
@@ -100,12 +102,20 @@ export default function Header() {
   };
 
   // Đóng gợi ý khi người dùng nhấn vào bên ngoài search bar
-  const handleClickOutside = (e: MouseEvent) => {
-    const searchBar = document.getElementById("search-bar");
-    if (searchBar && !searchBar.contains(e.target as Node)) {
-      setShowSuggestions(false); // Ẩn gợi ý khi nhấn ra ngoài
-    }
-  };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const searchBar = document.getElementById("search-bar");
+      console.log("Clicked outside:", event.target); // Xem mục tiêu click là gì
+      if (searchBar && !searchBar.contains(event.target as Node)) {
+        setShowSuggestions(false); // Ẩn gợi ý khi nhấn ra ngoài
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -122,7 +132,7 @@ export default function Header() {
 
   if (!session) {
     return (
-      <header className="relative bg-white pt-[24px] fixed top-0 left-0 right-0 z-[100]">
+      <header className="bg-white pt-[24px] fixed top-0 left-0 right-0 z-[100]">
         <div className="w-4/5 m-auto h-20 flex items-center justify-between px-5">
           {/* Logo */}
           <Link href="/">
@@ -150,17 +160,8 @@ export default function Header() {
               </Button>
             </Link>
             {/* Hiển thị gợi ý tìm kiếm */}
-            {showSuggestions && suggestions.length > 0 && (
-              <ul className="absolute top-[100%] left-0 w-full bg-white border border-[#D9D9D9] rounded-[12px] max-h-[200px] overflow-y-auto z-50">
-                {suggestions.map((suggestion, index) => (
-                  <li
-                    key={index}
-                    className="p-2 cursor-pointer hover:bg-[#f0f0f0]"
-                    onClick={() => handleSuggestionClick(suggestion)}>
-                    {suggestion}
-                  </li>
-                ))}
-              </ul>
+            {suggestions.length > 0 && (
+              <SearchSuggest suggestions={suggestions} />
             )}
           </form>
           {/* Khi chưa có account */}
@@ -207,17 +208,8 @@ export default function Header() {
             </Button>
           </Link>
           {/* Hiển thị gợi ý tìm kiếm */}
-          {showSuggestions && suggestions.length > 0 && (
-            <ul className="absolute top-[100%] left-0 w-full bg-white border border-[#D9D9D9] rounded-[12px] max-h-[200px] overflow-y-auto z-50">
-              {suggestions.map((suggestion, index) => (
-                <li
-                  key={index}
-                  className="p-2 cursor-pointer hover:bg-[#f0f0f0]"
-                  onClick={() => handleSuggestionClick(suggestion)}>
-                  {suggestion}
-                </li>
-              ))}
-            </ul>
+          {suggestions.length > 0 && (
+            <SearchSuggest suggestions={suggestions} />
           )}
         </form>
 
