@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 export default function CardCourse({
   course,
   className = "",
-  isPersonalized = true,
+  isPersonalized = false,
 }: {
   course: Course;
   className?: string;
@@ -18,9 +18,9 @@ export default function CardCourse({
 }) {
   return (
     <Link
-      href={`/course/${course?._id||1}`}
+      href={`/course/${course?._id || 1}`}
       target="_blank"
-      className={`cursor-pointer w-full border-2 rounded-3xl flex flex-col gap-2 items-center overflow-hidden bg-white hover:shadow-lg pb-2 ${className}`}>
+      className={`cursor-pointer w-full border-2 rounded-3xl flex flex-col gap-2 items-center overflow-hidden bg-white hover:shadow-lg pb-2  ${className}`}>
       <div className="relative w-full">
         <div className="relative w-full aspect-[10/7]">
           <Image
