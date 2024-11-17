@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
+import SearchSuggest from "./search-suggest";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -121,7 +122,7 @@ export default function Header() {
 
   if (!session) {
     return (
-      <header className="bg-white pt-[24px] fixed top-0 left-0 right-0 z-[100]">
+      <header className="relative bg-white pt-[24px] fixed top-0 left-0 right-0 z-[100]">
         <div className="w-4/5 m-auto h-20 flex items-center justify-between px-5">
           {/* Logo */}
           <Link href="/">
