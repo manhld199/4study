@@ -1,7 +1,19 @@
-// import libs
-import Head from "next/head";
+"use client";
 
-export default function TermsOfUsePage() {
+import React from "react";
+import Head from "next/head";
+import TableOfContents from "@/components/(general)/table-of-content/index";
+
+const TermsOfServicePage: React.FC = () => {
+  const tocItems = [
+    { id: "1", label: "1. Introduction" },
+    { id: "2", label: "2. Use of Services" },
+    { id: "3", label: "3. Intellectual Property Rights" },
+    { id: "4", label: "4. Privacy Policy" },
+    { id: "5", label: "5. Our Responsibilities" },
+    { id: "6", label: "6. Changes to Terms" },
+    { id: "7", label: "7. Contact Us" },
+  ];
   return (
     <div className=" min-h-screen">
       <Head>
@@ -12,7 +24,9 @@ export default function TermsOfUsePage() {
         <h1 className="text-4xl font-semibold mb-2 text-center text-[#5271FF]">
           Terms of Service
         </h1>
-        <div className="w-full border border-[#5271FF] border-l-4 p-5 mx-auto">
+         {/* Table of Contents */}
+         <TableOfContents items={tocItems} />
+        {/* <div className="w-full border border-[#5271FF] border-l-4 p-5 mx-auto">
           <h2 className="text-2xl text-[#5271FF] font-semibold mb-2">
             Table of Contents
           </h2>
@@ -44,7 +58,7 @@ export default function TermsOfUsePage() {
               <li>7. Contact Us</li>{" "}
             </a>
           </ul>
-        </div>
+        </div> */}
         <div className="flex-1 text-justify">
           <p>
             Welcome to{" "}
@@ -213,4 +227,5 @@ export default function TermsOfUsePage() {
       </div>
     </div>
   );
-}
+};
+export default TermsOfServicePage;
