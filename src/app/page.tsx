@@ -1,12 +1,16 @@
 "use client";
 
-import { useSession } from "next-auth/react"; 
+import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CardCourse, CardCourseMini } from "@/components";
-import { CourseMiniSlider } from "@/components/(general)/cards/course-mini-slider";
-import { CourseSlider } from "@/components/(general)/course-slider";
+import Skeleton from "react-loading-skeleton"; // Import react-loading-skeleton
+import "react-loading-skeleton/dist/skeleton.css"; // Import css nếu cần
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Navigation, Autoplay } from "swiper/modules";
 
 export default function Home() {
   const [popularCourses, setPopularCourses] = useState<Course[]>([]);
@@ -116,9 +120,47 @@ export default function Home() {
         </div>
 
         {loading ? (
-          <p>Loading popular courses...</p>
+          <div className="grid grid-cols-3 gap-4 w-full">
+            {/* Hiển thị 3 Skeletons riêng biệt */}
+            <Skeleton height={120} className="skeleton-custom" />
+            <Skeleton height={120} className="skeleton-custom" />
+            <Skeleton height={120} className="skeleton-custom" />
+          </div>
         ) : (
-          <CourseMiniSlider courses={popularCourses} />
+          // <CourseMiniSlider courses={popularCourses} />
+          // <CourseSlider
+          //   courses={otherCourses}
+          //   coursesPerPage={3}
+          //   renderCourse={CardCourseMini}
+          //   isPersonalized={false}
+          // />
+          <div className="w-full">
+            <div className="relative">
+              {/* Swiper with custom navigation buttons */}
+              <Swiper
+                modules={[Navigation, Autoplay]}
+                spaceBetween={15}
+                slidesPerView={3}
+                navigation={{
+                  nextEl: ".swiper-button-next",
+                  prevEl: ".swiper-button-prev",
+                }}
+                pagination={{ clickable: true }}
+                autoplay={{
+                  delay: 2000,
+                  disableOnInteraction: false,
+                }}
+                loop={true}>
+                {popularCourses.slice(0, 15).map((course, index) => (
+                  <SwiperSlide key={index}>
+                    <CardCourseMini course={course} isPersonalized={false} />
+                  </SwiperSlide>
+                ))}
+                <div className="swiper-button-next"></div>
+                <div className="swiper-button-prev"></div>
+              </Swiper>
+            </div>
+          </div>
         )}
       </div>
 
@@ -142,13 +184,43 @@ export default function Home() {
         </div>
 
         {loading ? (
-          <p>Loading recommended courses...</p>
+          <div className="grid grid-cols-4 gap-4 w-full">
+            {/* Hiển thị 4 Skeletons riêng biệt */}
+            <Skeleton height={350} className="skeleton-custom" />
+            <Skeleton height={350} className="skeleton-custom" />
+            <Skeleton height={350} className="skeleton-custom" />
+            <Skeleton height={350} className="skeleton-custom" />
+          </div>
         ) : (
-          <CourseSlider courses={otherCourses} />
+          <div className="w-full">
+            <div className="relative">
+              {/* Swiper with custom navigation buttons */}
+              <Swiper
+                modules={[Navigation, Autoplay]}
+                spaceBetween={15}
+                slidesPerView={4}
+                navigation={{
+                  nextEl: ".swiper-button-next",
+                  prevEl: ".swiper-button-prev",
+                }}
+                pagination={{ clickable: true }}
+                autoplay={{
+                  delay: 2000,
+                  disableOnInteraction: false,
+                }}
+                loop={true}>
+                {otherCourses.slice(0, 20).map((course, index) => (
+                  <SwiperSlide key={index}>
+                    <CardCourse course={course} isPersonalized={false} />
+                  </SwiperSlide>
+                ))}
+                <div className="swiper-button-next"></div>
+                <div className="swiper-button-prev"></div>
+              </Swiper>
+            </div>
+          </div>
         )}
       </div>
     </>
   );
 }
-
-

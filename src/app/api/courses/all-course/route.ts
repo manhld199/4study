@@ -11,6 +11,7 @@ export async function GET() {
   try {
     // Lấy thông tin khóa học, trường học và giáo viên liên quan, đồng thời sử dụng trường `enrollment_count` trong Course
     const result = await Course.aggregate([
+      {$limit:20},
       {
         $lookup: {
           from: "schools",
