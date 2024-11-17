@@ -1,3 +1,10 @@
+"use client";
+// import libs
+import { signIn, useSession } from "next-auth/react";
+import Image from "next/image";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+// import components
 import {
   Chapter,
   InfoTeacher,
@@ -5,13 +12,12 @@ import {
   NotificationSuccess,
 } from "@/components";
 import { Button } from "@/components/ui/button";
+// import utils
 import {
   capitalizeFirstSentence,
   truncateWords,
 } from "@/utils/functions/format";
-import { signIn, useSession } from "next-auth/react";
-import Image from "next/image";
-import { useState } from "react";
+
 interface CourseDetailProps {
   courseData: Course;
   isRegistered: boolean;
@@ -23,6 +29,8 @@ export default function CourseDetail({
   isRegistered,
   setIsRegistered,
 }: CourseDetailProps) {
+  const router = useRouter();
+  const currentUrl = window.location.href;
   const { data: session, status } = useSession();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -32,10 +40,11 @@ export default function CourseDetail({
     "You have already registered for this course. No need to register again.";
   const currentTime = new Date().toLocaleString();
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+
   const handleRegister = async () => {
     if (!session) {
       // Nếu chưa đăng nhập, yêu cầu đăng nhập
-      signIn(); // Chuyển hướng đến trang đăng nhập
+      router.push(`/login?returnUrl=${encodeURIComponent(currentUrl)}`);
       return;
     }
     console.log(session);
@@ -136,7 +145,7 @@ export default function CourseDetail({
             </p>
           </div>
           <div className="space-y-6">
-          {courseData.course_videos.map((video, index) => (
+            {courseData.course_videos.map((video, index) => (
               <Chapter
                 key={index}
                 title={`Chapter ${index + 1}`}

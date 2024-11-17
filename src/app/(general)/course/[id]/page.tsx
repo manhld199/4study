@@ -1,10 +1,13 @@
 "use client";
+
+// import libs
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 
+// import components
 import CourseDetail from "./course-detail";
 
 interface Teacher {
