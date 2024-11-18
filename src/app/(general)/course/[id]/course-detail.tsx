@@ -30,14 +30,11 @@ export default function CourseDetail({
   setIsRegistered,
 }: CourseDetailProps) {
   const router = useRouter();
-  const currentUrl = window.location.href;
+  const currentUrl = window.location.pathname + window.location.search;
   const { data: session, status } = useSession();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const successMessage = "You have successfully enrolled in this course!";
-  const titleMessage = "Enrollment Successful!";
-  const notificationMessage =
-    "You have already registered for this course. No need to register again.";
+  const [notificationType, setNotificationType] = useState<"success" | "warning">("success"); // Thêm trạng thái
   const currentTime = new Date().toLocaleString();
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
@@ -47,10 +44,10 @@ export default function CourseDetail({
       router.push(`/login?returnUrl=${encodeURIComponent(currentUrl)}`);
       return;
     }
-    console.log(session);
+
     if (isRegistered) {
+      setNotificationType("warning");
       setIsDialogOpen(true);
-      console.log("Already registered for this course.");
       return;
     }
 
@@ -69,10 +66,10 @@ export default function CourseDetail({
 
       if (response.ok) {
         setIsRegistered(true);
+        setNotificationType("success");
         setIsDialogOpen(true);
-        console.log("Course registered successfully!");
       } else {
-        console.log("Failed to register the course.");
+        console.error("Failed to register the course.");
       }
     } catch (error) {
       console.error("Error registering course:", error);
@@ -93,13 +90,6 @@ export default function CourseDetail({
       <div className="flex justify-between py-[50px] gap-[50px]">
         <div className="flex flex-col bg-white w-[800px] p-[20px] gap-[20px] rounded-[18px]">
           <div className="h-[350px] rounded-[10px] relative">
-            {/* <Image
-              src={courseData.course_img}
-              alt="Course Image"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-[10px]"
-            /> */}
             {selectedVideo ? (
               <iframe
                 width="100%"
@@ -184,8 +174,16 @@ export default function CourseDetail({
       <NotificationSuccess
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
-        title={titleMessage}
-        message={isRegistered ? notificationMessage : successMessage}
+        title={
+          notificationType === "success"
+            ? "Enrollment Successful!"
+            : "Already Registered"
+        }
+        message={
+          notificationType === "success"
+            ? "You have successfully enrolled in this course!"
+            : "You have already registered for this course. No need to register again."
+        }
       />
     </div>
   );
