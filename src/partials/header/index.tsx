@@ -4,8 +4,10 @@ import Link from "next/link";
 import { FiSearch } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import coursesData from "../../../database/preprocessed-data/course.json";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
+  const currentUrl = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLImageElement>(null);
@@ -121,7 +123,11 @@ export default function Header() {
         </form>
         {/* Khi chưa có account */}
         <div>
-          <Link href="/login">
+          <Link
+            href={{
+              pathname: "/login", 
+              query: { returnUrl: currentUrl }, 
+            }}>
             <Button
               type="submit"
               className="bg-[#5271FF] text-white rounded-[18px] py-2 px-8 hover:bg-[#11009E]">
