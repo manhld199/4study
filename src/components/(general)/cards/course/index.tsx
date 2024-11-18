@@ -43,13 +43,17 @@ export default function CardCourse({
       <div className="w-full py-2 flex flex-col gap-3">
         <div className="px-4 flex flex-row justify-between">
           <div className="flex flex-row gap-1 flex-wrap">
-            {course?.teachers.slice(0, 2).map((teacher, index) => (
-              <Badge
-                key={`badge ${course._id} teacher ${index}`}
-                className="w-fit bg-pri2 hover:bg-pri2">
-                {teacher.teacher_name}
-              </Badge>
-            ))}
+            {Array.isArray(course?.teachers) && course.teachers.length > 0 ? (
+              course.teachers.slice(0, 2).map((teacher, index) => (
+                <Badge
+                  key={`badge ${course._id} teacher ${index}`}
+                  className="w-fit bg-pri2 hover:bg-pri2">
+                  {teacher.teacher_name}
+                </Badge>
+              ))
+            ) : (
+              <span>No teachers available</span> // Hiển thị nếu không có giáo viên
+            )}
           </div>
           {course?.teachers.length > 2 && (
             <Badge className="bg-zinc-400 hover:bg-zinc-400">

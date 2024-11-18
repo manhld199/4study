@@ -17,6 +17,7 @@ export default function ProfilePage() {
   // State để lưu các khóa học
   const [popularCourses, setPopularCourses] = useState<any[]>([]);
   const [personalizedCourses, setPersonalizedCourses] = useState<any[]>([]);
+  const [completedCourses, setCompletedCourses] = useState<any[]>([]);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
@@ -41,6 +42,7 @@ export default function ProfilePage() {
     if (!session) {
       router.push("/login"); // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
     } else {
+      console.log(session);
       // Fetch dữ liệu nếu người dùng đã đăng nhập
       const fetchCourses = async () => {
         try {
@@ -67,6 +69,16 @@ export default function ProfilePage() {
           );
           const personalizedData = await personalizedResponse.json();
           setPersonalizedCourses(personalizedData.data);
+
+          // Fetch completed courses
+          const completedResponse = await fetch("/api/courses/completed", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const completedData = await completedResponse.json();
+          setCompletedCourses(completedData.data);
         } catch (error) {
           console.error("Error fetching courses:", error);
         } finally {
@@ -103,7 +115,7 @@ export default function ProfilePage() {
             <div className="flex flex-col items-left space-y-4">
               <div className="text-[24px]">Completed Courses</div>
               <div className="text-[32px] pt-[32px] pb-[24px]">
-                {popularCourses.length}
+                {completedCourses.length}
               </div>
               <button
                 className="text-blue-500 text-[16px] mt-2 hover:underline text-left"
@@ -193,10 +205,10 @@ export default function ProfilePage() {
           <div className="w-full grid grid-cols-4 gap-4 pt-[30px]">
             {loading ? (
               <p>Loading completed courses...</p>
-            ) : popularCourses?.length > 0 ? (
+            ) : completedCourses.length > 0 ? (
               // Hiển thị các khóa học của trang hiện tại (tối đa 8 khóa học)
 
-              popularCourses
+              completedCourses
                 .slice((page - 1) * 8, page * 8)
                 .map((course, index) => (
                   <CardCourse

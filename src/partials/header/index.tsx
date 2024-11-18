@@ -16,6 +16,8 @@ export default function Header() {
   const menuRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLImageElement>(null);
 
+  const [user, setUser] = useState(null);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -216,7 +218,7 @@ export default function Header() {
           )}
         </form>
         {/* Khi chưa có account */}
-        <div>
+        {/* <div>
           <Link
             href={{
               pathname: "/login", 
@@ -228,13 +230,13 @@ export default function Header() {
               Login
             </Button>
           </Link>
-        </div>
+        </div> */}
 
         {/* My Courses Button và Avatar */}
         <div className="flex items-center relative">
           <img
             ref={avatarRef}
-            src="/imgs/test.jpg"
+            src={session.user?.image}
             alt="Avatar"
             className="h-[40px] w-[40px] rounded-full cursor-pointer"
             onClick={toggleMenu}
@@ -254,14 +256,14 @@ export default function Header() {
               className="w-[290px] absolute top-12 right-0 bg-white shadow-2xl rounded-lg p-3 w-auto min-w-max z-50">
               <div className="flex items-center mb-3 gap-2 w-full">
                 <img
-                  src="/imgs/test.jpg"
+                  src={session.user?.image}
                   alt="Avatar"
                   className="h-[60px] w-[60px] rounded-full"
                 />
                 <div className="pl-[10px] pb-[20px] flex-grow">
-                  <p className="font-medium">user user_name</p>
+                  <p className="font-medium">{session.user?.name}</p>
                   <p className="text-sm text-gray-500 break-all">
-                    user user_email
+                    {session.user?.email}
                   </p>
                 </div>
               </div>
