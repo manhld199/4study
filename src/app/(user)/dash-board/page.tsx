@@ -8,7 +8,7 @@ import CardCourse from "@/components/(general)/cards/course";
 import { ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
 // import { ImageSlider } from "@/components/(general)/image-slider"; // Import ImageSlider
-import { CourseSlider } from "@/components/(general)/course-slider"; // Import CourseSlider
+// import { CourseSlider } from "@/components/(general)/course-slider"; // Import CourseSlider
 
 export default function ProfilePage() {
   // State để lưu các khóa học
@@ -160,23 +160,23 @@ export default function ProfilePage() {
             Completed Courses
           </h4>
           <div className="">
-            {loading ? (
+            {/* {loading ? (
               <p>Loading completed courses...</p>
             ) : popularCourses?.length > 0 ? (
               <CourseSlider courses={popularCourses} />
             ) : (
               <p>No completed courses available at the moment.</p>
-            )}
+            )} */}
           </div>
 
           <div className="pt-[30px]">
-            {loading ? (
+            {/* {loading ? (
               <p>Loading completed courses...</p>
             ) : popularCourses?.length > 0 ? (
               <CourseSlider courses={popularCourses} />
             ) : (
               <p>No completed courses available at the moment.</p>
-            )}
+            )} */}
           </div>
         </div>
 
@@ -186,7 +186,7 @@ export default function ProfilePage() {
             Personalized Courses
           </h4>
           <div className="">
-            {loading ? (
+            {/* {loading ? (
               <p>Loading personalized courses...</p>
             ) : personalizedCourses?.length > 0 ? (
               <CourseSlider courses={personalizedCourses} />
@@ -197,7 +197,7 @@ export default function ProfilePage() {
                   Log in right now
                 </Link>
               </p>
-            )}
+            )} */}
           </div>
           <Link
             href="/explore"
@@ -217,7 +217,7 @@ export default function ProfilePage() {
             What Is Your Next?
           </h4>
           <div className="">
-            {loading ? (
+            {/* {loading ? (
               <p>Loading personalized courses...</p>
             ) : personalizedCourses?.length > 0 ? (
               <CourseSlider courses={personalizedCourses} />
@@ -228,7 +228,7 @@ export default function ProfilePage() {
                   Log in right now
                 </Link>
               </p>
-            )}
+            )} */}
           </div>
           <Link
             href="/search"
