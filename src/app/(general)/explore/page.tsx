@@ -63,40 +63,40 @@ export default function Home() {
           </h2>
           {loading ? (
             <div className="grid grid-cols-4 gap-4 ">
-            {/* Hiển thị 4 Skeletons riêng biệt */}
-            <Skeleton height={350} className="skeleton-custom"/>
-            <Skeleton height={350} className="skeleton-custom"/>
-            <Skeleton height={350} className="skeleton-custom"/>
-            <Skeleton height={350} className="skeleton-custom"/>
-          </div>
+              {/* Hiển thị 4 Skeletons riêng biệt */}
+              <Skeleton height={350} className="skeleton-custom" />
+              <Skeleton height={350} className="skeleton-custom" />
+              <Skeleton height={350} className="skeleton-custom" />
+              <Skeleton height={350} className="skeleton-custom" />
+            </div>
           ) : personalizedCourses?.length > 0 ? (
             <div className="w-full">
-            <div className="relative">
-              {/* Swiper with custom navigation buttons */}
-              <Swiper
-                modules={[Navigation, Autoplay]}
-                spaceBetween={15}
-                slidesPerView={4}
-                navigation={{
-                  nextEl: ".swiper-button-next",
-                  prevEl: ".swiper-button-prev",
-                }}
-                pagination={{ clickable: true }}
-                autoplay={{
-                  delay: 2000,
-                  disableOnInteraction: false,
-                }}
-                loop={true}>
-                {personalizedCourses.slice(0, 20).map((course, index) => (
-                  <SwiperSlide key={index}>
-                    <CardCourse course={course} isPersonalized={false} />
-                  </SwiperSlide>
-                ))}
-                <div className="swiper-button-next"></div>
-                <div className="swiper-button-prev"></div>
-              </Swiper>
+              <div className="relative">
+                {/* Swiper with custom navigation buttons */}
+                <Swiper
+                  modules={[Navigation, Autoplay]}
+                  spaceBetween={15}
+                  slidesPerView={4}
+                  navigation={{
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                  }}
+                  pagination={{ clickable: true }}
+                  autoplay={{
+                    delay: 2000,
+                    disableOnInteraction: false,
+                  }}
+                  loop={true}>
+                  {personalizedCourses.slice(0, 20).map((course, index) => (
+                    <SwiperSlide key={index}>
+                      <CardCourse course={course} />
+                    </SwiperSlide>
+                  ))}
+                  <div className="swiper-button-next"></div>
+                  <div className="swiper-button-prev"></div>
+                </Swiper>
+              </div>
             </div>
-          </div>
           ) : session ? (
             <p>No personalized courses available at the moment.</p>
           ) : (
@@ -116,40 +116,40 @@ export default function Home() {
           </h2>
           {loading ? (
             <div className="grid grid-cols-4 gap-4 ">
-            {/* Hiển thị 4 Skeletons riêng biệt */}
-            <Skeleton height={350} className="skeleton-custom"/>
-            <Skeleton height={350} className="skeleton-custom"/>
-            <Skeleton height={350} className="skeleton-custom"/>
-            <Skeleton height={350} className="skeleton-custom"/>
-          </div>
+              {/* Hiển thị 4 Skeletons riêng biệt */}
+              <Skeleton height={350} className="skeleton-custom" />
+              <Skeleton height={350} className="skeleton-custom" />
+              <Skeleton height={350} className="skeleton-custom" />
+              <Skeleton height={350} className="skeleton-custom" />
+            </div>
           ) : popularCourses?.length > 0 ? (
             <div className="w-full">
-            <div className="relative">
-              {/* Swiper with custom navigation buttons */}
-              <Swiper
-                modules={[Navigation, Autoplay]}
-                spaceBetween={15}
-                slidesPerView={4}
-                navigation={{
-                  nextEl: ".swiper-button-next",
-                  prevEl: ".swiper-button-prev",
-                }}
-                pagination={{ clickable: true }}
-                autoplay={{
-                  delay: 2000,
-                  disableOnInteraction: false,
-                }}
-                loop={true}>
-                {popularCourses.slice(0, 20).map((course, index) => (
-                  <SwiperSlide key={index}>
-                    <CardCourse course={course} isPersonalized={false} />
-                  </SwiperSlide>
-                ))}
-                <div className="swiper-button-next"></div>
-                <div className="swiper-button-prev"></div>
-              </Swiper>
+              <div className="relative">
+                {/* Swiper with custom navigation buttons */}
+                <Swiper
+                  modules={[Navigation, Autoplay]}
+                  spaceBetween={15}
+                  slidesPerView={4}
+                  navigation={{
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                  }}
+                  pagination={{ clickable: true }}
+                  autoplay={{
+                    delay: 2000,
+                    disableOnInteraction: false,
+                  }}
+                  loop={true}>
+                  {popularCourses.slice(0, 20).map((course, index) => (
+                    <SwiperSlide key={index}>
+                      <CardCourse course={course} />
+                    </SwiperSlide>
+                  ))}
+                  <div className="swiper-button-next"></div>
+                  <div className="swiper-button-prev"></div>
+                </Swiper>
+              </div>
             </div>
-          </div>
           ) : (
             <p>No popular courses available at the moment.</p>
           )}
@@ -163,39 +163,39 @@ export default function Home() {
           {loading ? (
             <div className="grid grid-cols-4 gap-4 ">
               {/* Hiển thị 4 Skeletons riêng biệt */}
-              <Skeleton height={350} className="skeleton-custom"/>
-              <Skeleton height={350} className="skeleton-custom"/>
-              <Skeleton height={350} className="skeleton-custom"/>
-              <Skeleton height={350} className="skeleton-custom"/>
+              <Skeleton height={350} className="skeleton-custom" />
+              <Skeleton height={350} className="skeleton-custom" />
+              <Skeleton height={350} className="skeleton-custom" />
+              <Skeleton height={350} className="skeleton-custom" />
             </div>
           ) : teacherCourses?.length > 0 ? (
             <div className="w-full">
-            <div className="relative">
-              {/* Swiper with custom navigation buttons */}
-              <Swiper
-                modules={[Navigation, Autoplay]}
-                spaceBetween={15}
-                slidesPerView={4}
-                navigation={{
-                  nextEl: ".swiper-button-next",
-                  prevEl: ".swiper-button-prev",
-                }}
-                pagination={{ clickable: true }}
-                autoplay={{
-                  delay: 2000,
-                  disableOnInteraction: false,
-                }}
-                loop={true}>
-                {teacherCourses.slice(0, 20).map((course, index) => (
-                  <SwiperSlide key={index}>
-                    <CardCourse course={course} isPersonalized={false} />
-                  </SwiperSlide>
-                ))}
-                <div className="swiper-button-next"></div>
-                <div className="swiper-button-prev"></div>
-              </Swiper>
+              <div className="relative">
+                {/* Swiper with custom navigation buttons */}
+                <Swiper
+                  modules={[Navigation, Autoplay]}
+                  spaceBetween={15}
+                  slidesPerView={4}
+                  navigation={{
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                  }}
+                  pagination={{ clickable: true }}
+                  autoplay={{
+                    delay: 2000,
+                    disableOnInteraction: false,
+                  }}
+                  loop={true}>
+                  {teacherCourses.slice(0, 20).map((course, index) => (
+                    <SwiperSlide key={index}>
+                      <CardCourse course={course} />
+                    </SwiperSlide>
+                  ))}
+                  <div className="swiper-button-next"></div>
+                  <div className="swiper-button-prev"></div>
+                </Swiper>
+              </div>
             </div>
-          </div>
           ) : (
             <p>No teacher courses available at the moment.</p>
           )}
@@ -208,40 +208,40 @@ export default function Home() {
           </h2>
           {loading ? (
             <div className="grid grid-cols-4 gap-4 ">
-            {/* Hiển thị 4 Skeletons riêng biệt */}
-            <Skeleton height={350} className="skeleton-custom"/>
-            <Skeleton height={350} className="skeleton-custom"/>
-            <Skeleton height={350} className="skeleton-custom"/>
-            <Skeleton height={350} className="skeleton-custom"/>
-          </div>
+              {/* Hiển thị 4 Skeletons riêng biệt */}
+              <Skeleton height={350} className="skeleton-custom" />
+              <Skeleton height={350} className="skeleton-custom" />
+              <Skeleton height={350} className="skeleton-custom" />
+              <Skeleton height={350} className="skeleton-custom" />
+            </div>
           ) : schoolCourses?.length > 0 ? (
             <div className="w-full">
-            <div className="relative">
-              {/* Swiper with custom navigation buttons */}
-              <Swiper
-                modules={[Navigation, Autoplay]}
-                spaceBetween={15}
-                slidesPerView={4}
-                navigation={{
-                  nextEl: ".swiper-button-next",
-                  prevEl: ".swiper-button-prev",
-                }}
-                pagination={{ clickable: true }}
-                autoplay={{
-                  delay: 2000,
-                  disableOnInteraction: false,
-                }}
-                loop={true}>
-                {schoolCourses.slice(0, 20).map((course, index) => (
-                  <SwiperSlide key={index}>
-                    <CardCourse course={course} isPersonalized={false} />
-                  </SwiperSlide>
-                ))}
-                <div className="swiper-button-next"></div>
-                <div className="swiper-button-prev"></div>
-              </Swiper>
+              <div className="relative">
+                {/* Swiper with custom navigation buttons */}
+                <Swiper
+                  modules={[Navigation, Autoplay]}
+                  spaceBetween={15}
+                  slidesPerView={4}
+                  navigation={{
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                  }}
+                  pagination={{ clickable: true }}
+                  autoplay={{
+                    delay: 2000,
+                    disableOnInteraction: false,
+                  }}
+                  loop={true}>
+                  {schoolCourses.slice(0, 20).map((course, index) => (
+                    <SwiperSlide key={index}>
+                      <CardCourse course={course} />
+                    </SwiperSlide>
+                  ))}
+                  <div className="swiper-button-next"></div>
+                  <div className="swiper-button-prev"></div>
+                </Swiper>
+              </div>
             </div>
-          </div>
           ) : (
             <p>No school courses available at the moment.</p>
           )}

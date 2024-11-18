@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react"; 
+import { useSession } from "next-auth/react";
 // import libs
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -212,7 +212,7 @@ export default function Home() {
                 loop={true}>
                 {otherCourses.slice(0, 20).map((course, index) => (
                   <SwiperSlide key={index}>
-                    <CardCourse course={course} isPersonalized={false} />
+                    <CardCourse course={course} />
                   </SwiperSlide>
                 ))}
                 <div className="swiper-button-next"></div>
