@@ -85,7 +85,7 @@ export default function Header() {
       <div className="w-4/5 m-auto h-20 flex items-center justify-between px-5">
         {/* Logo */}
         <Link href="/">
-          <img src="/imgs/Logone.png" alt="Logo" className="h-16" />
+          <img src="/imgs/logo.png" alt="Logo" className="h-16" />
         </Link>
 
         {/* Search bar */}
@@ -125,8 +125,8 @@ export default function Header() {
         <div>
           <Link
             href={{
-              pathname: "/login", 
-              query: { returnUrl: currentUrl }, 
+              pathname: "/login",
+              query: { returnUrl: currentUrl },
             }}>
             <Button
               type="submit"
