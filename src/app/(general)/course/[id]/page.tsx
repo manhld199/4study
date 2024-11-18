@@ -1,10 +1,15 @@
 "use client";
+
+// import libs
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
 
+// import components
 import CourseDetail from "./course-detail";
+
 interface Teacher {
   _id: string;
   teacher_name: string;
@@ -28,7 +33,6 @@ interface Course {
   teachers: Teacher[];
   school: School;
 }
-
 
 export default function CoursePage() {
   const { id } = useParams();
@@ -94,9 +98,13 @@ export default function CoursePage() {
 
   if (loading)
     return (
-      <p className="flex items-center justify-center min-h-screen">
-        Loading...
-      </p>
+      <div className="flex flex-col gap-6 items-center justify-center min-h-screen">
+        <Skeleton height={300} width={700} />
+        <Skeleton height={40} width={300} />
+        <Skeleton count={3} height={20} width={500} />
+        <Skeleton height={40} width={150} />
+        <Skeleton height={150} width={400} />
+      </div>
     );
   if (error) return <p className="text-center text-red-500">{error}</p>;
   if (!courseData) return null;

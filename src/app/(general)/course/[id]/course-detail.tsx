@@ -1,3 +1,10 @@
+"use client";
+// import libs
+import { signIn, useSession } from "next-auth/react";
+import Image from "next/image";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+// import components
 import {
   Chapter,
   InfoTeacher,
@@ -5,13 +12,12 @@ import {
   NotificationSuccess,
 } from "@/components";
 import { Button } from "@/components/ui/button";
+// import utils
 import {
   capitalizeFirstSentence,
   truncateWords,
 } from "@/utils/functions/format";
-import { signIn, useSession } from "next-auth/react";
-import Image from "next/image";
-import { useState } from "react";
+
 interface CourseDetailProps {
   courseData: Course;
   isRegistered: boolean;
@@ -23,6 +29,8 @@ export default function CourseDetail({
   isRegistered,
   setIsRegistered,
 }: CourseDetailProps) {
+  const router = useRouter();
+  const currentUrl = window.location.href;
   const { data: session, status } = useSession();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -30,10 +38,13 @@ export default function CourseDetail({
   const titleMessage = "Enrollment Successful!";
   const notificationMessage =
     "You have already registered for this course. No need to register again.";
+  const currentTime = new Date().toLocaleString();
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+
   const handleRegister = async () => {
     if (!session) {
       // Nếu chưa đăng nhập, yêu cầu đăng nhập
-      signIn(); // Chuyển hướng đến trang đăng nhập
+      router.push(`/login?returnUrl=${encodeURIComponent(currentUrl)}`);
       return;
     }
     console.log(session);
@@ -42,8 +53,6 @@ export default function CourseDetail({
       console.log("Already registered for this course.");
       return;
     }
-
-    const currentTime = new Date().toLocaleString();
 
     try {
       const response = await fetch("/api/users/course/", {
@@ -70,18 +79,47 @@ export default function CourseDetail({
     }
   };
 
+  const handleChapterClick = (index: number) => {
+    setSelectedVideo(courseData.course_videos[index]);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div className="w-full">
       <div className="flex justify-between py-[50px] gap-[50px]">
-        <div className="flex flex-col bg-white w-[700px] p-[20px] gap-[20px] rounded-[18px]">
-          <div className="h-[300px] rounded-[10px] relative">
-            <Image
+        <div className="flex flex-col bg-white w-[800px] p-[20px] gap-[20px] rounded-[18px]">
+          <div className="h-[350px] rounded-[10px] relative">
+            {/* <Image
               src={courseData.course_img}
               alt="Course Image"
               layout="fill"
               objectFit="cover"
               className="rounded-[10px]"
-            />
+            /> */}
+            {selectedVideo ? (
+              <iframe
+                width="100%"
+                height="100%"
+                src={selectedVideo.replace("watch?v=", "embed/")}
+                title="Selected Video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="rounded-[10px]"
+              />
+            ) : (
+              <Image
+                src={courseData.course_img}
+                alt="Course Image"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-[10px]"
+              />
+            )}
           </div>
           <div className="flex flex-col gap-[10px]">
             <div className="flex justify-between items-center">
@@ -102,17 +140,19 @@ export default function CourseDetail({
           <div className="text-[16px] mb-8">
             <p className="text-[#5271FF]">Courses Details</p>
             <p className="text-[#2C2C2C]">
-              5 Chapters | {courseData.course_videos.length * 3} lessons |
-              Teacher(s): {courseData.teachers.length} | The total time:
-              18h36min
+              {courseData.course_videos.length} Chapters | Teacher(s):{" "}
+              {courseData.teachers.length} | The total time: 18h36min
             </p>
           </div>
           <div className="space-y-6">
-            <Chapter title="Chapter 1" lessons={courseData.course_videos} />
-            <Chapter title="Chapter 2" lessons={courseData.course_videos} />
-            <Chapter title="Chapter 3" lessons={courseData.course_videos} />
-            <Chapter title="Chapter 4" lessons={courseData.course_videos} />
-            <Chapter title="Chapter 5" lessons={courseData.course_videos} />
+            {courseData.course_videos.map((video, index) => (
+              <Chapter
+                key={index}
+                title={`Chapter ${index + 1}`}
+                index={index}
+                onClick={handleChapterClick}
+              />
+            ))}
           </div>
         </div>
 
