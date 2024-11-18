@@ -40,11 +40,7 @@ export default function RecommendedCourses() {
       {/* Render top 4 popular courses */}
       <div className="grid grid-cols-4 gap-12">
         {popularCourses.map((course, index) => (
-          <CardCourse
-            key={`course-card-${course._id}`}
-            course={course}
-            isPersonalized={false}
-          />
+          <CardCourse key={`course-card-${course._id}`} course={course} />
         ))}
       </div>
       <div
