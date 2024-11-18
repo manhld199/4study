@@ -3,12 +3,15 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { FiSearch } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
+import coursesData from "../../../database/preprocessed-data/course.json";
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import SearchSuggest from "./search-suggest";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
+  const currentUrl = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLImageElement>(null);
@@ -212,6 +215,20 @@ export default function Header() {
             <SearchSuggest suggestions={suggestions} />
           )}
         </form>
+        {/* Khi chưa có account */}
+        <div>
+          <Link
+            href={{
+              pathname: "/login", 
+              query: { returnUrl: currentUrl }, 
+            }}>
+            <Button
+              type="submit"
+              className="bg-[#5271FF] text-white rounded-[18px] py-2 px-8 hover:bg-[#11009E]">
+              Login
+            </Button>
+          </Link>
+        </div>
 
         {/* My Courses Button và Avatar */}
         <div className="flex items-center relative">
