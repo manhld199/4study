@@ -114,3 +114,33 @@ p {
 span {
   color:#2C2C2C;
 }
+
+.skeleton-custom {
+  border-radius: 1.5rem !important; /* Hoặc giá trị tương ứng để bo góc */
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  background-color: #5271FF;
+  opacity: 75%;
+  font-size: 16px !important;
+  color: white !important;
+  border-radius: 100%;
+  width: 40px !important;
+  height: 40px !important;
+  --swiper-navigation-size: 16px; 
+  transform: translateY(-50%);
+  margin-top: 0px !important;
+}
+.swiper-button-next{
+  right: 20px !important;
+}
+.swiper-button-prev{
+  left: 20px !important;
+}
+.swiper-button-next:hover,
+.swiper-button-prev:hover{
+  background-color: black;
+}
+
+
