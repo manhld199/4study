@@ -6,10 +6,8 @@ import { useSession } from "next-auth/react";
 
 export default function SearchSuggest({
   suggestions,
-  onSuggestionClick,
 }: {
   suggestions: string[]; // Danh sách gợi ý tìm kiếm
-  onSuggestionClick: (courseName: string) => void; // Hàm xử lý khi người dùng nhấp vào gợi ý
 }) {
   const [popularCourses, setPopularCourses] = useState<Course[]>([]);
   const [personalizedCourses, setPersonalizedCourses] = useState<Course[]>([]);
