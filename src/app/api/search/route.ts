@@ -92,8 +92,6 @@ export const GET = async (req: NextRequest) => {
     let sortStage = {};
     if (sortType === "Popular") {
       sortStage = { enrolled_users: -1 };
-    } else if (sortType === "Personalized") {
-      sortStage = { rank_personalized: -1 };
     }
 
     if (Object.keys(sortStage).length > 0) {

@@ -30,13 +30,13 @@ export const truncateWords = (text: string, maxWords: number): string => {
   if (!text) return "";
 
   // Tách chuỗi thành mảng các từ
-  const wordsArray = text.trim().split(/\s+/);
+  const wordsArray = text.trim();
 
   // Nếu số từ ít hơn hoặc bằng `maxWords`, trả về chuỗi gốc
   if (wordsArray.length <= maxWords) return text;
 
   // Cắt mảng từ và nối lại thành chuỗi với dấu `...`
-  const truncated = wordsArray.slice(0, maxWords).join(" ") + "...";
+  const truncated = wordsArray.slice(0, maxWords) + "...";
   return truncated;
 };
 

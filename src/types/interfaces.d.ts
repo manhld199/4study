@@ -39,4 +39,5 @@ interface Course {
   teachers: Teacher[];
   rank_popular?: number;
   rank_personalized?: number;
+  enrolled_users?: number;
 }
