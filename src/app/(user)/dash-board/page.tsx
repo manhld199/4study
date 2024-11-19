@@ -190,7 +190,7 @@ export default function ProfilePage() {
                 {popularCourses?.length}+
               </div>
               <Link
-                href="/courses"
+                href="/search"
                 className="text-blue-500 text-[16px] mt-2 hover:underline">
                 See all
               </Link>
