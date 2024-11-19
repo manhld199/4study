@@ -1,17 +1,34 @@
-import { NextResponse } from "next/server";
-import { Course, User } from "@/libs/models"; // Import các mô hình
-import { ObjectId } from "mongodb";
+import { Course, User } from "@/libs/models";
 import {
-  successResponse,
-  notFoundResponse,
   errorResponse,
-} from "@/utils/functions/server"; // Các hàm phản hồi
+  notFoundResponse,
+  successResponse,
+} from "@/utils/functions/server";
+import { ObjectId } from "mongodb";
+import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
+import { authOptions } from "@/libs/auth";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const userId = "672cbdb77def8193c3ab24fb"; // Giả sử bạn có ID người dùng, có thể lấy từ request hoặc params
+    // Lấy session từ NextAuth
+    const session = await getServerSession(authOptions);
 
-    // Chuyển đổi userId thành ObjectId (nếu bạn đang sử dụng MongoDB)
+    // Nếu không có session, trả về phản hồi không hợp lệ
+    if (!session || !session.user?.id) {
+      return NextResponse.json(
+        { error: "User not authenticated" },
+        { status: 401 }
+      );
+    }
+    console.log(session)
+    const userId = session.user.id;
+
+    // Kiểm tra ObjectId hợp lệ
+    if (!ObjectId.isValid(userId)) {
+      return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
+    }
+
     const objectIdUser = new ObjectId(userId);
 
     // Truy vấn thông tin người dùng và lấy trường `suggested_courses`

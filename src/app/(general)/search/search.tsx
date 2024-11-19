@@ -3,7 +3,8 @@
 // import libs
 import React, { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { ColorRing } from "react-loader-spinner";
 
 // import components
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,8 @@ import FilterTeacher from "./filter-teacher";
 // import utils
 import { PUBLIC_API_SEARCH_URL } from "@/utils/constants/urls";
 import Pagination from "./pagination";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 export default function Search({
   schoolData,
@@ -36,6 +39,7 @@ export default function Search({
   pageNumber: number;
 }) {
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   const [filteredData, setFilteredData] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -72,8 +76,10 @@ export default function Search({
         : "";
       const sortQuery = `&sort=${sortState}`;
 
-      const url = `${PUBLIC_API_SEARCH_URL}?keyword=${keyword}&page=${page}${schoolQuery}${teacherQuery}${sortQuery}`;
+      let url = `${PUBLIC_API_SEARCH_URL}?keyword=${keyword}&page=${page}${schoolQuery}${teacherQuery}${sortQuery}`;
+      const urlPersonalized = "/api/courses/personalized";
 
+      if (sortState == "Personalized") url = urlPersonalized;
       try {
         const response = await fetch(url, {
           method: "GET",
@@ -82,8 +88,13 @@ export default function Search({
           },
         });
         const result = await response.json();
-        setFilteredData(result.data.courses || []);
-        setTotalPages(result.data.pages.totalPages);
+
+        setFilteredData(
+          sortState == "Personalized" ? result.data : result.data.courses
+        );
+        setTotalPages(
+          sortState == "Personalized" ? 1 : result.data.pages.totalPages
+        );
       } catch (error) {
         console.error("Error fetching data:", error);
         setFilteredData([]);
@@ -123,7 +134,9 @@ export default function Search({
         <div className="w-full mt-3 mb-3 flex flex-row justify-between items-center">
           <div className="pb-2 border-b-[1px] border-normal-text">
             <p className="text-base">
-              {totalPages > 1 ? "Over " : ""}
+              {filteredData.length * totalPages > filteredData.length
+                ? "Over "
+                : ""}
               <span className="font-bold">
                 {filteredData.length * totalPages}
               </span>{" "}
@@ -160,53 +173,44 @@ export default function Search({
                   Popular
                 </DropdownMenuRadioItem>
 
-                <DropdownMenuRadioItem
-                  className="capitalize"
-                  value="Personalized">
-                  Personalized
-                </DropdownMenuRadioItem>
+                {session && (
+                  <DropdownMenuRadioItem
+                    className="capitalize"
+                    value="Personalized">
+                    Personalized
+                  </DropdownMenuRadioItem>
+                )}
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
 
         {isLoading ? (
-          <p>Loading...</p>
+          <ColorRing height="80" width="80" ariaLabel="loading" />
         ) : (
           <div>
             <div className="w-full grid grid-cols-3 gap-3">
               {filteredData.length > 0 ? (
-                filteredData.map((course, index) => (
-                  <CardCourse
-                    key={`course card ${index}`}
-                    isPersonalized={sortState == "Personalized" && index <= 5}
-                    course={course}
+                <>
+                  {filteredData.map((course, index) => (
+                    <CardCourse key={`course card ${index}`} course={course} />
+                  ))}
+                  <Pagination
+                    page={page}
+                    setPage={setPage}
+                    totalPages={totalPages}
                   />
-                ))
+                </>
               ) : (
-                <>No results</>
+                <div className="col-span-full relative w-[300px] h-[300px]">
+                  <Image
+                    src="/imgs/search-not-found.png"
+                    alt="Search not found"
+                    fill={true}
+                  />
+                </div>
               )}
             </div>
-
-            <Pagination page={page} setPage={setPage} totalPages={totalPages} />
-
-            {/* <div className="pagination-controls">
-              <button
-                disabled={page === 1}
-                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}>
-                Previous
-              </button>
-              <span>
-                Page {page} of {totalPages}
-              </span>
-              <button
-                disabled={page === totalPages}
-                onClick={() =>
-                  setPage((prev) => Math.min(prev + 1, totalPages))
-                }>
-                Next
-              </button>
-            </div> */}
           </div>
         )}
       </div>
