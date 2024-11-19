@@ -15,7 +15,8 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLImageElement>(null);
-
+  const inputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
   const [user, setUser] = useState(null);
 
   const toggleMenu = () => {
@@ -30,16 +31,20 @@ export default function Header() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const searchBar = document.getElementById("search-bar");
       if (
-        searchBar &&
-        !searchBar.contains(event.target as Node) // Click outside search bar
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node) &&
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target as Node)
       ) {
-        setShowSuggestions(false);
+        setShowSuggestions(false); // Ẩn gợi ý khi nhấn ra ngoài
       }
     };
 
+    // Thêm event listener khi component mount
     document.addEventListener("mousedown", handleClickOutside);
+
+    // Xóa event listener khi component unmount
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -84,7 +89,6 @@ export default function Header() {
       setShowSuggestions(false);
     }
   };
-
   // Xử lý khi người dùng chọn một gợi ý
   const handleSuggestionClick = (suggestion: string) => {
     setSearchQuery(suggestion); // Cập nhật input thành gợi ý đã chọn
@@ -105,22 +109,6 @@ export default function Header() {
       setShowSuggestions(false); // Đóng gợi ý khi tìm kiếm
     }
   };
-
-  // Đóng gợi ý khi người dùng nhấn vào bên ngoài search bar
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const searchBar = document.getElementById("search-bar");
-      console.log("Clicked outside:", event.target); // Xem mục tiêu click là gì
-      if (searchBar && !searchBar.contains(event.target as Node)) {
-        setShowSuggestions(false); // Ẩn gợi ý khi nhấn ra ngoài
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -151,11 +139,13 @@ export default function Header() {
             className="relative flex items-center justify-between w-full max-w-[480px] min-w-[700px] border-[#D9D9D9] border-[1.4px] rounded-[18px] px-1 min-h-12  bg-opacity-50">
             <FiSearch className="min-w-[30px] min-h-[30px] p-[7px] rounded-full stroke-[#5271FF]" />
             <input
+              ref={inputRef}
               type="text"
               placeholder="Find Your Courses..."
               className="w-full border-0 outline-none bg-transparent"
               value={searchQuery}
               onChange={handleSearchChange}
+              onFocus={() => setShowSuggestions(true)}
             />
             <Link href={`/search?keyword=${searchQuery}`}>
               <Button
@@ -165,8 +155,10 @@ export default function Header() {
               </Button>
             </Link>
             {/* Hiển thị gợi ý tìm kiếm */}
-            {suggestions.length > 0 && (
-              <SearchSuggest suggestions={suggestions} />
+            {showSuggestions && suggestions.length > 0 && (
+              <div ref={suggestionsRef}>
+                <SearchSuggest suggestions={suggestions} />
+              </div>
             )}
           </form>
           {/* Khi chưa có account */}
@@ -199,11 +191,13 @@ export default function Header() {
           className="relative flex items-center justify-between w-full max-w-[480px] min-w-[700px] border-[#D9D9D9] border-[1.4px] rounded-[18px] px-1 min-h-12  bg-opacity-50">
           <FiSearch className="min-w-[30px] min-h-[30px] p-[7px] rounded-full stroke-[#5271FF]" />
           <input
+            ref={inputRef}
             type="text"
             placeholder="Find Your Courses..."
             className="w-full border-0 outline-none bg-transparent"
             value={searchQuery}
             onChange={handleSearchChange}
+            onFocus={() => setShowSuggestions(true)}
           />
           <Link href={`/search?keyword=${searchQuery}`}>
             <Button
@@ -213,8 +207,10 @@ export default function Header() {
             </Button>
           </Link>
           {/* Hiển thị gợi ý tìm kiếm */}
-          {suggestions.length > 0 && (
-            <SearchSuggest suggestions={suggestions} />
+          {showSuggestions && suggestions.length > 0 && (
+            <div ref={suggestionsRef}>
+              <SearchSuggest suggestions={suggestions} />
+            </div>
           )}
         </form>
         {/* Khi chưa có account */}

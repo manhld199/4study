@@ -13,6 +13,7 @@ export default function SearchSuggest({
   const [popularCourses, setPopularCourses] = useState<Course[]>([]);
   const [personalizedCourses, setPersonalizedCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const { data: session } = useSession();
 
   // Fetch dữ liệu khóa học
   useEffect(() => {
@@ -37,12 +38,12 @@ export default function SearchSuggest({
     };
 
     fetchCourses();
-  }, []);
+  }, [session]);
 
   const showSuggestions = suggestions.length > 0;
 
   return (
-    <div className="absolute top-[100%] border transform w-full bg-white rounded-[18px] max-w-[700px] max-h-[726px] overflow-y-auto z-50">
+    <div className="absolute top-[100%] left-0 border transform w-full bg-white rounded-[18px] max-w-[700px] max-h-[726px] overflow-y-auto z-50">
       {showSuggestions && (
         <>
           {/* Hiển thị khóa học phổ biến */}
@@ -56,14 +57,16 @@ export default function SearchSuggest({
           </div>
 
           {/* Hiển thị khóa học được cá nhân hóa */}
-          <div className="pb-[20px]">
-            <div className="text-[22px] text-[#5271FF] font-medium leading-none p-[20px]">
-              Personalized Courses
+          {session?.user && (
+            <div className="pb-[20px]">
+              <div className="text-[22px] text-[#5271FF] font-medium leading-none p-[20px]">
+                Personalized Courses
+              </div>
+              <div className="max-w-[660px] mx-auto">
+                <CourseMiniSuggest courses={personalizedCourses} />
+              </div>
             </div>
-            <div className="max-w-[660px] mx-auto">
-              <CourseMiniSuggest courses={personalizedCourses} />
-            </div>
-          </div>
+          )}
         </>
       )}
     </div>

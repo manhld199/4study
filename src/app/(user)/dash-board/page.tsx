@@ -3,7 +3,9 @@
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import CardCourse from "@/components/(general)/cards/course";
+// import CardCourse from "@/components/(general)/cards/course";
+import { CardCourse } from "@/components"; // Import CardCourse
+
 import { ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
@@ -115,7 +117,7 @@ export default function ProfilePage() {
             <div className="flex flex-col items-left space-y-4">
               <div className="text-[24px]">Completed Courses</div>
               <div className="text-[32px] pt-[32px] pb-[24px]">
-                {completedCourses.length}
+                {completedCourses?.length}
               </div>
               <button
                 className="text-blue-500 text-[16px] mt-2 hover:underline text-left"
@@ -140,7 +142,7 @@ export default function ProfilePage() {
             <div className="flex flex-col items-left space-y-4">
               <div className="text-[24px]">Personalize Courses</div>
               <div className="text-[32px] pt-[32px] pb-[24px]">
-                {personalizedCourses.length}+
+                {personalizedCourses?.length}+
               </div>
               <button
                 className="text-blue-500 text-[16px] mt-2 hover:underline text-left"
@@ -166,7 +168,7 @@ export default function ProfilePage() {
             <div className="flex flex-col items-left space-y-4">
               <div className="text-[24px]">Popular Courses</div>
               <div className="text-[32px] pt-[32px] pb-[24px]">
-                {popularCourses.length}+
+                {popularCourses?.length}+
               </div>
               <Link
                 href="/explore"
@@ -185,7 +187,7 @@ export default function ProfilePage() {
             <div className="flex flex-col items-left space-y-4">
               <div className="text-[24px] pr-[200px]">All Courses</div>
               <div className="text-[32px] pt-[32px] pb-[24px]">
-                {popularCourses.length}+
+                {popularCourses?.length}+
               </div>
               <Link
                 href="/courses"
@@ -211,11 +213,7 @@ export default function ProfilePage() {
               completedCourses
                 .slice((page - 1) * 8, page * 8)
                 .map((course, index) => (
-                  <CardCourse
-                    key={`course card ${index}`}
-                    isPersonalized={false && index <= 5}
-                    course={course}
-                  />
+                  <CardCourse key={`course card ${index}`} course={course} />
                 ))
             ) : (
               <p>No completed courses available at the moment.</p>
@@ -240,11 +238,7 @@ export default function ProfilePage() {
               personalizedCourses
                 .slice(0, 4)
                 .map((course, index) => (
-                  <CardCourse
-                    key={`course card ${index}`}
-                    isPersonalized={true}
-                    course={course}
-                  />
+                  <CardCourse key={`course card ${index}`} course={course} />
                 ))
             ) : (
               <p>
@@ -280,11 +274,7 @@ export default function ProfilePage() {
               popularCourses
                 .slice(0, 4)
                 .map((course, index) => (
-                  <CardCourse
-                    key={`course card ${index}`}
-                    isPersonalized={false}
-                    course={course}
-                  />
+                  <CardCourse key={`course card ${index}`} course={course} />
                 ))
             ) : (
               <p>No next courses available at the moment.</p>

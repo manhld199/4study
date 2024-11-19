@@ -15,7 +15,7 @@ export const CourseMiniSuggest = ({ courses }: CourseMiniSliderProps) => {
 
   // Sử dụng useEffect để cập nhật danh sách các khóa học cần hiển thị
   useEffect(() => {
-    const limitedCourses = courses.slice(0, 15); // Lấy 15 khóa học đầu tiên
+    const limitedCourses = courses?.slice(0, 15); // Lấy 15 khóa học đầu tiên
     setDisplayedCourses(limitedCourses); // Cập nhật danh sách khóa học cần hiển thị
   }, [courses]);
 
@@ -23,8 +23,19 @@ export const CourseMiniSuggest = ({ courses }: CourseMiniSliderProps) => {
   const getCoursesForDisplay = () => {
     const coursesToDisplay = [];
     for (let i = 0; i < coursesPerPage; i++) {
-      const index = (currentIndex + i) % displayedCourses.length; // Quay lại đầu khi index vượt qua số khóa học
-      coursesToDisplay.push(displayedCourses[index]);
+      if (displayedCourses && displayedCourses.length > 0) {
+        const index = (currentIndex + i) % displayedCourses.length; // Đảm bảo chỉ số không vượt quá độ dài mảng
+        // Kiểm tra thêm để tránh truy cập vào phần tử không tồn tại
+        if (displayedCourses[index] !== undefined) {
+          coursesToDisplay.push(displayedCourses[index]);
+        } else {
+          // Xử lý khi phần tử không tồn tại tại vị trí `index` (nếu có)
+          coursesToDisplay.push(null); // Hoặc một giá trị thay thế phù hợp
+        }
+      } else {
+        // Nếu không có khóa học để hiển thị, đẩy giá trị mặc định vào
+        coursesToDisplay.push(null); // Hoặc một giá trị mặc định khác
+      }
     }
     return coursesToDisplay;
   };
