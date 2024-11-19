@@ -1,14 +1,13 @@
 "use client";
 
-// import libs
+import React, { Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-
-// import components
+import { useSearchParams } from "next/navigation";
 import { NotificationSuccess } from "@/components";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,7 +19,16 @@ interface LoginFormInputs {
 }
 
 export default function Login() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const {
     register,
     handleSubmit,
@@ -28,10 +36,18 @@ export default function Login() {
     watch,
   } = useForm<LoginFormInputs>({ mode: "onChange" });
 
+  console.log("returnUrl1", searchParams.get("returnUrl"));
+  let returnUrl = searchParams.get("returnUrl") || "/";
+  if (returnUrl === "/login") {
+    returnUrl = "/";
+  }
+  console.log("returnUrl2", returnUrl);
+
   const [loginError, setLoginError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const successMessage = "You have successfully logged in. Welcome back!";
+  const titleMessage = "Login Successful!";
   const emailValue = watch("email");
   const passwordValue = watch("password");
 
@@ -50,10 +66,9 @@ export default function Login() {
       });
 
       if (!response?.error) {
-        // Show success notification and navigate after a delay
         setIsDialogOpen(true);
         setTimeout(() => {
-          router.push("/");
+          router.push(returnUrl as string);
           router.refresh();
         }, 3000);
       } else {
@@ -109,7 +124,6 @@ export default function Login() {
               })}
               className="border border-[#D4D1D1] focus:border-blue-500 focus:!ring-2 focus:!ring-blue-300 focus:!ring-offset-0 focus:outline-none pr-10 rounded-[18px] bg-white"
             />
-
             {errors.email && (
               <p className="text-red-500">{errors.email.message}</p>
             )}
@@ -158,6 +172,7 @@ export default function Login() {
       <NotificationSuccess
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
+        title={titleMessage}
         message={successMessage}
       />
     </div>
