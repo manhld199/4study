@@ -3,54 +3,99 @@
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { courses } from "@/data/courses";
-import CardCourse from "@/components/(general)/cards/course";
+// import CardCourse from "@/components/(general)/cards/course";
+import { CardCourse } from "@/components"; // Import CardCourse
+
 import { ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
-// import { ImageSlider } from "@/components/(general)/image-slider"; // Import ImageSlider
-// import { CourseSlider } from "@/components/(general)/course-slider"; // Import CourseSlider
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import Pagination from "./paginationc";
 
 export default function ProfilePage() {
+  const { data: session, status } = useSession(); // Lấy thông tin session
+  const router = useRouter(); // Dùng router để chuyển hướng
+
   // State để lưu các khóa học
   const [popularCourses, setPopularCourses] = useState<any[]>([]);
   const [personalizedCourses, setPersonalizedCourses] = useState<any[]>([]);
+  const [completedCourses, setCompletedCourses] = useState<any[]>([]);
 
   const [loading, setLoading] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+
+  // useEffect(() => {
+  //   const params = new URLSearchParams();
+  //   if (keyword) {
+  //     params.set("keyword", keyword);
+  //   }
+  //   if (page) {
+  //     params.set("page", page.toString());
+  //   }
+
+  //   // Update the URL with only the relevant query params (keyword, page)
+  //   router.push(`?${params.toString()}`, { scroll: false });
+  // }, [keyword, page]);
 
   // Fetch dữ liệu cho 4 mục
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        setLoading(true);
+    if (status === "loading") return; // Chờ khi loading
+    if (!session) {
+      router.push("/login"); // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
+    } else {
+      console.log(session);
+      // Fetch dữ liệu nếu người dùng đã đăng nhập
+      const fetchCourses = async () => {
+        try {
+          setLoading(true);
+          // Fetch popular courses
+          const popularResponse = await fetch("/api/courses/popularity", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const popularData = await popularResponse.json();
+          setPopularCourses(popularData.data);
+          setTotalPages(popularData.totalPages);
+          // Fetch personalized courses
+          const personalizedResponse = await fetch(
+            "/api/courses/personalized",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const personalizedData = await personalizedResponse.json();
+          setPersonalizedCourses(personalizedData.data);
 
-        // Fetch popular courses
-        const popularResponse = await fetch("/api/courses/popularity", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const popularData = await popularResponse.json();
-        setPopularCourses(popularData.data);
+          // Fetch completed courses
+          const completedResponse = await fetch("/api/courses/completed", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const completedData = await completedResponse.json();
+          setCompletedCourses(completedData.data);
+        } catch (error) {
+          console.error("Error fetching courses:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
 
-        // Fetch personalized courses
-        const personalizedResponse = await fetch("/api/courses/personalized", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const personalizedData = await personalizedResponse.json();
-        setPersonalizedCourses(personalizedData.data);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      fetchCourses();
+    }
+  }, [session, status, router, page]);
 
-    fetchCourses();
-  }, []);
+  // Nếu session đang loading hoặc người dùng chưa đăng nhập, không render content
+  if (status === "loading" || !session) {
+    return <div>Redirecting to login...</div>;
+  }
 
   return (
     <div className="">
@@ -72,7 +117,7 @@ export default function ProfilePage() {
             <div className="flex flex-col items-left space-y-4">
               <div className="text-[24px]">Completed Courses</div>
               <div className="text-[32px] pt-[32px] pb-[24px]">
-                {popularCourses.length}
+                {completedCourses?.length}
               </div>
               <button
                 className="text-blue-500 text-[16px] mt-2 hover:underline text-left"
@@ -97,7 +142,7 @@ export default function ProfilePage() {
             <div className="flex flex-col items-left space-y-4">
               <div className="text-[24px]">Personalize Courses</div>
               <div className="text-[32px] pt-[32px] pb-[24px]">
-                {personalizedCourses.length}+
+                {personalizedCourses?.length}+
               </div>
               <button
                 className="text-blue-500 text-[16px] mt-2 hover:underline text-left"
@@ -123,7 +168,7 @@ export default function ProfilePage() {
             <div className="flex flex-col items-left space-y-4">
               <div className="text-[24px]">Popular Courses</div>
               <div className="text-[32px] pt-[32px] pb-[24px]">
-                {popularCourses.length}+
+                {popularCourses?.length}+
               </div>
               <Link
                 href="/explore"
@@ -142,10 +187,10 @@ export default function ProfilePage() {
             <div className="flex flex-col items-left space-y-4">
               <div className="text-[24px] pr-[200px]">All Courses</div>
               <div className="text-[32px] pt-[32px] pb-[24px]">
-                {popularCourses.length}+
+                {popularCourses?.length}+
               </div>
               <Link
-                href="/courses"
+                href="/search"
                 className="text-blue-500 text-[16px] mt-2 hover:underline">
                 See all
               </Link>
@@ -159,25 +204,25 @@ export default function ProfilePage() {
           <h4 className="text-[32px] text-[#5271FF] font-medium leading-none pt-[30px] pb-[30px]">
             Completed Courses
           </h4>
-          <div className="">
-            {/* {loading ? (
+          <div className="w-full grid grid-cols-4 gap-4 pt-[30px]">
+            {loading ? (
               <p>Loading completed courses...</p>
-            ) : popularCourses?.length > 0 ? (
-              <CourseSlider courses={popularCourses} />
-            ) : (
-              <p>No completed courses available at the moment.</p>
-            )} */}
-          </div>
+            ) : completedCourses.length > 0 ? (
+              // Hiển thị các khóa học của trang hiện tại (tối đa 8 khóa học)
 
-          <div className="pt-[30px]">
-            {/* {loading ? (
-              <p>Loading completed courses...</p>
-            ) : popularCourses?.length > 0 ? (
-              <CourseSlider courses={popularCourses} />
+              completedCourses
+                .slice((page - 1) * 8, page * 8)
+                .map((course, index) => (
+                  <CardCourse key={`course card ${index}`} course={course} />
+                ))
             ) : (
               <p>No completed courses available at the moment.</p>
-            )} */}
+            )}
           </div>
+        </div>
+
+        <div className="pt-[30px] pb-[30px] w-full text-center">
+          <Pagination page={page} setPage={setPage} />
         </div>
 
         {/* Personalized Courses */}
@@ -185,19 +230,24 @@ export default function ProfilePage() {
           <h4 className="text-[32px] text-[#5271FF] font-medium leading-none pt-[30px] pb-[30px]">
             Personalized Courses
           </h4>
-          <div className="">
-            {/* {loading ? (
+          <div className="w-full grid grid-cols-4 gap-4 pt-[30px]">
+            {loading ? (
               <p>Loading personalized courses...</p>
             ) : personalizedCourses?.length > 0 ? (
-              <CourseSlider courses={personalizedCourses} />
+              // Hiển thị các khóa học của trang hiện tại (tối đa 8 khóa học)
+              personalizedCourses
+                .slice(0, 4)
+                .map((course, index) => (
+                  <CardCourse key={`course card ${index}`} course={course} />
+                ))
             ) : (
               <p>
                 No personalized courses available at the moment.&nbsp;
-                <Link href="/login" className="underline text-[#5271FF]">
+                {/* <Link href="/login" className="underline text-[#5271FF]">
                   Log in right now
-                </Link>
+                </Link> */}
               </p>
-            )} */}
+            )}
           </div>
           <Link
             href="/explore"
@@ -216,19 +266,19 @@ export default function ProfilePage() {
           <h4 className="text-[32px] text-white font-semibold leading-none pb-[30px]">
             What Is Your Next?
           </h4>
-          <div className="">
-            {/* {loading ? (
-              <p>Loading personalized courses...</p>
-            ) : personalizedCourses?.length > 0 ? (
-              <CourseSlider courses={personalizedCourses} />
+          <div className="w-full grid grid-cols-4 gap-4 pt-[30px]">
+            {loading ? (
+              <p>Loading next courses...</p>
+            ) : popularCourses?.length > 0 ? (
+              // Hiển thị các khóa học của trang hiện tại (tối đa 8 khóa học)
+              popularCourses
+                .slice(0, 4)
+                .map((course, index) => (
+                  <CardCourse key={`course card ${index}`} course={course} />
+                ))
             ) : (
-              <p>
-                No personalized courses available at the moment.&nbsp;
-                <Link href="/login" className="underline text-[#5271FF]">
-                  Log in right now
-                </Link>
-              </p>
-            )} */}
+              <p>No next courses available at the moment.</p>
+            )}
           </div>
           <Link
             href="/search"
