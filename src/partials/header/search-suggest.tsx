@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { CourseMiniSuggest } from "./course-mini-suggest"; // Import Component CourseMiniSuggest hiển thị khóa học
 import { useSession } from "next-auth/react";
+import Fuse from "fuse.js";
 
 export default function SearchSuggest({
   suggestions,
@@ -14,6 +15,13 @@ export default function SearchSuggest({
   const [loading, setLoading] = useState<boolean>(true);
   const [allCourses, setAllCourses] = useState<Course[]>([]); // Danh sách tất cả khóa học đã fetch
   const { data: session } = useSession();
+  const options = {
+    keys: ["course_name"], // Chỉ tìm kiếm trong tên khóa học
+    threshold: 0.3, // Độ khớp (0 là khớp hoàn hảo, 1 là không khớp)
+  };
+
+  const fusePopular = new Fuse(popularCourses, options);
+  const fusePersonalized = new Fuse(personalizedCourses, options);
 
   // Fetch dữ liệu khóa học
   useEffect(() => {
@@ -40,11 +48,11 @@ export default function SearchSuggest({
     fetchCourses();
   }, [session]);
 
-  useEffect(() => {
-    // Kết hợp cả khóa học phổ biến và khóa học cá nhân hóa vào một danh sách duy nhất
-    const combinedCourses = [...popularCourses, ...personalizedCourses];
-    setAllCourses(combinedCourses);
-  }, [popularCourses, personalizedCourses]);
+  // useEffect(() => {
+  //   // Kết hợp cả khóa học phổ biến và khóa học cá nhân hóa vào một danh sách duy nhất
+  //   const combinedCourses = [...popularCourses, ...personalizedCourses];
+  //   setAllCourses(combinedCourses);
+  // }, [popularCourses, personalizedCourses]);
 
   const showSuggestions = suggestions.length > 0 || allCourses.length > 0;
 
@@ -59,11 +67,9 @@ export default function SearchSuggest({
             </div>
             <div className="max-w-[660px] mx-auto">
               <CourseMiniSuggest
-                courses={popularCourses.filter((course) =>
-                  course.course_name
-                    .toLowerCase()
-                    .includes(suggestions[0].toLowerCase())
-                )}
+                courses={fusePopular
+                  .search(suggestions[0])
+                  .map((result) => result.item)}
               />
             </div>
           </div>
@@ -76,11 +82,9 @@ export default function SearchSuggest({
               </div>
               <div className="max-w-[660px] mx-auto">
                 <CourseMiniSuggest
-                  courses={personalizedCourses.filter((course) =>
-                    course.course_name
-                      .toLowerCase()
-                      .includes(suggestions[0].toLowerCase())
-                  )}
+                  courses={fusePersonalized
+                    .search(suggestions[0])
+                    .map((result) => result.item)}
                   // Truyền hàm callback để xử lý khi người dùng nhấp vào khóa học
                 />
               </div>
