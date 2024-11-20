@@ -123,6 +123,23 @@ export default function Header() {
     }
   }, [session, status, router]);
 
+  useEffect(() => {
+    const handleClickOutMenuDropdown = (event: MouseEvent) => {
+      // Kiểm tra nếu click ngoài menu thì đóng menu
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    // Thêm event listener khi component mount
+    document.addEventListener("mousedown", handleClickOutMenuDropdown);
+
+    // Xóa event listener khi component unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutMenuDropdown);
+    };
+  }, []);
+
   if (!session) {
     return (
       <header className="bg-white pt-[24px] fixed top-0 left-0 right-0 z-[100]">
