@@ -4,7 +4,7 @@ import { SessionProvider } from "next-auth/react";
 
 // import libs
 import { Nunito } from "next/font/google";
-
+import { usePathname } from "next/navigation";
 // import partials
 import { Header, MainNav, ScrollUp } from "../partials";
 import { Footer } from "../partials";
@@ -22,6 +22,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
   return (
     <SessionProvider>
       <html lang="en" className={nunito.className}>
@@ -33,7 +34,10 @@ export default function RootLayout({
           </div>
 
           {/* CONTAINER */}
-          <main className="w-4/5 m-auto">{children}</main>
+          <main
+            className={pathname === "/about-us" ? "w-full" : "w-4/5 m-auto"}>
+            {children}
+          </main>
 
           {/* FOOTER */}
           <Footer />
