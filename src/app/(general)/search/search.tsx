@@ -88,6 +88,7 @@ export default function Search({
           },
         });
         const result = await response.json();
+        console.log("bbbbbbbbbb", result.data.courses.length);
 
         setFilteredData(
           sortState == "Personalized" ? result.data : result.data.courses
