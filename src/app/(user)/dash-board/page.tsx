@@ -3,9 +3,9 @@
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-// import CardCourse from "@/components/(general)/cards/course";
 import { CardCourse } from "@/components"; // Import CardCourse
-
+import Skeleton from "react-loading-skeleton"; // Import react-loading-skeleton
+import "react-loading-skeleton/dist/skeleton.css"; // Import css nếu cần
 import { ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
@@ -200,21 +200,28 @@ export default function ProfilePage() {
       </div>
       <div>
         {/*Completed Courses*/}
-        <div id="completed-courses">
+        <div id="completed-courses" className="w-full">
           <h4 className="text-[32px] text-[#5271FF] font-medium leading-none pt-[30px] pb-[30px]">
             Completed Courses
           </h4>
-          <div className="w-full grid grid-cols-4 gap-4 pt-[30px]">
+          <div className=" ">
             {loading ? (
-              <p>Loading completed courses...</p>
+              <div className="grid grid-cols-4 gap-4 ">
+                {/* Hiển thị 4 Skeletons riêng biệt */}
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom " />
+              </div>
             ) : completedCourses.length > 0 ? (
               // Hiển thị các khóa học của trang hiện tại (tối đa 8 khóa học)
-
-              completedCourses
-                .slice((page - 1) * 8, page * 8)
-                .map((course, index) => (
-                  <CardCourse key={`course card ${index}`} course={course} />
-                ))
+              <div className="grid grid-cols-4 gap-4">
+                {completedCourses
+                  .slice((page - 1) * 8, page * 8)
+                  .map((course, index) => (
+                    <CardCourse key={`course card ${index}`} course={course} />
+                  ))}
+              </div>
             ) : (
               <p>No completed courses available at the moment.</p>
             )}
@@ -230,16 +237,21 @@ export default function ProfilePage() {
           <h4 className="text-[32px] text-[#5271FF] font-medium leading-none pt-[30px] pb-[30px]">
             Personalized Courses
           </h4>
-          <div className="w-full grid grid-cols-4 gap-4 pt-[30px]">
+          <div className="">
             {loading ? (
-              <p>Loading personalized courses...</p>
+              <div className="grid grid-cols-4 gap-4 ">
+                {/* Hiển thị 4 Skeletons riêng biệt */}
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom " />
+              </div>
             ) : personalizedCourses?.length > 0 ? (
-              // Hiển thị các khóa học của trang hiện tại (tối đa 8 khóa học)
-              personalizedCourses
-                .slice(0, 4)
-                .map((course, index) => (
+              <div className="grid grid-cols-4 gap-4 ">
+                {personalizedCourses.slice(0, 4).map((course, index) => (
                   <CardCourse key={`course card ${index}`} course={course} />
-                ))
+                ))}
+              </div>
             ) : (
               <p>
                 No personalized courses available at the moment.&nbsp;
@@ -266,16 +278,21 @@ export default function ProfilePage() {
           <h4 className="text-[32px] text-white font-semibold leading-none pb-[30px]">
             What Is Your Next?
           </h4>
-          <div className="w-full grid grid-cols-4 gap-4 pt-[30px]">
+          <div className="">
             {loading ? (
-              <p>Loading next courses...</p>
+              <div className="grid grid-cols-4 gap-4 ">
+                {/* Hiển thị 4 Skeletons riêng biệt */}
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom " />
+              </div>
             ) : popularCourses?.length > 0 ? (
-              // Hiển thị các khóa học của trang hiện tại (tối đa 8 khóa học)
-              popularCourses
-                .slice(0, 4)
-                .map((course, index) => (
+              <div className="grid grid-cols-4 gap-4 ">
+                {popularCourses.slice(0, 4).map((course, index) => (
                   <CardCourse key={`course card ${index}`} course={course} />
-                ))
+                ))}{" "}
+              </div>
             ) : (
               <p>No next courses available at the moment.</p>
             )}

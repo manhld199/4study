@@ -116,12 +116,12 @@ export default function Header() {
   console.log("Session:", session);
   console.log("Status:", status);
 
-  useEffect(() => {
-    if (status === "loading") return;
-    if (!session) {
-      router.push("/login");
-    }
-  }, [session, status, router]);
+useEffect(() => {
+  if (status === "loading") return;
+  if (!session && currentUrl === "/dash-board") {
+    router.push(`/login?returnUrl=${encodeURIComponent(currentUrl)}`);
+  }
+}, [session, status, router]);
 
   useEffect(() => {
     const handleClickOutMenuDropdown = (event: MouseEvent) => {
@@ -180,7 +180,11 @@ export default function Header() {
           </form>
           {/* Khi chưa có account */}
           <div>
-            <Link href="/login">
+            <Link
+              href={{
+                pathname: "/login",
+                query: { returnUrl: currentUrl },
+              }}>
               <Button
                 type="submit"
                 className="bg-[#5271FF] text-white rounded-[18px] py-2 px-8 hover:bg-[#11009E]">
