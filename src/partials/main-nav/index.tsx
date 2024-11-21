@@ -17,7 +17,7 @@ export default function MainNav() {
   ];
 
   return (
-    <nav className="bg-white shadow-md pb-[6px] pt-[24px] pb-[24px]">
+    <nav className="bg-white shadow-md pb-[6px] pt-[110px] pb-[24px]">
       <ul className="w-4/5 m-auto flex justify-center items-center text-[16px] font-medium leading-[24px] tracking-[0.15px] whitespace-nowrap h-[45px] text-[#2C2C2C]">
         {navLinks.map(({ href, label }) => (
           <Link href={href} key={href}>
