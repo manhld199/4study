@@ -52,7 +52,7 @@ const RenderOption: React.FC<{
             }`}>
             <div className="h-11 px-2 pt-2 grid grid-cols-[1.25rem_1fr] gap-2 text-black">
               {renderSelectionIndicator()}
-              <p className="text-sm font-semibold line-clamp-2">
+              <p className="text-sm font-semibold line-clamp-2 capitalize">
                 {option.name}
               </p>
             </div>
