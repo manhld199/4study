@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import SearchSuggest from "./search-suggest";
 import { usePathname } from "next/navigation";
+import debounce from "lodash.debounce"; // Correct import for debounce
 
 export default function Header() {
   const currentUrl = usePathname();
@@ -96,17 +97,23 @@ export default function Header() {
     setIsSubmitting(false);
     setShowSuggestions(false); // Đóng gợi ý khi chọn
   };
+  const debouncedSearch = useRef(
+    debounce(async (query: string) => {
+      const filteredSuggestions = await fetchCourses(query);
+      setSuggestions(filteredSuggestions);
+    }, 500) // Delay 500ms trước khi gọi API
+  ).current;
 
   // Xử lý sự kiện khi người dùng nhấn "Search"
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      setIsSubmitting(true);
-      // Bạn có thể thực hiện tìm kiếm qua API hoặc chuyển hướng sang trang tìm kiếm
-      console.log("Searching for:", searchQuery); // Tìm kiếm với query
-      setIsSubmitting(false);
-      setSuggestions([]); // Xóa gợi ý sau khi tìm kiếm
-      setShowSuggestions(false); // Đóng gợi ý khi tìm kiếm
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query); // Update search input value
+
+    if (query.length > 0) {
+      debouncedSearch(query); // Call the debounced function
+    } else {
+      setSuggestions([]); // Clear suggestions if no query
+      setShowSuggestions(false); // Hide suggestions when the query is empty
     }
   };
 
@@ -116,12 +123,12 @@ export default function Header() {
   console.log("Session:", session);
   console.log("Status:", status);
 
-useEffect(() => {
-  if (status === "loading") return;
-  if (!session && currentUrl === "/dash-board") {
-    router.push(`/login?returnUrl=${encodeURIComponent(currentUrl)}`);
-  }
-}, [session, status, router]);
+  useEffect(() => {
+    if (status === "loading") return;
+    if (!session && currentUrl === "/dash-board") {
+      router.push(`/login?returnUrl=${encodeURIComponent(currentUrl)}`);
+    }
+  }, [session, status, router, currentUrl]);
 
   useEffect(() => {
     const handleClickOutMenuDropdown = (event: MouseEvent) => {

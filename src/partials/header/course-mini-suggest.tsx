@@ -21,7 +21,7 @@ export const CourseMiniSuggest = ({ courses }: CourseMiniSliderProps) => {
     setTimeout(() => {
       setSearchedCourses(courses); // Sau khi tìm thấy khóa học, cập nhật danh sách khóa học
       setLoading(false); // Kết thúc tải
-    }, 10000); // Giả lập thời gian tìm kiếm (ví dụ: 2 giây)
+    }, 8000); // Giả lập thời gian tìm kiếm (ví dụ: 2 giây)
   }, [courses]); // Mỗi khi `courses` thay đổi, chúng ta sẽ gọi lại effect này
 
   return (
