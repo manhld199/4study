@@ -3,14 +3,18 @@
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-// import CardCourse from "@/components/(general)/cards/course";
 import { CardCourse } from "@/components"; // Import CardCourse
-
+import Skeleton from "react-loading-skeleton"; // Import react-loading-skeleton
+import "react-loading-skeleton/dist/skeleton.css"; // Import css nếu cần
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Navigation, Autoplay } from "swiper/modules";
 import { ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Pagination from "./paginationc";
+import PaginationC from "./paginationc";
 
 export default function ProfilePage() {
   const { data: session, status } = useSession(); // Lấy thông tin session
@@ -20,6 +24,11 @@ export default function ProfilePage() {
   const [popularCourses, setPopularCourses] = useState<any[]>([]);
   const [personalizedCourses, setPersonalizedCourses] = useState<any[]>([]);
   const [completedCourses, setCompletedCourses] = useState<any[]>([]);
+
+  // Loading states for different course categories
+  const [loadingPopular, setLoadingPopular] = useState<boolean>(true);
+  const [loadingPersonalized, setLoadingPersonalized] = useState<boolean>(true);
+  const [loadingCompleted, setLoadingCompleted] = useState<boolean>(true);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
@@ -46,7 +55,7 @@ export default function ProfilePage() {
     } else {
       console.log(session);
       // Fetch dữ liệu nếu người dùng đã đăng nhập
-      const fetchCourses = async () => {
+      const fetchPersonalizedCourses = async () => {
         try {
           setLoading(true);
           // Fetch popular courses
@@ -58,7 +67,7 @@ export default function ProfilePage() {
           });
           const popularData = await popularResponse.json();
           setPopularCourses(popularData.data);
-          setTotalPages(popularData.totalPages);
+          setLoadingPopular(true);
           // Fetch personalized courses
           const personalizedResponse = await fetch(
             "/api/courses/personalized",
@@ -71,7 +80,7 @@ export default function ProfilePage() {
           );
           const personalizedData = await personalizedResponse.json();
           setPersonalizedCourses(personalizedData.data);
-
+          setLoadingPersonalized(false);
           // Fetch completed courses
           const completedResponse = await fetch("/api/courses/completed", {
             method: "GET",
@@ -81,20 +90,27 @@ export default function ProfilePage() {
           });
           const completedData = await completedResponse.json();
           setCompletedCourses(completedData.data);
+          setLoadingCompleted(false);
+          const totalPages = Math.ceil(completedData.data.length / 8);
+          setTotalPages(totalPages);
         } catch (error) {
           console.error("Error fetching courses:", error);
         } finally {
           setLoading(false);
+          setLoadingPersonalized(false);
         }
       };
-
-      fetchCourses();
+      fetchPersonalizedCourses();
     }
   }, [session, status, router, page]);
 
   // Nếu session đang loading hoặc người dùng chưa đăng nhập, không render content
   if (status === "loading" || !session) {
-    return <div>Redirecting to login...</div>;
+    return (
+      <div className="h-[400px] text-[30px] items-center">
+        Redirecting to login...
+      </div>
+    );
   }
 
   return (
@@ -200,46 +216,96 @@ export default function ProfilePage() {
       </div>
       <div>
         {/*Completed Courses*/}
-        <div id="completed-courses">
+        <div id="completed-courses" className="w-full">
           <h4 className="text-[32px] text-[#5271FF] font-medium leading-none pt-[30px] pb-[30px]">
             Completed Courses
           </h4>
-          <div className="w-full grid grid-cols-4 gap-4 pt-[30px]">
-            {loading ? (
-              <p>Loading completed courses...</p>
+          <div className=" ">
+            {loadingCompleted ? (
+              <div className="grid grid-cols-4 gap-4 ">
+                {/* Hiển thị 4 Skeletons riêng biệt */}
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+              </div>
             ) : completedCourses.length > 0 ? (
-              // Hiển thị các khóa học của trang hiện tại (tối đa 8 khóa học)
-
-              completedCourses
-                .slice((page - 1) * 8, page * 8)
-                .map((course, index) => (
-                  <CardCourse key={`course card ${index}`} course={course} />
-                ))
+              <div>
+                <div className="grid grid-cols-4 gap-4">
+                  {completedCourses
+                    .slice((page - 1) * 8, page * 8)
+                    .map((course, index) => (
+                      <CardCourse
+                        key={`course card ${index}`}
+                        course={course}
+                      />
+                    ))}
+                </div>
+                <div className="pt-[30px] pb-[30px] w-full text-center">
+                  <PaginationC
+                    page={page}
+                    setPage={setPage}
+                    totalPages={totalPages}
+                  />
+                </div>
+              </div>
             ) : (
               <p>No completed courses available at the moment.</p>
             )}
           </div>
         </div>
-
-        <div className="pt-[30px] pb-[30px] w-full text-center">
-          <Pagination page={page} setPage={setPage} />
-        </div>
-
         {/* Personalized Courses */}
         <div id="personalized-courses">
           <h4 className="text-[32px] text-[#5271FF] font-medium leading-none pt-[30px] pb-[30px]">
             Personalized Courses
           </h4>
-          <div className="w-full grid grid-cols-4 gap-4 pt-[30px]">
-            {loading ? (
-              <p>Loading personalized courses...</p>
+          <div className="">
+            {loadingPersonalized ? (
+              <div className="grid grid-cols-4 gap-4 ">
+                {/* Hiển thị 4 Skeletons riêng biệt */}
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom " />
+              </div>
             ) : personalizedCourses?.length > 0 ? (
-              // Hiển thị các khóa học của trang hiện tại (tối đa 8 khóa học)
-              personalizedCourses
-                .slice(0, 4)
-                .map((course, index) => (
-                  <CardCourse key={`course card ${index}`} course={course} />
-                ))
+              <div className="w-full">
+                <div className="relative">
+                  {/* Swiper with custom navigation buttons */}
+                  <Swiper
+                    modules={[Navigation, Autoplay]}
+                    spaceBetween={15}
+                    slidesPerView={4}
+                    navigation={{
+                      nextEl: ".swiper-button-next",
+                      prevEl: ".swiper-button-prev",
+                    }}
+                    pagination={{ clickable: true }}
+                    autoplay={{
+                      delay: 2000,
+                      disableOnInteraction: false,
+                    }}
+                    loop={true}>
+                    {popularCourses.slice(0, 20).map((course, index) => (
+                      <SwiperSlide key={index}>
+                        <CardCourse course={course} />
+                      </SwiperSlide>
+                    ))}
+                    <div className="swiper-button-next"></div>
+                    <div className="swiper-button-prev"></div>
+                  </Swiper>
+                </div>
+                <Link
+                  href="/explore"
+                  className="text-blue-500 text-[16px] mt-2 hover:underline flex items-center space-x-2 justify-center pb-[50px] pt-[30px]">
+                  See more
+                  <ChevronRight className="ml-2 w-[24px] h-[24px] stroke-1" />
+                </Link>
+              </div>
             ) : (
               <p>
                 No personalized courses available at the moment.&nbsp;
@@ -249,43 +315,64 @@ export default function ProfilePage() {
               </p>
             )}
           </div>
-          <Link
-            href="/explore"
-            className="text-blue-500 text-[16px] mt-2 hover:underline flex items-center space-x-2 justify-center pb-[50px] pt-[30px]">
-            See more
-            <ChevronRight className="ml-2 w-[24px] h-[24px] stroke-1" />
-          </Link>
         </div>
       </div>
 
       {/* What Is Your Next? */}
-      <div className="w-full">
+      <div className="w-full pt-[20px]">
         <div
           className="bg-[#11009E] left-0 top-0 w-full h-auto p-6"
           style={{ width: "100% !important" }}>
           <h4 className="text-[32px] text-white font-semibold leading-none pb-[30px]">
             What Is Your Next?
           </h4>
-          <div className="w-full grid grid-cols-4 gap-4 pt-[30px]">
-            {loading ? (
-              <p>Loading next courses...</p>
+          <div className="">
+            {loadingCompleted ? (
+              <div className="grid grid-cols-4 gap-4 ">
+                {/* Hiển thị 4 Skeletons riêng biệt */}
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom w-full" />
+                <Skeleton height={350} className="skeleton-custom " />
+              </div>
             ) : popularCourses?.length > 0 ? (
-              // Hiển thị các khóa học của trang hiện tại (tối đa 8 khóa học)
-              popularCourses
-                .slice(0, 4)
-                .map((course, index) => (
-                  <CardCourse key={`course card ${index}`} course={course} />
-                ))
+              <div className="w-full">
+                <div className="relative">
+                  {/* Swiper with custom navigation buttons */}
+                  <Swiper
+                    modules={[Navigation, Autoplay]}
+                    spaceBetween={15}
+                    slidesPerView={4}
+                    navigation={{
+                      nextEl: ".swiper-button-next",
+                      prevEl: ".swiper-button-prev",
+                    }}
+                    pagination={{ clickable: true }}
+                    autoplay={{
+                      delay: 2000,
+                      disableOnInteraction: false,
+                    }}
+                    loop={true}>
+                    {popularCourses.slice(0, 20).map((course, index) => (
+                      <SwiperSlide key={index}>
+                        <CardCourse course={course} />
+                      </SwiperSlide>
+                    ))}
+                    <div className="swiper-button-next"></div>
+                    <div className="swiper-button-prev"></div>
+                  </Swiper>
+                </div>
+                <Link
+                  href="/search"
+                  className="text-white text-[16px] mt-2 hover:underline flex items-center space-x-2 justify-center pb-[5px] pt-[30px]">
+                  See more
+                  <ChevronRight className="ml-2 w-[24px] h-[24px] stroke-1" />
+                </Link>
+              </div>
             ) : (
               <p>No next courses available at the moment.</p>
             )}
           </div>
-          <Link
-            href="/search"
-            className="text-white text-[16px] mt-2 hover:underline flex items-center space-x-2 justify-center pb-[5px] pt-[30px]">
-            See more
-            <ChevronRight className="ml-2 w-[24px] h-[24px] stroke-1" />
-          </Link>
         </div>
       </div>
     </div>

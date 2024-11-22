@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import SearchSuggest from "./search-suggest";
 import { usePathname } from "next/navigation";
+import debounce from "lodash.debounce"; // Correct import for debounce
 
 export default function Header() {
   const currentUrl = usePathname();
@@ -96,17 +97,23 @@ export default function Header() {
     setIsSubmitting(false);
     setShowSuggestions(false); // Đóng gợi ý khi chọn
   };
+  const debouncedSearch = useRef(
+    debounce(async (query: string) => {
+      const filteredSuggestions = await fetchCourses(query);
+      setSuggestions(filteredSuggestions);
+    }, 500) // Delay 500ms trước khi gọi API
+  ).current;
 
   // Xử lý sự kiện khi người dùng nhấn "Search"
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      setIsSubmitting(true);
-      // Bạn có thể thực hiện tìm kiếm qua API hoặc chuyển hướng sang trang tìm kiếm
-      console.log("Searching for:", searchQuery); // Tìm kiếm với query
-      setIsSubmitting(false);
-      setSuggestions([]); // Xóa gợi ý sau khi tìm kiếm
-      setShowSuggestions(false); // Đóng gợi ý khi tìm kiếm
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Ngừng form gửi đi khi nhấn Enter hoặc submit
+
+    // Logic xử lý tìm kiếm, nếu bạn cần lấy giá trị từ input
+    if (searchQuery.length > 0) {
+      debouncedSearch(searchQuery); // Gọi hàm tìm kiếm đã debounce
+    } else {
+      setSuggestions([]); // Xóa gợi ý khi không có từ khóa tìm kiếm
+      setShowSuggestions(false); // Ẩn gợi ý khi không có từ khóa tìm kiếm
     }
   };
 
@@ -118,10 +125,27 @@ export default function Header() {
 
   useEffect(() => {
     if (status === "loading") return;
-    if (!session) {
-      router.push("/login");
+    if (!session && currentUrl === "/dash-board") {
+      router.push(`/login?returnUrl=${encodeURIComponent(currentUrl)}`);
     }
-  }, [session, status, router]);
+  }, [session, status, router, currentUrl]);
+
+  useEffect(() => {
+    const handleClickOutMenuDropdown = (event: MouseEvent) => {
+      // Kiểm tra nếu click ngoài menu thì đóng menu
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    // Thêm event listener khi component mount
+    document.addEventListener("mousedown", handleClickOutMenuDropdown);
+
+    // Xóa event listener khi component unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutMenuDropdown);
+    };
+  }, []);
 
   if (!session) {
     return (
@@ -163,7 +187,11 @@ export default function Header() {
           </form>
           {/* Khi chưa có account */}
           <div>
-            <Link href="/login">
+            <Link
+              href={{
+                pathname: "/login",
+                query: { returnUrl: currentUrl },
+              }}>
               <Button
                 type="submit"
                 className="bg-[#5271FF] text-white rounded-[18px] py-2 px-8 hover:bg-[#11009E]">

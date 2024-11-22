@@ -12,11 +12,13 @@ import { Button } from "@/components/ui/button";
 export default function Pagination({
   page,
   setPage,
+  totalPages,
 }: {
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
+  totalPages:number
 }) {
-  const totalPages = 89;
+  // const totalPages = 2;
   const [pages, setPages] = useState<number[]>([]);
 
   useEffect(() => {
