@@ -105,15 +105,15 @@ export default function Header() {
   ).current;
 
   // Xử lý sự kiện khi người dùng nhấn "Search"
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    setSearchQuery(query); // Update search input value
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Ngừng form gửi đi khi nhấn Enter hoặc submit
 
-    if (query.length > 0) {
-      debouncedSearch(query); // Call the debounced function
+    // Logic xử lý tìm kiếm, nếu bạn cần lấy giá trị từ input
+    if (searchQuery.length > 0) {
+      debouncedSearch(searchQuery); // Gọi hàm tìm kiếm đã debounce
     } else {
-      setSuggestions([]); // Clear suggestions if no query
-      setShowSuggestions(false); // Hide suggestions when the query is empty
+      setSuggestions([]); // Xóa gợi ý khi không có từ khóa tìm kiếm
+      setShowSuggestions(false); // Ẩn gợi ý khi không có từ khóa tìm kiếm
     }
   };
 
