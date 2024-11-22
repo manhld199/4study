@@ -149,7 +149,7 @@ export default function Header() {
 
   if (!session) {
     return (
-      <header className="bg-white pt-[24px] fixed top-0 left-0 right-0 z-[100]">
+      <header className="z-20 bg-white pt-[24px] fixed top-0 left-0 right-0">
         <div className="w-4/5 m-auto h-20 flex items-center justify-between px-5">
           {/* Logo */}
           <Link href="/">
@@ -205,7 +205,7 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white pt-[24px] fixed top-0 left-0 right-0 z-[100]">
+    <header className="bg-white pt-[24px] fixed top-0 left-0 right-0 z-20">
       <div className="w-4/5 m-auto h-20 flex items-center justify-between px-5">
         {/* Logo */}
         <Link href="/">

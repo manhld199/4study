@@ -26,7 +26,7 @@ export default function Pagination({
   );
 
   return (
-    <div className="w-full my-4 flex flex-row gap-4 justify-center items-center">
+    <div className="w-full col-span-full my-4 flex flex-row gap-4 justify-center items-center">
       <Button
         variant="icon"
         size="icon-sm"

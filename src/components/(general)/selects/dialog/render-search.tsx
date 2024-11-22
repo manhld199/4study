@@ -20,10 +20,10 @@ const RenderSearch: React.FC<{
           name="q"
           autoCapitalize="off"
           placeholder={SELECT_DATA["search-placeholder"]}
-          type="search"
+          type="text"
           value={searchText}
           onChange={handleSearchChange}
-          className="bg-white dark:bg-zinc-900"
+          className="bg-white dark:bg-zinc-900 pr-8"
         />
 
         <button

@@ -41,7 +41,7 @@ export default function CardSchool1({
         className={`absolute bottom-0 w-full p-2 ${
           isSelected ? "bg-hover" : "bg-zinc-300"
         }`}>
-        <p className="text-sm line-clamp-2 font-bold">
+        <p className="text-sm line-clamp-2 font-bold capitalize">
           {(data as School).school_name || (data as Teacher).teacher_name}
         </p>
       </div>

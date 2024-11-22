@@ -23,7 +23,7 @@ export default function CardCourse({
       href={`/course/${course?._id || 1}`}
       target="_blank"
       className={`relative cursor-pointer w-full border-2 rounded-3xl flex flex-col gap-2 items-center overflow-hidden bg-white hover:shadow-lg pb-2  ${className}`}>
-      <div className="z-20 absolute top-0 right-0 flex flex-row gap-2 items-center bg-white pr-2 pl-3 py-1 rounded-bl-2xl">
+      <div className="z-10 absolute top-0 right-0 flex flex-row gap-2 items-center bg-white pr-2 pl-3 py-1 rounded-bl-2xl">
         <UsersRound className="w-3.5 h-3.5" />
         <span className="text-sm">
           {convertNumberToShortString(course.enrolled_users)}
@@ -48,12 +48,12 @@ export default function CardCourse({
               course.teachers.slice(0, 2).map((teacher, index) => (
                 <Badge
                   key={`badge ${course._id} teacher ${index}`}
-                  className="w-fit bg-pri2 hover:bg-pri2">
+                  className="w-fit bg-pri2 hover:bg-pri2 capitalize">
                   {teacher.teacher_name}
                 </Badge>
               ))
             ) : (
-              <span>No teachers available</span> // Hiển thị nếu không có giáo viên
+              <></>
             )}
           </div>
           {course?.teachers.length > 2 && (
@@ -72,7 +72,9 @@ export default function CardCourse({
           </p>
         </div>
 
-        <p className="px-4 font-bold text-pri2">{course?.school.school_name}</p>
+        <p className="px-4 font-bold text-pri2 capitalize line-clamp-1">
+          {course?.school.school_name}
+        </p>
       </div>
     </Link>
   );

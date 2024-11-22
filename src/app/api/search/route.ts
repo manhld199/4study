@@ -101,7 +101,6 @@ export const GET = async (req: NextRequest) => {
     // Define the pipeline with pagination stages for fetching results
     const paginatedPipeline = [
       ...basePipeline,
-      { $skip: skip },
       { $limit: limit },
       {
         $project: {
@@ -126,10 +125,13 @@ export const GET = async (req: NextRequest) => {
     // Count the total number of matching documents
     const totalCourses = await Course.aggregate(countPipeline);
     const total = totalCourses[0]?.total || 0;
+
     const totalPages = Math.ceil(total / limit);
 
     // Fetch the paginated results
     const courses = await Course.aggregate(paginatedPipeline);
+
+    // console.log("aaaaaaaa", total, courses.length);
 
     if (!courses.length) return notFoundResponse();
 

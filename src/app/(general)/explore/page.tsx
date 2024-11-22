@@ -57,57 +57,53 @@ export default function Home() {
       <ImageSlider />
       <section className="py-[50px] flex flex-col gap-[30px] max-w-[1180px] justify-center items-center m-auto">
         {/* Personalized Courses */}
-        <div className="w-full">
-          <h2 className="text-[32px] text-[#5271FF] font-semibold leading-[40px] pb-[10px]">
-            Personalized Courses
-          </h2>
-          {loading ? (
-            <div className="grid grid-cols-4 gap-4 ">
-              {/* Hiển thị 4 Skeletons riêng biệt */}
-              <Skeleton height={350} className="skeleton-custom" />
-              <Skeleton height={350} className="skeleton-custom" />
-              <Skeleton height={350} className="skeleton-custom" />
-              <Skeleton height={350} className="skeleton-custom" />
-            </div>
-          ) : personalizedCourses?.length > 0 ? (
-            <div className="w-full">
-              <div className="relative">
-                {/* Swiper with custom navigation buttons */}
-                <Swiper
-                  modules={[Navigation, Autoplay]}
-                  spaceBetween={15}
-                  slidesPerView={4}
-                  navigation={{
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
-                  }}
-                  pagination={{ clickable: true }}
-                  autoplay={{
-                    delay: 2000,
-                    disableOnInteraction: false,
-                  }}
-                  loop={true}>
-                  {personalizedCourses.slice(0, 20).map((course, index) => (
-                    <SwiperSlide key={index}>
-                      <CardCourse course={course} />
-                    </SwiperSlide>
-                  ))}
-                  <div className="swiper-button-next"></div>
-                  <div className="swiper-button-prev"></div>
-                </Swiper>
+        {session && (
+          <div className="w-full">
+            <h2 className="text-[32px] text-[#5271FF] font-semibold leading-[40px] pb-[10px]">
+              Personalized Courses
+            </h2>
+            {loading ? (
+              <div className="grid grid-cols-4 gap-4">
+                {/* Displaying 4 separate Skeletons while loading */}
+                <Skeleton height={350} className="skeleton-custom" />
+                <Skeleton height={350} className="skeleton-custom" />
+                <Skeleton height={350} className="skeleton-custom" />
+                <Skeleton height={350} className="skeleton-custom" />
               </div>
-            </div>
-          ) : session ? (
-            <p>No personalized courses available at the moment.</p>
-          ) : (
-            <p>
-              No personalized courses available at the moment.&nbsp;
-              <Link href="/login" className="underline text-[#5271FF]">
-                Log in right now
-              </Link>
-            </p>
-          )}
-        </div>
+            ) : personalizedCourses?.length > 0 ? (
+              <div className="w-full">
+                <div className="relative">
+                  {/* Swiper with custom navigation buttons */}
+                  <Swiper
+                    modules={[Navigation, Autoplay]}
+                    spaceBetween={15}
+                    slidesPerView={4}
+                    navigation={{
+                      nextEl: ".swiper-button-next",
+                      prevEl: ".swiper-button-prev",
+                    }}
+                    pagination={{ clickable: true }}
+                    autoplay={{
+                      delay: 2000,
+                      disableOnInteraction: false,
+                    }}
+                    loop={true}
+                  >
+                    {personalizedCourses.slice(0, 20).map((course, index) => (
+                      <SwiperSlide key={index}>
+                        <CardCourse course={course} />
+                      </SwiperSlide>
+                    ))}
+                    <div className="swiper-button-next"></div>
+                    <div className="swiper-button-prev"></div>
+                  </Swiper>
+                </div>
+              </div>
+            ) : (
+              <p>No personalized courses available at the moment.</p>
+            )}
+          </div>
+        )}
 
         {/* Popular Courses */}
         <div className="w-full">
