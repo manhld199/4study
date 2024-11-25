@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { CourseMiniSuggest } from "./course-mini-suggest"; // Import Component CourseMiniSuggest hiển thị khóa học
 import { useSession } from "next-auth/react";
 import Fuse from "fuse.js";
@@ -17,7 +17,7 @@ export default function SearchSuggest({
   const { data: session } = useSession();
   const options = {
     keys: ["course_name"], // Chỉ tìm kiếm trong tên khóa học
-    threshold: 0.3, // Độ khớp (0 là khớp hoàn hảo, 1 là không khớp)
+    threshold: 0.4, // Độ khớp (0 là khớp hoàn hảo, 1 là không khớp)
   };
 
   const fusePopular = new Fuse(popularCourses, options);
@@ -35,9 +35,11 @@ export default function SearchSuggest({
         setPopularCourses(popularData.data);
 
         // Fetch personalized courses
-        const personalizedResponse = await fetch("/api/courses/personalized");
-        const personalizedData = await personalizedResponse.json();
-        setPersonalizedCourses(personalizedData.data);
+        if (session?.user) {
+          const personalizedResponse = await fetch("/api/courses/personalized");
+          const personalizedData = await personalizedResponse.json();
+          setPersonalizedCourses(personalizedData.data);
+        }
       } catch (error) {
         console.error("Error fetching courses:", error);
       } finally {
@@ -53,12 +55,23 @@ export default function SearchSuggest({
   //   const combinedCourses = [...popularCourses, ...personalizedCourses];
   //   setAllCourses(combinedCourses);
   // }, [popularCourses, personalizedCourses]);
+  const filteredPopularCourses = useMemo(
+    () => fusePopular.search(suggestions[0]).map((result) => result.item),
+    [fusePopular, suggestions]
+  );
+  const filteredPersonalizedCourses = useMemo(
+    () => fusePersonalized.search(suggestions[0]).map((result) => result.item),
+    [fusePersonalized, suggestions]
+  );
 
-  const showSuggestions = suggestions.length > 0 || allCourses.length > 0;
+  const showSuggestions =
+    suggestions.length > 0 &&
+    (filteredPopularCourses.length > 0 ||
+      filteredPersonalizedCourses.length > 0);
 
   return (
     <div className="absolute top-[100%] left-0 border transform w-full bg-white rounded-[18px] max-w-[700px] max-h-[726px] overflow-y-auto z-50">
-      {showSuggestions && (
+      {showSuggestions ? (
         <>
           {/* Hiển thị các khóa học phổ biến và cá nhân hóa */}
           <div>
@@ -66,11 +79,7 @@ export default function SearchSuggest({
               Popular Courses
             </div>
             <div className="max-w-[660px] mx-auto">
-              <CourseMiniSuggest
-                courses={fusePopular
-                  .search(suggestions[0])
-                  .map((result) => result.item)}
-              />
+              <CourseMiniSuggest courses={filteredPopularCourses} />
             </div>
           </div>
 
@@ -81,16 +90,14 @@ export default function SearchSuggest({
                 Personalized Courses
               </div>
               <div className="max-w-[660px] mx-auto">
-                <CourseMiniSuggest
-                  courses={fusePersonalized
-                    .search(suggestions[0])
-                    .map((result) => result.item)}
-                  // Truyền hàm callback để xử lý khi người dùng nhấp vào khóa học
-                />
+                <CourseMiniSuggest courses={filteredPersonalizedCourses} />
               </div>
             </div>
           )}
         </>
+      ) : (
+        // Chỉ hiển thị "No courses found" khi không có khóa học nào
+        <div></div>
       )}
     </div>
   );

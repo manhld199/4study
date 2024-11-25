@@ -56,6 +56,15 @@ export default function Header() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [showSuggestions, setShowSuggestions] = useState<boolean>(true); // Quản lý hiển thị gợi ý
 
+  useEffect(() => {
+    // Chỉ hiển thị gợi ý nếu có suggestions
+    setShowSuggestions(suggestions.length > 0);
+  }, [suggestions]);
+
+  useEffect(() => {
+    setShowSuggestions(false); // Ẩn gợi ý khi chuyển trang
+  }, [currentUrl]); // Theo dõi thay đổi URL
+
   // Hàm gọi API để lấy khóa học
   const fetchCourses = async (query: string) => {
     try {
@@ -75,6 +84,22 @@ export default function Header() {
     }
   };
 
+  // Xử lý khi người dùng chọn một gợi ý
+  const handleSuggestionClick = (suggestion: string) => {
+    setSearchQuery(suggestion);
+    setSuggestions([]);
+    setIsSubmitting(false);
+    setShowSuggestions(false);
+  };
+
+  const debouncedSearch = useRef(
+    debounce(async (query: string) => {
+      const filteredSuggestions = await fetchCourses(query);
+      setSuggestions(filteredSuggestions);
+      setShowSuggestions(filteredSuggestions.length > 0);
+    }, 300) // Giảm thời gian debounce
+  ).current;
+
   // Hàm tìm kiếm gợi ý
   const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
@@ -82,28 +107,15 @@ export default function Header() {
 
     if (query.length > 0) {
       // Nếu có giá trị tìm kiếm, gọi API để tìm kiếm gợi ý
-      const filteredSuggestions = await fetchCourses(query);
-      setSuggestions(filteredSuggestions);
-      setShowSuggestions(filteredSuggestions.length > 0);
+      // const filteredSuggestions = await fetchCourses(query);
+      // setSuggestions(filteredSuggestions);
+      // setShowSuggestions(filteredSuggestions.length > 0);
+      debouncedSearch(query);
     } else {
       setSuggestions([]); // Nếu không có gì nhập, xóa gợi ý
       setShowSuggestions(false);
     }
   };
-  // Xử lý khi người dùng chọn một gợi ý
-  const handleSuggestionClick = (suggestion: string) => {
-    setSearchQuery(suggestion); // Cập nhật input thành gợi ý đã chọn
-    setSuggestions([]); // Ẩn danh sách gợi ý
-    setIsSubmitting(false);
-    setShowSuggestions(false); // Đóng gợi ý khi chọn
-  };
-  const debouncedSearch = useRef(
-    debounce(async (query: string) => {
-      const filteredSuggestions = await fetchCourses(query);
-      setSuggestions(filteredSuggestions);
-    }, 500) // Delay 500ms trước khi gọi API
-  ).current;
-
   // Xử lý sự kiện khi người dùng nhấn "Search"
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Ngừng form gửi đi khi nhấn Enter hoặc submit
@@ -130,22 +142,22 @@ export default function Header() {
     }
   }, [session, status, router, currentUrl]);
 
-  useEffect(() => {
-    const handleClickOutMenuDropdown = (event: MouseEvent) => {
-      // Kiểm tra nếu click ngoài menu thì đóng menu
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMenuOpen(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutMenuDropdown = (event: MouseEvent) => {
+  //     // Kiểm tra nếu click ngoài menu thì đóng menu
+  //     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+  //       setIsMenuOpen(false);
+  //     }
+  //   };
 
-    // Thêm event listener khi component mount
-    document.addEventListener("mousedown", handleClickOutMenuDropdown);
+  //   // Thêm event listener khi component mount
+  //   document.addEventListener("mousedown", handleClickOutMenuDropdown);
 
-    // Xóa event listener khi component unmount
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutMenuDropdown);
-    };
-  }, []);
+  //   // Xóa event listener khi component unmount
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutMenuDropdown);
+  //   };
+  // }, []);
 
   if (!session) {
     return (
