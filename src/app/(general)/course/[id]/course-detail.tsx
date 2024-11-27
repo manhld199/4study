@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 // import utils
 import {
   capitalizeFirstSentence,
+  capitalizeEachWord,
   truncateWords,
 } from "@/utils/functions/format";
 
@@ -34,9 +35,12 @@ export default function CourseDetail({
   const { data: session, status } = useSession();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [notificationType, setNotificationType] = useState<"success" | "warning">("success"); // Thêm trạng thái
+  const [notificationType, setNotificationType] = useState<
+    "success" | "warning"
+  >("success"); // Thêm trạng thái
   const currentTime = new Date().toLocaleString();
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleRegister = async () => {
     if (!session) {
@@ -85,6 +89,10 @@ export default function CourseDetail({
     });
   };
 
+
+  const toggleExpand = () => {
+    setIsExpanded((prevState) => !prevState);
+  };
   return (
     <div className="w-full">
       <div className="flex justify-between py-[50px] gap-[50px]">
@@ -114,19 +122,27 @@ export default function CourseDetail({
           <div className="flex flex-col gap-[10px]">
             <div className="flex justify-between items-center">
               <p className="text-[32px] font-bold text-[#5271FF]">
-                {capitalizeFirstSentence(courseData.course_name)}
+                {capitalizeEachWord(courseData.course_name)}
               </p>
               <p className="text-[16px] text-[#5271FF] text-nowrap">
                 1000 Enrolled Students
               </p>
             </div>
-            <p className="text-[#2C2C2C] text-[16px] text-justify">
-              {capitalizeFirstSentence(
-                truncateWords(courseData.course_about, 70)
-              )}
-            </p>
+            <div>
+              <p
+                className={`text-[#2C2C2C] text-[16px] text-justify ${
+                  !isExpanded ? "line-clamp-4" : "" // Giới hạn 3 dòng khi chưa mở rộng
+                }`}>
+                {capitalizeFirstSentence(courseData.course_about)}
+              </p>
+              <div className="flex justify-end mt-2">
+                <button onClick={toggleExpand} className="text-blue-500">
+                  {isExpanded ? "See less" : "See more"}
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="h-[1px] w-[665px] bg-[#D4D1D1]"></div>
+          <div className="h-[1px] w-[735px] bg-[#D4D1D1]"></div>
           <div className="text-[16px] mb-8">
             <p className="text-[#5271FF]">Courses Details</p>
             <p className="text-[#2C2C2C]">
@@ -141,6 +157,7 @@ export default function CourseDetail({
                 title={`Chapter ${index + 1}`}
                 index={index}
                 onClick={handleChapterClick}
+                isDisabled={!isRegistered && index !== 0}
               />
             ))}
           </div>
@@ -153,9 +170,9 @@ export default function CourseDetail({
             {courseData.teachers.map((teacher, index) => (
               <InfoTeacher
                 key={index}
-                teacher_name={capitalizeFirstSentence(teacher.teacher_name)}
+                teacher_name={capitalizeEachWord(teacher.teacher_name)}
                 teacher_img={teacher.teacher_img}
-                teacher_about={capitalizeFirstSentence(
+                teacher_about={capitalizeEachWord(
                   truncateWords(teacher.teacher_about, 20)
                 )}
               />

@@ -44,5 +44,16 @@ export const truncateWords = (text: string, maxWords: number): string => {
 export const capitalizeFirstSentence = (text: string): string => {
   if (!text) return "";
 
-  return text.charAt(0).toUpperCase() + text.slice(1);
+  const trimmedText = text.trimStart();
+  return trimmedText.charAt(0).toUpperCase() + trimmedText.slice(1);
+};
+// Viết hoa mỗi từ của chuỗi
+export const capitalizeEachWord = (text: string): string => {
+  if (!text) return "";
+
+  const trimmedText = text.trimStart();
+  return trimmedText
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
 };
