@@ -55,21 +55,21 @@ export default function SearchSuggest({
   //   const combinedCourses = [...popularCourses, ...personalizedCourses];
   //   setAllCourses(combinedCourses);
   // }, [popularCourses, personalizedCourses]);
-  const filteredPopularCourses = useMemo(
-    () => fusePopular.search(suggestions[0]).map((result) => result.item),
-    [fusePopular, suggestions]
-  );
-  const filteredPersonalizedCourses = useMemo(
-    () => fusePersonalized.search(suggestions[0]).map((result) => result.item),
-    [fusePersonalized, suggestions]
-  );
+  const filteredPopularCourses = useMemo(() => {
+    if (suggestions.length === 0) return []; // Nếu suggestions rỗng, trả về mảng rỗng
+    return fusePopular.search(suggestions[0]).map((result) => result.item);
+  }, [fusePopular, suggestions]);
+
+  const filteredPersonalizedCourses = useMemo(() => {
+    if (suggestions.length === 0) return []; // Nếu suggestions rỗng, trả về mảng rỗng
+    return fusePersonalized.search(suggestions[0]).map((result) => result.item);
+  }, [fusePersonalized, suggestions]);
 
   const showSuggestions =
     suggestions.length > 0 &&
     (filteredPopularCourses.length > 0 ||
       filteredPersonalizedCourses.length > 0);
 
-  
   return (
     <div className="absolute top-[100%] left-0 border transform w-full bg-white rounded-[18px] max-w-[700px] max-h-[726px] overflow-y-auto z-50">
       {showSuggestions ? (
