@@ -69,6 +69,7 @@ export default function SearchSuggest({
     (filteredPopularCourses.length > 0 ||
       filteredPersonalizedCourses.length > 0);
 
+  
   return (
     <div className="absolute top-[100%] left-0 border transform w-full bg-white rounded-[18px] max-w-[700px] max-h-[726px] overflow-y-auto z-50">
       {showSuggestions ? (

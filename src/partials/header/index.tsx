@@ -55,6 +55,7 @@ export default function Header() {
   const [suggestions, setSuggestions] = useState<string[]>([]); // Lưu trữ danh sách gợi ý
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [showSuggestions, setShowSuggestions] = useState<boolean>(true); // Quản lý hiển thị gợi ý
+  const controllerRef = useRef<AbortController | null>(null); // Ref để lưu controller
 
   useEffect(() => {
     // Chỉ hiển thị gợi ý nếu có suggestions
@@ -67,8 +68,16 @@ export default function Header() {
 
   // Hàm gọi API để lấy khóa học
   const fetchCourses = async (query: string) => {
+    if (controllerRef.current) {
+      controllerRef.current.abort(); // Hủy yêu cầu cũ nếu có
+    }
+    const controller = new AbortController(); // Tạo một controller mới
+    controllerRef.current = controller; // Lưu controller vào ref
+
     try {
-      const response = await fetch(`/api/courses/popularity`); // Thay đổi API endpoint tại đây
+      const response = await fetch(`/api/courses/popularity`, {
+        signal: controller.signal, // Gửi tín hiệu hủy yêu cầu
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch courses");
       }
@@ -79,7 +88,6 @@ export default function Header() {
           courseName.toLowerCase().includes(query.toLowerCase())
         );
     } catch (error) {
-      console.error("Error fetching courses:", error);
       return [];
     }
   };
@@ -97,7 +105,7 @@ export default function Header() {
       const filteredSuggestions = await fetchCourses(query);
       setSuggestions(filteredSuggestions);
       setShowSuggestions(filteredSuggestions.length > 0);
-    }, 300) // Giảm thời gian debounce
+    }, 500) // Giảm thời gian debounce
   ).current;
 
   // Hàm tìm kiếm gợi ý
@@ -142,22 +150,22 @@ export default function Header() {
     }
   }, [session, status, router, currentUrl]);
 
-  // useEffect(() => {
-  //   const handleClickOutMenuDropdown = (event: MouseEvent) => {
-  //     // Kiểm tra nếu click ngoài menu thì đóng menu
-  //     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-  //       setIsMenuOpen(false);
-  //     }
-  //   };
+  useEffect(() => {
+    const handleClickOutMenuDropdown = (event: MouseEvent) => {
+      // Kiểm tra nếu click ngoài menu thì đóng menu
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
 
-  //   // Thêm event listener khi component mount
-  //   document.addEventListener("mousedown", handleClickOutMenuDropdown);
+    // Thêm event listener khi component mount
+    document.addEventListener("mousedown", handleClickOutMenuDropdown);
 
-  //   // Xóa event listener khi component unmount
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutMenuDropdown);
-  //   };
-  // }, []);
+    // Xóa event listener khi component unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutMenuDropdown);
+    };
+  }, []);
 
   if (!session) {
     return (
