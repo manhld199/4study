@@ -46,8 +46,7 @@ export default function SearchSuggest({
         setLoading(false);
       }
     };
-
-    fetchCourses();
+    if (session) fetchCourses();
   }, [session]);
 
   // useEffect(() => {
@@ -55,14 +54,25 @@ export default function SearchSuggest({
   //   const combinedCourses = [...popularCourses, ...personalizedCourses];
   //   setAllCourses(combinedCourses);
   // }, [popularCourses, personalizedCourses]);
-  const filteredPopularCourses = useMemo(
-    () => fusePopular.search(suggestions[0]).map((result) => result.item),
-    [fusePopular, suggestions]
-  );
-  const filteredPersonalizedCourses = useMemo(
-    () => fusePersonalized.search(suggestions[0]).map((result) => result.item),
-    [fusePersonalized, suggestions]
-  );
+  // const filteredPopularCourses = useMemo(() => {
+  //   if (suggestions.length === 0) return []; // Nếu suggestions rỗng, trả về mảng rỗng
+  //   return fusePopular.search(suggestions[0]).map((result) => result.item);
+  // }, [fusePopular, suggestions]);
+
+  // const filteredPersonalizedCourses = useMemo(() => {
+  //   if (suggestions.length === 0) return []; // Nếu suggestions rỗng, trả về mảng rỗng
+  //   return fusePersonalized.search(suggestions[0]).map((result) => result.item);
+  // }, [fusePersonalized, suggestions]);
+
+  const filteredPopularCourses = useMemo(() => {
+    if (suggestions.length === 0 || !popularCourses.length) return []; // Avoid searching when there's no suggestion or courses
+    return fusePopular.search(suggestions[0]).map((result) => result.item);
+  }, [fusePopular, suggestions, popularCourses]);
+
+  const filteredPersonalizedCourses = useMemo(() => {
+    if (suggestions.length === 0 || !personalizedCourses.length) return []; // Avoid searching when there's no suggestion or courses
+    return fusePersonalized.search(suggestions[0]).map((result) => result.item);
+  }, [fusePersonalized, suggestions, personalizedCourses]);
 
   const showSuggestions =
     suggestions.length > 0 &&
