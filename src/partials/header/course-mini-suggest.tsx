@@ -17,12 +17,12 @@ export const CourseMiniSuggest = ({ courses }: CourseMiniSliderProps) => {
 
   useEffect(() => {
     // Giả sử đây là logic tìm kiếm khóa học
-    setLoading(true); // Bắt đầu tải
-    setTimeout(() => {
-      setSearchedCourses(courses); // Sau khi tìm thấy khóa học, cập nhật danh sách khóa học
-      setLoading(false); // Kết thúc tải
-    }, 3000); // Giả lập thời gian tìm kiếm (ví dụ: 2 giây)
+    setLoading(false); // Bắt đầu tải
+    setSearchedCourses(courses); // Sau khi tìm thấy khóa học, cập nhật danh sách khóa học
+    setLoading(false); // Kết thúc tải
   }, [courses]); // Mỗi khi `courses` thay đổi, chúng ta sẽ gọi lại effect này
+
+  const limitedCourses = searchedCourses.slice(0, 3);
 
   return (
     <div className="w-full">
@@ -35,9 +35,9 @@ export const CourseMiniSuggest = ({ courses }: CourseMiniSliderProps) => {
             <Skeleton height={120} className="skeleton-custom" />
             <Skeleton height={120} className="skeleton-custom" />
           </div>
-        ) : searchedCourses.length > 0 ? (
+        ) : limitedCourses.length > 0 ? (
           // Hiển thị các khóa học tìm được
-          searchedCourses.map((course, index) => (
+          limitedCourses.map((course, index) => (
             <CardCourseMini
               key={`course-card-${index}`}
               course={course}

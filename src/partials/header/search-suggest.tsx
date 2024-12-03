@@ -46,23 +46,43 @@ export default function SearchSuggest({
         setLoading(false);
       }
     };
-
-    fetchCourses();
-  }, [session]);
+    if (suggestions && suggestions.length > 0) fetchCourses();
+  }, [suggestions]);
 
   // useEffect(() => {
   //   // Kết hợp cả khóa học phổ biến và khóa học cá nhân hóa vào một danh sách duy nhất
   //   const combinedCourses = [...popularCourses, ...personalizedCourses];
   //   setAllCourses(combinedCourses);
   // }, [popularCourses, personalizedCourses]);
-  const filteredPopularCourses = useMemo(
-    () => fusePopular.search(suggestions[0]).map((result) => result.item),
-    [fusePopular, suggestions]
-  );
-  const filteredPersonalizedCourses = useMemo(
-    () => fusePersonalized.search(suggestions[0]).map((result) => result.item),
-    [fusePersonalized, suggestions]
-  );
+  // const filteredPopularCourses = useMemo(() => {
+  //   if (suggestions.length === 0) return []; // Nếu suggestions rỗng, trả về mảng rỗng
+  //   return fusePopular.search(suggestions[0]).map((result) => result.item);
+  // }, [fusePopular, suggestions]);
+
+  // const filteredPersonalizedCourses = useMemo(() => {
+  //   if (suggestions.length === 0) return []; // Nếu suggestions rỗng, trả về mảng rỗng
+  //   return fusePersonalized.search(suggestions[0]).map((result) => result.item);
+  // }, [fusePersonalized, suggestions]);
+
+  const filteredPopularCourses = useMemo(() => {
+    if (
+      suggestions.length === 0 ||
+      !popularCourses ||
+      popularCourses.length === 0
+    )
+      return []; // Avoid searching when there's no suggestion or courses
+    return fusePopular.search(suggestions[0]).map((result) => result.item);
+  }, [fusePopular, suggestions, popularCourses]);
+
+  const filteredPersonalizedCourses = useMemo(() => {
+    if (
+      suggestions.length === 0 ||
+      !Array.isArray(personalizedCourses) ||
+      personalizedCourses.length === 0
+    )
+      return []; // Avoid searching when there's no suggestion or courses
+    return fusePersonalized.search(suggestions[0]).map((result) => result.item);
+  }, [fusePersonalized, suggestions, personalizedCourses]);
 
   const showSuggestions =
     suggestions.length > 0 &&
