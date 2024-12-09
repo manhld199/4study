@@ -45,7 +45,7 @@ export default function CardCourse({
         <div className="px-4 flex flex-row justify-between">
           <div className="flex flex-row gap-1 flex-wrap">
             {Array.isArray(course?.teachers) && course.teachers.length > 0 ? (
-              course.teachers.slice(0, 2).map((teacher, index) => (
+              course.teachers.slice(0, 1).map((teacher, index) => (
                 <Badge
                   key={`badge ${course._id} teacher ${index}`}
                   className="w-fit bg-pri2 hover:bg-pri2 capitalize">
@@ -56,10 +56,13 @@ export default function CardCourse({
               <></>
             )}
           </div>
-          {course?.teachers.length > 2 && (
+
+          {course?.teachers.length > 2 ? (
             <Badge className="bg-zinc-400 hover:bg-zinc-400">
               +{course?.teachers.length - 2}
             </Badge>
+          ) : (
+            <div className="min-h-[26px]"></div>
           )}
         </div>
 

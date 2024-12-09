@@ -107,14 +107,14 @@ export default function AboutUsPage() {
             Let&apos;s explore wonderful learning opportunities together!
           </p>
         </div>
-        <div className="flex flex-col items-center">
+        {/* <div className="flex flex-col items-center">
           <Image
             src="/imgs/about-3.png"
             alt="about-1"
             width={1440}
             height={500}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );
