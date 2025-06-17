@@ -1,4 +1,4 @@
-# WEBSITEHOCJ TRỰC TUYẾN 4STUDY
+# HỆ THỐNG ĐỀ XUẤT KHOÁ HỌC TRỰC TUYẾN CÁ NHÂN HOÁ 4STUDY
 
 * Khoa Khoa học và Kỹ thuật thông tin, Trường Đại học Công nghệ Thông tin, Đại học Quốc gia Thành phố Hồ Chí Minh.
 * GVHD: ThS. Nguyễn Thị Anh Thư.
