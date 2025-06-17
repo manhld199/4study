@@ -4,6 +4,19 @@
 * GVHD: ThS. Nguyễn Thị Anh Thư.
 * Nhóm sinh viên thực hiện: Nhóm 1.
 
+## Danh sách thành viên
+
+| STT | Họ và Tên               | MSSV         | Vai trò         |
+| --- | ----------------------- | ------------ | --------------- |
+| 1   | **Phan Nguyễn Hải Yến** | **21521698** | **Nhóm trưởng** |
+| 2   | Lê Đức Mạnh             | 21521116     | Thành viên      |
+| 3   | Lý Phi Lân              | 21520319     | Thành viên      |
+| 4   | Nguyễn Viết Kha         | 21520949     | Thành viên      |
+| 5   | Lâm Thị Hồng Cẩm        | 21520009     | Thành viên      |
+| 6   | Đặng Quỳnh Như          | 21520081     | Thành viên      |
+| 7   | Bùi Yến Giàu            | 21520796     | Thành viên      |
+| 8   | Bùi Xuân Nhi            | 21522422     | Thành viên      |
+
 ## Công nghệ/Thư viện sử dụng
 * Front-end: NextJS, Shadcn UI, Tailwind CSS.
 * Back-end: NextJS, Mongoose
